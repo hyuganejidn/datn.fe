@@ -1,0 +1,35 @@
+.public {
+  //background: $grief url(../images/login_bg.jpg) no-repeat center center;
+  background-color: $primary-light;
+  background-size: cover;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__left {
+    &--md {
+      width: calc(100% - 450px);
+    }
+    &--hd {
+      display: none;
+    }
+  }
+
+  &__left,
+  &__right {
+    height: inherit;
+  }
+
+  &__right {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $grief;
+
+    &--md {
+      width: 450px;
+    }
+  }
+}

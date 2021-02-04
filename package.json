@@ -1,0 +1,91 @@
+{
+  "name": "lycafe-fe",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "react-scripts test",
+    "start": "webpack serve --mode development --env development",
+    "build": "webpack --mode production",
+    "lint": "eslint ./ --ignore-path .gitignore",
+    "lint:fix": "yarn run lint -- --fix",
+    "format": "prettier --write \"{,!(node_modules)/**/}*.js\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./src/**/*": [
+      "prettier --write --ignore-unknown --no-verify"
+    ],
+    "**/*.{js,jsx}": [
+      "eslint --fix",
+      "eslint ./ --ignore-path .gitignore"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hyuganejidn/DATN-Fe.git"
+  },
+  "author": "xuan-hung",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hyuganejidn/DATN-Fe/issues"
+  },
+  "homepage": "https://github.com/hyuganejidn/DATN-Fe#readme",
+  "keywords": [],
+  "devDependencies": {
+    "@babel/core": "^7.12.13",
+    "@babel/plugin-proposal-class-properties": "^7.12.13",
+    "@babel/plugin-syntax-dynamic-import": "^7.8.3",
+    "@babel/preset-env": "^7.12.13",
+    "@babel/preset-react": "^7.12.13",
+    "babel-loader": "^8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^7.1.2",
+    "css-loader": "^5.0.1",
+    "dotenv-webpack": "^6.0.0",
+    "eslint": "^7.19.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-react": "^7.22.0",
+    "file-loader": "^6.2.0",
+    "html-loader": "^1.3.2",
+    "html-webpack-plugin": "^4.5.1",
+    "husky": "^4.3.8",
+    "lint-staged": "^10.5.3",
+    "mini-css-extract-plugin": "^1.3.5",
+    "prettier": "^2.2.1",
+    "sass-loader": "^10.1.1",
+    "webpack": "^5.20.0",
+    "webpack-cli": "^4.5.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "node-sass": "^5.0.0",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-lazyload": "^3.1.0",
+    "react-redux": "^7.2.2",
+    "react-router-dom": "^5.2.0",
+    "redux": "^4.0.5"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

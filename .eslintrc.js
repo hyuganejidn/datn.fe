@@ -45,6 +45,14 @@ module.exports = {
       // It will default to "detect" in the future
       flowVersion: '0.53', // Flow version
     },
+    'import/resolver': {
+      alias: [
+        ['@', './src'],
+        ['@@', './'],
+        ['assets/*', ['src/_assets/*']],
+        ['Templates', './src/_components'],
+      ],
+    },
     propWrapperFunctions: [
       // The names of any function used to wrap propTypes, e.g. `forbidExtraProps`. If this isn't set, any propTypes wrapped in a function will be skipped.
       'forbidExtraProps',

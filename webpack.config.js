@@ -11,6 +11,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
   const config = {
     mode,
     entry: {
+      polyfill: '@babel/polyfill',
       app: path.resolve(__dirname, 'src/index.jsx'),
     },
     output: {
@@ -23,7 +24,8 @@ const webpackConfig = (env, { mode = 'development' }) => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
         '@@': path.resolve(),
-        assets: path.resolve(__dirname, 'assets'),
+        assets: path.resolve(__dirname, 'src/_assets'),
+        Templates: path.resolve(__dirname, 'src/_components'),
       },
     },
     optimization: {
@@ -101,7 +103,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
   }
 
   if (isDev) {
-    config.devtool = 'source-map'
+    config.devtool = 'inline-source-map'
     config.watch = true
     config.watchOptions = {
       aggregateTimeout: 300,

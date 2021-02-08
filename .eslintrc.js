@@ -22,6 +22,41 @@ module.exports = {
     'no-console': 1,
     'no-use-before-define': 1,
     'object-curly-spacing': [1, 'always'],
+    'no-unused-expressions': [
+      2,
+      { allowTernary: true, allowShortCircuit: true },
+    ],
+    'arrow-spacing': ['error', { before: true, after: true }],
+    'space-before-function-paren': [
+      2,
+      {
+        anonymous: 'always',
+        named: 'never',
+        asyncArrow: 'always',
+      },
+    ],
+    'key-spacing': [
+      2,
+      {
+        singleLine: {
+          beforeColon: false,
+          afterColon: true,
+        },
+        // multiLine: {
+        //   beforeColon: true,
+        //   afterColon: true,
+        //   align: 'colon',
+        // },
+      },
+    ],
+    'comma-spacing': [
+      2,
+      {
+        before: false,
+        after: true,
+      },
+    ],
+    'space-before-blocks': 'error',
     'prettier/prettier': [
       1,
       {
@@ -76,6 +111,7 @@ module.exports = {
 
   parserOptions: {
     ecmaFeatures: {
+      jsx: true,
       arrowFunctions: true,
       blockBindings: true,
       classes: true,
@@ -84,14 +120,13 @@ module.exports = {
       forOf: true,
       generators: false,
       modules: true,
+      spread: true,
+      superInFunctions: true,
+      templateStrings: true,
       objectLiteralComputedProperties: true,
       objectLiteralDuplicateProperties: false,
       objectLiteralShorthandMethods: true,
       objectLiteralShorthandProperties: true,
-      spread: true,
-      superInFunctions: true,
-      templateStrings: true,
-      jsx: true,
     },
     ecmaVersion: 2020,
     sourceType: 'module',

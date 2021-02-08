@@ -32,6 +32,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
       splitChunks: { chunks: 'all' },
       mangleWasmImports: true,
       mergeDuplicateChunks: true,
+      removeEmptyChunks: true,
       minimize: !isDev,
       nodeEnv: mode,
     },
@@ -86,8 +87,9 @@ const webpackConfig = (env, { mode = 'development' }) => {
     plugins: [
       new Dotenv(),
       new webpack.IgnorePlugin(/^\.\/locale$/, /moment/),
+      // use 'development' unless process.env.NODE_ENV is defined
       new webpack.EnvironmentPlugin({
-        NODE_ENV: mode, // use 'development' unless process.env.NODE_ENV is defined
+        NODE_ENV: mode,
       }),
       new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'src/index.html'),
@@ -104,7 +106,6 @@ const webpackConfig = (env, { mode = 'development' }) => {
 
   if (isDev) {
     config.devtool = 'inline-source-map'
-    config.watch = true
     config.watchOptions = {
       aggregateTimeout: 300,
       poll: 1000,
@@ -129,7 +130,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
         hash: false,
         version: false,
         timings: true,
-        assets: true,
+        assets: false,
         chunks: false,
         modules: false,
         reasons: false,
@@ -139,6 +140,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
         errorDetails: true,
         warnings: false,
         publicPath: false,
+        entrypoints: false,
       },
     }
   } else {

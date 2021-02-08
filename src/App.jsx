@@ -8,10 +8,10 @@ import store from './store'
 const App = () => (
   <Provider store={store}>
     <div className="hung">
-      <div>Welcome to my-webpack-react</div>
+      <div>Welcome to 123 my asd 123-</div>
       <Home />
     </div>
   </Provider>
 )
 
-export { App }
+export default App

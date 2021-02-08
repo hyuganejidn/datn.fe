@@ -10,6 +10,6 @@
       "Templates/*": ["src/_components/*"]
     }
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "server.js",],
   "exclude": ["node_modules"]
 }

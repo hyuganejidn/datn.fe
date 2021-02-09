@@ -23,8 +23,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
       extensions: ['.js', '.jsx', '.json'],
       alias: {
         '@': path.resolve(__dirname, 'src'),
-        '@@': path.resolve(),
-        assets: path.resolve(__dirname, 'src/_assets'),
+        Assets: path.resolve(__dirname, 'src/_assets'),
         Templates: path.resolve(__dirname, 'src/_components'),
       },
     },

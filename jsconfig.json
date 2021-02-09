@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
     "baseUrl": "./",
-    "module": "commonjs",
-    "target": "es6",
     "paths": {
       "@/*": ["src/*"],
-      "@@/*": ["./*"],
-      "assets/*": ["src/_assets/*"],
+      "Assets/*": ["src/_assets/*"],
       "Templates/*": ["src/_components/*"]
-    }
+    },
+    "jsx": "react-jsx",
+    "module": "commonjs",
+    "target": "es6"
   },
   "include": ["src/**/*", "server.js",],
   "exclude": ["node_modules"]

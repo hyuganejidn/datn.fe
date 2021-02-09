@@ -72,24 +72,21 @@ module.exports = {
   },
   settings: {
     react: {
-      pragma: 'React', // Pragma to use, default to "React"
-      fragment: 'Fragment', // Fragment to use (may be a property of <pragma>), default to "Fragment"
-      version: 'detect', // React version. "detect" automatically picks the version you have installed.
-      // You can also use `16.0`, `16.3`, etc, if you want to override the detected value.
-      // default to latest and warns if missing
-      // It will default to "detect" in the future
-      flowVersion: '0.53', // Flow version
+      pragma: 'React',
+      fragment: 'Fragment',
+      version: 'detect',
     },
     'import/resolver': {
-      alias: [
-        ['@', './src'],
-        ['@@', './'],
-        ['assets/*', ['src/_assets/*']],
-        ['Templates', './src/_components'],
-      ],
+      alias: {
+        map: [
+          ['@', './src'],
+          ['Assets', ['./src/_assets']],
+          ['Templates', './src/_components'],
+        ],
+        extensions: ['.ts', '.js', '.jsx', '.json'],
+      },
     },
     propWrapperFunctions: [
-      // The names of any function used to wrap propTypes, e.g. `forbidExtraProps`. If this isn't set, any propTypes wrapped in a function will be skipped.
       'forbidExtraProps',
       {
         property: 'freeze',
@@ -100,7 +97,6 @@ module.exports = {
       },
     ],
     linkComponents: [
-      // Components used as alternatives to <a> for linking, eg. <Link to={ url } />
       'Hyperlink',
       {
         name: 'Link',
@@ -108,7 +104,6 @@ module.exports = {
       },
     ],
   },
-
   parserOptions: {
     ecmaFeatures: {
       jsx: true,

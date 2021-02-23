@@ -17,6 +17,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 0,
     'react-hooks/rules-of-hooks': 0,
     'react/prop-types': 0,
+    'react/no-array-index-key': 0,
     'no-param-reassign': 0,
 
     'no-console': 1,
@@ -67,6 +68,14 @@ module.exports = {
         singleQuote: true,
         tabWidth: 2,
         printWidth: 80,
+      },
+    ],
+    'react/jsx-props-no-spreading': [
+      1,
+      {
+        html: 'enforce',
+        custom: 'ignore',
+        explicitSpread: 'ignore',
       },
     ],
   },

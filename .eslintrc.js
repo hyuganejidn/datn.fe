@@ -71,12 +71,12 @@ module.exports = {
       },
     ],
     'react/jsx-props-no-spreading': [
-      1,
-      {
-        html: 'enforce',
-        custom: 'ignore',
-        explicitSpread: 'ignore',
-      },
+      0,
+      // {
+      //   html: 'ignore',
+      //   custom: 'ignore',
+      //   explicitSpread: 'ignore',
+      // },
     ],
   },
   settings: {

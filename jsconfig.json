@@ -2,9 +2,9 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"],
+      "Templates/*": ["src/_components/*"],
       "Assets/*": ["src/_assets/*"],
-      "Templates/*": ["src/_components/*"]
+      "@/*": ["src/*"],
     },
     "jsx": "react-jsx",
     "module": "commonjs",

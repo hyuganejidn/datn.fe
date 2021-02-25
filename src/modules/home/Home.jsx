@@ -5,7 +5,11 @@ function Home() {
   const dispatch = useDispatch()
   return (
     <div>
-      <button type="button" onClick={() => dispatch({ type: '**' })}>
+      <button
+        type="button"
+        className="bg-gray-400"
+        onClick={() => dispatch({ type: '**' })}
+      >
         hung
       </button>
     </div>

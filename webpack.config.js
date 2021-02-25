@@ -116,6 +116,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
       new webpack.HotModuleReplacementPlugin(),
     ]
     config.devServer = {
+      clientLogLevel: 'silent',
       contentBase: path.resolve(__dirname, 'src'),
       hot: true,
       open: true,

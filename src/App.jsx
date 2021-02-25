@@ -3,24 +3,27 @@ import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
 
 import Layout from '@/_layouts'
-import routes from './routes'
+import PrivateRoute from 'Templates/commons/PrivateRoute'
+import PublicRoute from 'Templates/commons/PublicRoute'
+
 import store from './store'
-import PrivateRoute from './_components/commons/PrivateRoute'
-import PublicRoute from './_components/commons/PublicRoute'
+import routes from './routes'
+
 import 'Assets/sass/main.scss'
+// import 'Assets/sass/tailwind.scss'
 
 const App = () => (
   <Provider store={store}>
     <Router>
       <Layout>
         <Switch>
-          {routes.map((route, i) => {
-            if (route.auth) {
-              return <PrivateRoute key={i} {...route} />
-            }
-
-            return <PublicRoute key={i} {...route} />
-          })}
+          {routes.map((route, i) =>
+            route.auth ? (
+              <PrivateRoute key={i} {...route} />
+            ) : (
+              <PublicRoute key={i} {...route} />
+            )
+          )}
         </Switch>
       </Layout>
     </Router>

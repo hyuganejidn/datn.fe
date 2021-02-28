@@ -1,9 +1,9 @@
 import { Icons } from 'Templates/icon/Icon'
 
-export const topicObj = [
+export const topics = [
   {
     slug: 'food',
-    name: 'ăn uống- Nấu nướng',
+    name: 'Ăn uống- Nấu nướng',
     icon: Icons.Food,
   },
   {
@@ -54,97 +54,97 @@ export const topicObj = [
   {
     slug: 'confidence',
     name: 'Tâm sự - chuyên đời',
-    icon: Icons.confidence,
+    icon: Icons.Confidence,
   },
   {
     slug: 'pics',
     name: 'Ảnh',
-    icon: Icons.pics,
+    icon: Icons.Pics,
   },
   {
     slug: 'videos',
     name: 'Video',
-    icon: Icons.videos,
+    icon: Icons.Videos,
   },
   {
     slug: 'musics',
     name: 'Nhạc',
-    icon: Icons.musics,
+    icon: Icons.Musics,
   },
   {
     slug: 'movies',
     name: 'Phim -TV',
-    icon: Icons.movies,
+    icon: Icons.Movies,
   },
   {
     slug: 'sports',
     name: 'Thể thao',
-    icon: Icons.sports,
+    icon: Icons.Sports,
   },
   {
     slug: 'health',
     name: 'Sức khỏe - Y tế',
-    icon: Icons.health,
+    icon: Icons.Health,
   },
   {
     slug: 'fashion',
     name: 'Thời trang - Làm đẹp',
-    icon: Icons.fashion,
+    icon: Icons.Fashion,
   },
   {
     slug: 'tips',
     name: 'Mẹo hay',
-    icon: Icons.tips,
+    icon: Icons.Tips,
   },
   {
     slug: 'motivated',
     name: 'Truyền cảm hứng',
-    icon: Icons.motivated,
+    icon: Icons.Motivated,
   },
   {
     slug: 'art',
     name: 'Nghệ thuật',
-    icon: Icons.art,
+    icon: Icons.Art,
   },
   {
     slug: 'photography',
     name: 'Nhiếp ảnh',
-    icon: Icons.photography,
+    icon: Icons.Photography,
   },
   {
     slug: 'life',
     name: 'Đời sống',
-    icon: Icons.life,
+    icon: Icons.Life,
   },
   {
     slug: 'gardening',
     name: 'Vườn - Ao - Chuông',
-    icon: Icons.gardening,
+    icon: Icons.Gardening,
   },
   {
     slug: 'pets',
     name: 'Thú cưng - Động vật',
-    icon: Icons.pets,
+    icon: Icons.Pets,
   },
   {
     slug: 'business',
     name: 'Kinh doanh - Khởi nghiệp',
-    icon: Icons.business,
+    icon: Icons.Business,
   },
   {
     slug: 'stock',
     name: 'Chứng khoán - Kinh tế',
-    icon: Icons.stock,
+    icon: Icons.Stock,
   },
   {
     slug: 'cars',
     name: 'Xe cộ',
-    icon: Icons.cars,
+    icon: Icons.Cars,
   },
   {
     slug: 'housing',
     name: 'Nhà cửa - nội thất',
-    icon: Icons.housing,
+    icon: Icons.Housing,
   },
   {
     slug: 'fengShui',
@@ -224,12 +224,12 @@ export const topicObj = [
   {
     slug: 'maths',
     name: 'Toán - Lý - Hóa',
-    icon: Icons.Maths,
+    icon: Icons.Math,
   },
   {
     slug: 'vietnam',
     name: 'Việt Nam',
-    icon: Icons.Vietnam,
+    icon: Icons.VietNam,
   },
   {
     slug: 'world',
@@ -243,7 +243,7 @@ export const topicObj = [
   },
 ]
 
-export const topics = {
+export const topicObj = {
   food: {
     name: 'ăn uống- Nấu nướng',
     icon: Icons.Food,

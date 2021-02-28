@@ -68,8 +68,23 @@ const webpackConfig = (env, { mode = 'development' }) => {
           ],
         },
         {
-          test: /\.(png|svg|jpe?g|gif)$/i,
-          include: path.join(__dirname, 'public'),
+          test: /\.svg$/,
+          use: [
+            'babel-loader',
+            {
+              loader: 'react-svg-loader',
+              options: {
+                jsx: true, // true outputs JSX tags
+                outputPath: 'images',
+                name: () =>
+                  isDev ? '[path][name].[ext]' : '[contenthash].[ext]',
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|jpe?g|gif)$/i,
+          include: path.resolve(__dirname, 'src/_assets'),
           use: [
             {
               loader: 'file-loader',

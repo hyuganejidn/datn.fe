@@ -19,6 +19,8 @@ module.exports = {
     'react/prop-types': 0,
     'react/no-array-index-key': 0,
     'no-param-reassign': 0,
+    'react/jsx-pascal-case': 0,
+    camelcase: 0,
 
     'no-console': 1,
     'no-use-before-define': 1,

@@ -27,6 +27,6 @@ yarn-debug.log*
 yarn-error.log*
 yarn.lock
 
-./serviceWorker.js
-./tailwind.config.js
-./postcss.config.js
+serviceWorker.js
+tailwind.config.js
+postcss.config.js

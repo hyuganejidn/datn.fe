@@ -17,6 +17,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: '[name].[fullhash].js',
+      publicPath: '/',
     },
     target: isDev ? 'web' : 'browserslist',
     resolve: {
@@ -153,7 +154,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
         source: false,
         errors: true,
         errorDetails: true,
-        warnings: false,
+        warnings: true,
         publicPath: false,
         entrypoints: false,
       },

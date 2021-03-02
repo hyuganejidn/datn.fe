@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-// import { useDispatch } from 'react-redux'
-
 import { topics } from '@/_constants/data'
 import Forum from './Forum'
 import Topics from './Topics'
@@ -15,25 +13,26 @@ const S_Layout = styled.div`
 const S_Topics = styled(Topics)`
   position: sticky;
   top: 0;
-  width: 260px;
+  padding-right: 4px;
+  width: 280px;
   max-height: calc(100vh - 50px);
   overflow-y: scroll;
   transition: 0.7s;
   :hover {
     ::-webkit-scrollbar {
-      width: 6px;
+      width: 4px;
       display: block;
     }
   }
   ::-webkit-scrollbar {
-    width: 6px;
+    width: 4px;
     display: none;
     /* background-color: #f5f5f5; */
   }
   ::-webkit-scrollbar-thumb {
-    width: 6px;
+    width: 4px;
     border-radius: 3px;
-    background-color: #b2b2b2;
+    background-color: #b2b2b26b;
   }
 `
 const S_Forum = styled(Forum)`
@@ -41,7 +40,6 @@ const S_Forum = styled(Forum)`
 `
 
 function Home() {
-  // const dispatch = useDispatch()
   return (
     <S_Layout>
       <S_Topics topics={topics} />

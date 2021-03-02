@@ -9,7 +9,6 @@ function InputEmoji(props) {
   const showError = errors[name] && touched[name]
   const textareaRef = useRef(null)
 
-  console.log(errors)
   const emojiInserted = messageWithEmoji => {
     const eventChange = {
       target: {

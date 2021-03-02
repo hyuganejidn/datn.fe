@@ -1,4 +1,4 @@
-import http from '../axios'
+import http from '../helpers/axios'
 
 const path = '/topics'
 

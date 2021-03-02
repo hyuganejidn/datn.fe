@@ -49,6 +49,7 @@ import Game from 'Assets/icons/svg/game.svg'
 import Math from 'Assets/icons/svg/math.svg'
 import VietNam from 'Assets/icons/svg/vietnam.svg'
 import World from 'Assets/icons/svg/world.svg'
+import { Forum } from 'Templates/icon/IconsSvg'
 
 export const Icons = {
   Emoji: 'Emoji',
@@ -101,6 +102,7 @@ export const Icons = {
   Comic: 'Comic',
   Etc: 'Etc',
   Food: 'Food',
+  Forum: 'Forum',
 }
 
 const IconComponents = {
@@ -154,6 +156,7 @@ const IconComponents = {
   Comic,
   Etc,
   Food,
+  Forum,
 }
 
 export const Icon = ({

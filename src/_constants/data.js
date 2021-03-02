@@ -2,6 +2,11 @@ import { Icons } from 'Templates/icon/Icon'
 
 export const topics = [
   {
+    slug: '',
+    name: 'Diễn đàn',
+    icon: Icons.Forum,
+  },
+  {
     slug: 'food',
     name: 'Ăn uống- Nấu nướng',
     icon: Icons.Food,
@@ -13,7 +18,7 @@ export const topics = [
   },
   {
     slug: 'news',
-    name: 'tin tức - thời sự',
+    name: 'Tin tức - Thời sự',
     icon: Icons.News,
   },
   {

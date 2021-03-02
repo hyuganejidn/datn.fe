@@ -1,5 +1,6 @@
 import React from 'react'
-import { Field } from 'formik'
+import { ErrorMessage } from 'formik'
+import { FormHelperText, TextField } from '@material-ui/core'
 
 function InputField(props) {
   const {
@@ -10,28 +11,47 @@ function InputField(props) {
     type,
     placeholder,
     autoComplete,
+    helperText,
+    errorText,
   } = props
+
   const { name } = field
   const { errors, touched } = form
-  const showError = errors[name] && touched[name]
 
-  console.log(form)
+  const showError = (errors[name] && touched[name]) || !!errorText
 
   return (
     <div className="form-group">
-      {label && <label htmlFor={name}>{label}</label>}
-      <Field
+      <TextField
         {...field}
         id={name}
-        validate={showError}
+        label={label}
+        error={showError}
         type={type || 'text'}
+        helperText={helperText}
         placeholder={placeholder}
         disabled={disabled || false}
         autoComplete={autoComplete || 'off'}
+        aria-describedby={`${name}-error`}
       />
 
-      {showError && <div>{errors[name]}</div>}
-      {/* <ErrorMessage name={name} component={<FormFeedback />} /> */}
+      {showError && (
+        <div
+          className="MuiFormHelperText-root"
+          style={{ color: 'red', fontSize: '0.75rem' }}
+        >
+          {errorText}
+        </div>
+      )}
+
+      <ErrorMessage
+        name={name}
+        component={() => (
+          <FormHelperText id={`${name}-error`} style={{ color: 'red' }}>
+            {errors[name]}
+          </FormHelperText>
+        )}
+      />
     </div>
   )
 }

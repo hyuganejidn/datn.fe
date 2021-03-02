@@ -5,12 +5,12 @@ const Home = lazy(() => import('./Home'))
 
 export default [
   {
-    path: '/',
+    path: ['/', '/topics/:slug'],
     auth: false,
     exact: true,
-    component: () => (
+    component: props => (
       <Suspense fallback={<Loading />}>
-        <Home />
+        <Home {...props} />
       </Suspense>
     ),
   },

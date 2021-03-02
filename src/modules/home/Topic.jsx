@@ -26,18 +26,19 @@ const S_Link = styled(Link)`
 `
 
 const S_Icon = styled(Icon)`
-  margin-right: 2px;
+  margin-right: 4px;
 `
 
 const S_Span = styled.span`
-  margin-left: 4px;
+  margin-left: 6px;
+  font-size: 16px;
 `
 
 function Topic({ topic }) {
   const { slug, name, icon } = topic
   return (
     <S_Li>
-      <S_Link to={`/topics/${slug}`}>
+      <S_Link to={slug === '' ? '/' : `/topics/${slug}`}>
         <S_Icon icon={icon} width={22} />
         <S_Span>{name}</S_Span>
       </S_Link>

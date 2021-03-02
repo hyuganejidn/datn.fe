@@ -1,5 +1,5 @@
 import { capitalizeFirstLetter, timeSince } from '@/helpers/common'
-import React from 'react'
+import React, { useState } from 'react'
 import { Icon, Icons } from 'Templates/icon/Icon'
 import {
   DownVote,
@@ -10,7 +10,8 @@ import {
   ThreeDot,
 } from 'Templates/icon/IconsSvg'
 import styled from 'styled-components'
-import { Link } from '@material-ui/core'
+import { Link } from 'react-router-dom'
+import { votePost } from '@/services/post'
 
 const S_Post = styled.div`
   display: flex;
@@ -32,7 +33,7 @@ const S_Vote = styled.div`
   padding: 8px 4px;
 `
 
-const S_Avatar = styled.div`
+const S_Avatar = styled(Link)`
   min-width: 110px;
   margin: 8px 0px 8px 4px;
 `
@@ -97,9 +98,6 @@ const S_PostTitle = styled(Link)`
   color: #1a202c !important;
   font-size: 16px !important;
   cursor: pointer;
-  :hover {
-    text-decoration: none !important;
-  }
 `
 
 const S_PostContent = styled(Link)`
@@ -109,9 +107,6 @@ const S_PostContent = styled(Link)`
   font-weight: 500;
   font-size: 13px !important;
   cursor: pointer;
-  :hover {
-    text-decoration: none !important;
-  }
 `
 
 const S_FooterLink = styled(Link)`
@@ -133,25 +128,37 @@ const S_TopLink = styled(Link)`
   color: inherit !important;
 
   cursor: pointer;
+  :hover {
+    text-decoration: underline;
+  }
 `
 const S_Icon = styled(Icon)`
+  position: relative;
+  top: -3px;
   margin-right: 4px;
 `
 
-const S_UpVote = styled(Link)`
-  margin-right: 4px;
+const S_UpVote = styled.button`
   height: 24px;
-  color: rgb(113, 128, 150) !important;
+  background: none;
+  outline: none;
+  border: none;
+  color: ${props =>
+    !props.isVoted ? ' rgb(113, 128, 150)!important' : '#57fb04 !important'};
   cursor: pointer;
   :hover {
     border-radius: 4px;
     background: #e2e8f0;
   }
 `
-const S_DownVote = styled(Link)`
-  margin-right: 4px;
+const S_DownVote = styled.button`
   height: 24px;
-  color: rgb(113, 128, 150) !important;
+  background: none;
+  outline: none;
+  border: none;
+  /* color: rgb(113, 128, 150) !important; */
+  color: ${props =>
+    !props.isVoted ? ' rgb(113, 128, 150)!important' : 'red !important'};
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -159,19 +166,37 @@ const S_DownVote = styled(Link)`
   }
 `
 
-function Post({ post }) {
+function Post({ post, isVote }) {
+  const [vote, setVote] = useState(undefined)
+  const [isVoted, setIsVoted] = useState(isVote)
+
+  const handleVotePost = async (postId, voteNum) => {
+    const voteData = await votePost(postId, voteNum)
+    setVote({
+      voteTotal: voteData.vote,
+      vote: isVoted === voteNum ? 0 : voteNum,
+    })
+    setIsVoted(isVoted === voteNum ? 0 : voteNum)
+  }
+
   return (
     <S_Post>
       <S_Vote>
-        <S_UpVote>
+        <S_UpVote
+          onClick={() => handleVotePost(post.id, 1)}
+          isVoted={vote?.vote === 1 || isVoted === 1}
+        >
           <UpVote />
         </S_UpVote>
-        <span>{post.voteNum}</span>
-        <S_DownVote>
+        <span>{vote ? vote?.voteTotal : post.voteNum}</span>
+        <S_DownVote
+          onClick={() => handleVotePost(post.id, -1)}
+          isVoted={vote?.vote === -1 || isVoted === -1}
+        >
           <DownVote />
         </S_DownVote>
       </S_Vote>
-      <S_Avatar>
+      <S_Avatar to={`/topics/posts/${post.id}`}>
         {post.avatar ? (
           <img src={post.avatar} alt={post.topic?.slug} />
         ) : (
@@ -183,24 +208,31 @@ function Post({ post }) {
 
       <S_PostInfo>
         <S_PostTop>
-          <S_TopLink>
+          <S_TopLink to={`/topics/${post.topic?.slug}`}>
             <S_Icon
               icon={Icons[capitalizeFirstLetter(post.topic?.slug)]}
               width={16}
             />
             {post.topic?.name}
           </S_TopLink>
-          &ensp;•&ensp;bởi&ensp;<S_TopLink>{post.author?.fullName}</S_TopLink>
+          &ensp;•&ensp;bởi&ensp;
+          <S_TopLink to={`/users/${post.author?.id}`}>
+            {post.author?.fullName}
+          </S_TopLink>
           &ensp;•&ensp;{timeSince(post.createdAt)}
         </S_PostTop>
 
         <S_PostMain>
-          <S_PostTitle>{post.title} </S_PostTitle>
-          <S_PostContent>{post.content} </S_PostContent>
+          <S_PostTitle to={`/topics/posts/${post.id}`}>
+            {post.title}
+          </S_PostTitle>
+          <S_PostContent to={`/topics/posts/${post.id}`}>
+            {post.content}
+          </S_PostContent>
         </S_PostMain>
 
         <S_PostFooter>
-          <S_FooterLink>
+          <S_FooterLink to={`/topics/posts/${post.id}`}>
             <S_Comment />
             <span style={{ marginLeft: 4, marginRight: 19 }}>
               {post.commentNum} Bình luận

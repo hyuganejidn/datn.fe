@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { FastField, Formik, Form } from 'formik'
 import * as Yup from 'yup'
+import { useHistory } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+
 import InputField from 'Templates/form/InputField'
 import InputPassword from 'Templates/form/InputPassword'
+import * as types from './store/action_types'
+import { makeGetErrorsSignUp, makeGetIsAuthenticated } from './store/selector'
 
 const initialDataUser = {
   fullName: '',
@@ -12,6 +17,16 @@ const initialDataUser = {
 }
 
 export default function Register() {
+  const dispatch = useDispatch()
+  const history = useHistory()
+
+  const errors = makeGetErrorsSignUp()
+  const isAuthenticated = makeGetIsAuthenticated()
+
+  useEffect(() => {
+    if (isAuthenticated) history.push('/')
+  }, [isAuthenticated])
+
   const validationSchema = Yup.object({
     fullName: Yup.string()
       .required('Vui lòng điền Họ tên')
@@ -33,37 +48,45 @@ export default function Register() {
       .oneOf([Yup.ref('password')], 'Mật khẩu không giống'),
   })
 
+  const signIn = values =>
+    dispatch({ type: types.S_AUTH_SIGNUP_REQUEST, payload: values })
+
   return (
     <div>
       <Formik
         initialValues={initialDataUser}
-        onSubmit={(values, actions) => console.log(values, actions)}
+        onSubmit={signIn}
         validationSchema={validationSchema}
       >
         <Form>
           <FastField
             name="fullName"
             component={InputField}
-            label="Ít nhất 3 ký tự"
+            label="Họ và Tên"
             placeholder="Họ và Tên"
+            helperText="Ít nhất 3 ký tự"
+            errorText={errors.fullName}
           />
           <FastField
             name="username"
             component={InputField}
             label="Tên đăng nhập"
             helperText="Viết liền không dấu, không ký tự đặc biệt(nickname)"
+            errorText={errors.username}
           />
           <FastField
             name="password"
             component={InputPassword}
             label="Mật khẩu"
             helperText="Ít nhất 6 ký tự"
+            errorText={errors.password}
           />
           <FastField
             name="passwordConfirm"
             component={InputField}
             label="Mật khẩu xác nhận"
             helperText="Ít nhất 6 ký tự"
+            errorText={errors.passwordConfirm}
           />
           <button type="submit" className="text-lg">
             Đăng ký

@@ -10,10 +10,28 @@ export const makeGetErrorsLogin = () => {
   return useSelector(stateSelect)
 }
 
+export const makeGetErrorsSignUp = () => {
+  const stateSelect = createSelector(
+    state => state.auth,
+    auth => auth.errors.signUp
+  )
+
+  return useSelector(stateSelect)
+}
+
 export const makeGetMe = () => {
   const stateSelect = createSelector(
     state => state.auth,
     auth => auth.user
+  )
+
+  return useSelector(stateSelect)
+}
+
+export const makeGetIsAuthenticated = () => {
+  const stateSelect = createSelector(
+    state => state.auth,
+    auth => auth.isAuthenticated
   )
 
   return useSelector(stateSelect)

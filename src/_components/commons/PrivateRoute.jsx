@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
+import { makeGetIsAuthenticated } from '@/modules/auth/store/selector'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = true
+  const isAuthenticated = makeGetIsAuthenticated()
 
   return (
     <Route

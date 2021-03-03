@@ -30,6 +30,7 @@ function Posts() {
       setIsLoading(false)
     }
   }
+
   useEffect(() => {
     setIsLoading(true)
     getPosts()

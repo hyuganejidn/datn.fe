@@ -11,16 +11,16 @@ export class Immutable {
     return this._state
   }
 
-  set(key, value) {
+  set(key, payload) {
     if (typeof key !== 'string') throw new Error(`${key} not found in state`)
 
-    Object.assign(this._state[key], value)
+    this._state[key] = payload
     return this
   }
 
-  setIn(keys, value) {
+  setIn(keys, payload) {
     if (typeof keys === 'string') {
-      Object.assign(this._state[keys], value)
+      Object.assign(this._state[keys], payload)
     } else if (Array.isArray(keys)) {
       let state = this._state
 
@@ -30,16 +30,54 @@ export class Immutable {
 
         if (
           typeof state[key] === 'object' &&
-          !(keys[keys.length - 1] === key && typeof value === 'object')
+          !(keys[keys.length - 1] === key && typeof payload === 'object')
         ) {
           state = state[key]
         } else {
-          if (typeof value === 'object') Object.assign(state[key], value)
-          else state[key] = value
+          if (typeof payload === 'object') Object.assign(state[key], payload)
+          else state[key] = payload
           break
         }
       }
+    } else {
+      throw new Error(`${keys} is must array or string`)
     }
     return this
   }
+
+  update(key, payload) {
+    if (typeof key !== 'string') throw new Error(`${key} not found in state`)
+    if (this._state[key] === undefined)
+      throw new Error(`${key} not found in state`)
+
+    if (typeof payload === 'function') payload = payload(this._state[key])
+
+    this._state[key] = payload
+    return this
+  }
+
+  // updateIn(keys, payload) {
+  //   if (typeof keys === 'string') {
+  //     Object.assign(this._state[keys], payload)
+  //   } else if (Array.isArray(keys)) {
+  //     let state = this._state
+
+  //     for (const key of keys) {
+  //       if (typeof state[key] === 'undefined')
+  //         throw new Error(`${key} not found in state`)
+
+  //       if (
+  //         typeof state[key] === 'object' &&
+  //         !(keys[keys.length - 1] === key && typeof payload === 'object')
+  //       ) {
+  //         state = state[key]
+  //       } else {
+  //         if (typeof payload === 'object') Object.assign(state[key], payload)
+  //         else state[key] = payload
+  //         break
+  //       }
+  //     }
+  //   }
+  //   return this
+  // }
 }

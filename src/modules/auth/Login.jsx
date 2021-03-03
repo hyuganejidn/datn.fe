@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import { useDispatch } from 'react-redux'
 
 import InputField from 'Templates/form/InputField'
 import InputPassword from 'Templates/form/InputPassword'
+import { useHistory } from 'react-router-dom'
 import * as types from './store/action_types'
-import { makeGetErrorsLogin } from './store/selector'
+import { makeGetErrorsLogin, makeGetIsAuthenticated } from './store/selector'
 
 const initialDataUser = {
   username: '',
@@ -15,7 +16,14 @@ const initialDataUser = {
 
 export default function Login() {
   const dispatch = useDispatch()
+  const history = useHistory()
+
   const errors = makeGetErrorsLogin()
+  const isAuthenticated = makeGetIsAuthenticated()
+
+  useEffect(() => {
+    if (isAuthenticated) history.push('/')
+  }, [isAuthenticated])
 
   const validationSchema = Yup.object({
     username: Yup.string()

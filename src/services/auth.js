@@ -5,4 +5,10 @@ const path = '/auth'
 export const login = ({ username, password }) =>
   http.post(`${path}/login`, { username, password })
 
-export const register = () => http.post(`${path}/register`)
+export const register = ({ username, fullName, password, passwordConfirm }) =>
+  http.post(`${path}/register`, {
+    username,
+    fullName,
+    password,
+    passwordConfirm,
+  })

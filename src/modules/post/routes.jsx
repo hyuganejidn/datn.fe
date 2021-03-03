@@ -6,7 +6,7 @@ const PostViewBlog = lazy(() => import('./PostViewBlog'))
 
 export default [
   {
-    path: '/topics/posts/:slug/',
+    path: '/topics/posts/:id',
     exact: true,
     component: () => (
       <Suspense fallback={<Loading />}>
@@ -15,7 +15,7 @@ export default [
     ),
   },
   {
-    path: '/blogs/posts/:slug/',
+    path: '/blogs/posts/:id',
     exact: true,
     component: () => (
       <Suspense fallback={<Loading />}>

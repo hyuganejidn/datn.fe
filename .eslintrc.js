@@ -21,6 +21,7 @@ module.exports = {
     'no-param-reassign': 0,
     'react/jsx-pascal-case': 0,
     camelcase: 0,
+    'import/named': 0,
 
     'no-console': 1,
     'no-use-before-define': 1,

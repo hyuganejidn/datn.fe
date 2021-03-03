@@ -3,10 +3,17 @@ import * as types from './action_types'
 
 const initialState = {
   user: {},
+  isAuthenticated: false,
   errors: {
     login: {
       username: '',
       password: '',
+    },
+    signUp: {
+      username: '',
+      fullName: '',
+      password: '',
+      password_confirm: '',
     },
     resetPassword: {
       password: '',
@@ -24,6 +31,14 @@ const reducer = (_state = initialState, { type, payload }) => {
       return immutableState.set('user', payload).state
     case types.AUTH_LOGIN_ERRORS:
       return immutableState.setIn(['errors', 'login'], payload).state
+    case types.AUTH_SIGNUP_ERRORS:
+      return immutableState.setIn(['errors', 'signUp'], payload).state
+    case types.AUTH_LOGIN_SUCCESSFUL:
+      return immutableState.update('isAuthenticated', bool => !bool).state
+    case types.AUTH_LOGOUT_SUCCESSFUL:
+      return immutableState
+        .update('user', {})
+        .update('isAuthenticated', bool => !bool).state
     case types.AUTH_RESET_ERRORS:
       return immutableState.setIn(['errors', 'login'], {
         username: '',

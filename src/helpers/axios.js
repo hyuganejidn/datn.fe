@@ -5,6 +5,7 @@ const url = `${process.env.API_URL}/api/${process.env.VERSION}`
 const pathsNotAuthenticated = ['/signup']
 
 instance.defaults.baseURL = url
+// instance.defaults.headers['Content-Type'] = 'multipart/form-data'
 
 instance.interceptors.request.use(
   config => {

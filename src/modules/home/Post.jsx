@@ -48,7 +48,7 @@ function Post({ post, isVote }) {
         >
           <UpVote />
         </S_UpVote>
-        <span>{vote ? vote?.voteTotal : post.voteNum}</span>
+        <span className="p-2">{vote ? vote?.voteTotal : post.voteNum}</span>
         <S_DownVote
           onClick={() => handleVotePost(post.id, -1)}
           isVoted={vote?.vote === -1 || isVoted === -1}
@@ -58,13 +58,16 @@ function Post({ post, isVote }) {
       </S_Vote>
 
       <S_Avatar to={`/topics/posts/${post.id}`}>
-        {post.avatar ? (
-          <img src={post.avatar} alt={post.topic?.slug} />
-        ) : (
-          <S_AvatarDefault>
+        <S_AvatarDefault>
+          {post.avatar ? (
+            <img
+              src={`${process.env.API_URL}/${post.avatar}`}
+              alt={post.topic?.slug}
+            />
+          ) : (
             <S_ImageDefault />
-          </S_AvatarDefault>
-        )}
+          )}
+        </S_AvatarDefault>
       </S_Avatar>
 
       <S_PostInfo>

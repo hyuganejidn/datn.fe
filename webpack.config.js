@@ -6,6 +6,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 const { CleanWebpackPlugin } = require('clean-webpack-plugin')
 
+// const tailwindcss = require('tailwindcss')
+// const autoprefixer = require('autoprefixer')
+// const postcssImport = require('postcss-import')
+
 const webpackConfig = (env, { mode = 'development' }) => {
   const isDev = mode === 'development'
   const config = {
@@ -46,13 +50,16 @@ const webpackConfig = (env, { mode = 'development' }) => {
         },
         {
           test: /\.(s[ac]ss|css)$/,
-          exclude: /node_modules/,
+          // exclude: /node_modules/,
           use: [
             isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
             {
               loader: 'css-loader', // Parse the css into js
               options: { sourceMap: isDev },
             },
+            // {
+            //   loader: 'postcss-loader',
+            // },
             {
               loader: 'sass-loader', // Convert Scss/sass to css
               options: { sourceMap: isDev },

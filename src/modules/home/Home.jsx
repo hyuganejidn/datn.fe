@@ -14,7 +14,7 @@ const S_Topics = styled(Topics)`
   position: sticky;
   top: 0;
   padding-right: 4px;
-  width: 280px;
+  width: 300px;
   max-height: calc(100vh - 50px);
   overflow-y: scroll;
   transition: 0.7s;

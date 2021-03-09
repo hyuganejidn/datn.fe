@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from 'react'
 
 const PostViewForum = lazy(() => import('./PostViewForum'))
 const PostViewBlog = lazy(() => import('./PostViewBlog'))
+const PostAdd = lazy(() => import('./components/PostAdd'))
 
 export default [
   {
@@ -20,6 +21,15 @@ export default [
     component: () => (
       <Suspense fallback={<Loading />}>
         <PostViewBlog />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/posts/add',
+    exact: true,
+    component: () => (
+      <Suspense fallback={<Loading />}>
+        <PostAdd />
       </Suspense>
     ),
   },

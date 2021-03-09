@@ -3,7 +3,7 @@ import { Icon } from 'Templates/icon/Icon'
 
 import useClickOutside from '@/hooks/useClickOutside'
 
-export const Dropdown = ({ icon, render, title }) => {
+export const Dropdown = ({ icon, render, title, className }) => {
   const [showDropdown, setDropdownState] = useState(false)
   const dropdown = useRef(null)
 
@@ -18,8 +18,8 @@ export const Dropdown = ({ icon, render, title }) => {
   }
 
   return (
-    <div ref={dropdown} style={{ position: 'absolute', right: 10, top: 10 }}>
-      <Icon onClick={toggleDropdown} icon={icon} title={title} clickable />
+    <div ref={dropdown} className={className}>
+      <Icon onClick={toggleDropdown} icon={icon} title={title} width={18} />
       {showDropdown && render(dismissDropdown)}
     </div>
   )

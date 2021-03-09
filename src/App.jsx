@@ -1,4 +1,3 @@
-// import '@babel/polyfill'
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
@@ -11,7 +10,7 @@ import store from './store'
 import routes from './routes'
 
 import 'Assets/sass/main.scss'
-// import 'Assets/sass/tailwind.scss'
+// import 'Assets/sass/index.scss'
 
 const App = () => (
   <Provider store={store}>

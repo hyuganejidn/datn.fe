@@ -1,7 +1,15 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import { ImageDefault, Comment, Share, ThreeDot } from 'Templates/icon/IconsSvg'
+import {
+  ImageDefault,
+  Comment,
+  Share,
+  ThreeDot,
+  CommentSquare,
+  CommentSquareLine,
+  ShareLine,
+} from 'Templates/icon/IconsSvg'
 import { Icon } from 'Templates/icon/Icon'
 
 export const S_Post = styled.div`
@@ -24,6 +32,18 @@ export const S_Vote = styled.div`
   padding: 8px 4px;
 `
 
+export const S_VoteRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(248, 249, 250);
+  margin-right: 18px;
+  padding: 2px 6px;
+  border: 1px solid #ccc;
+  border-radius: 15px;
+`
+
 export const S_Avatar = styled(Link)`
   min-width: 110px;
   margin: 8px 0px 8px 4px;
@@ -38,17 +58,30 @@ export const S_AvatarDefault = styled.div`
   border-radius: 5px;
 `
 
+const M_Comment = css`
+  width: 14px !important;
+  color: rgb(113, 128, 150);
+`
+
 export const S_ImageDefault = styled(ImageDefault)`
   color: #e2e8f0;
   font-size: 50px !important;
 `
 export const S_Comment = styled(Comment)`
-  width: 14px !important;
-  color: rgb(113, 128, 150);
+  ${M_Comment}
+`
+export const S_CommentSquare = styled(CommentSquare)`
+  ${M_Comment}
+`
+export const S_CommentSquareLine = styled(CommentSquareLine)`
+  ${M_Comment}
 `
 export const S_Share = styled(Share)`
-  width: 14px !important;
-  color: rgb(113, 128, 150);
+  ${M_Comment}
+`
+
+export const S_ShareLine = styled(ShareLine)`
+  ${M_Comment}
 `
 
 export const S_ThreeDot = styled(ThreeDot)`
@@ -83,6 +116,16 @@ export const S_PostFooter = styled.div`
   font-size: 14px !important;
 `
 
+export const S_PostViewFooter = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 24px;
+  margin-bottom: 20px;
+  color: rgb(113, 128, 150);
+  line-height: 24px;
+  font-size: 14px !important;
+`
+
 export const S_PostTitle = styled(Link)`
   display: inline-block;
   font-weight: 500;
@@ -100,14 +143,24 @@ export const S_PostContent = styled(Link)`
   cursor: pointer;
 `
 
+export const S_PostMainContent = styled(Link)`
+  display: inline-block;
+  padding: 4px 0;
+  color: #718096 !important;
+  font-weight: 500;
+  font-size: 13px !important;
+  cursor: pointer;
+
+  margin-top: 32px;
+`
+
 export const S_FooterLink = styled(Link)`
   display: flex;
   align-items: center;
   color: inherit !important;
   padding: 4px 4px;
   border-radius: 4px;
-  font-weight: 500;
-
+  margin-right: 18px;
   cursor: pointer;
   :hover {
     background-color: rgba(237, 242, 247, var(--bg-opacity));
@@ -155,4 +208,15 @@ export const S_DownVote = styled.button`
     border-radius: 4px;
     background: #e2e8f0;
   }
+`
+
+export const S_FooterText = styled.span`
+  font-size: 16px;
+  margin-left: 4px;
+`
+
+export const S_InfoUser = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
 `

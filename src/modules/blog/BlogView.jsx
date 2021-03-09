@@ -1,23 +1,27 @@
 import { BlogAPI } from '@/services'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import PostsBlogs from './PostsBlogs'
 
 function BlogView() {
   const { slug } = useParams()
   const [blog, setBlog] = useState({})
+  const [posts, setPosts] = useState([])
 
   useEffect(() => {
-    const fetchBlog = async () => {
+    const fetchDataBlog = async () => {
       try {
         const blogData = await BlogAPI.getBlogById(slug)
+        const postsData = await BlogAPI.getPostsOfBlogId(blogData.id)
         console.log(blogData)
+        setPosts(postsData)
         setBlog(blogData)
       } catch (error) {
         throw new Error(error)
       }
     }
 
-    fetchBlog()
+    fetchDataBlog()
   }, [])
 
   return (
@@ -47,7 +51,9 @@ function BlogView() {
           {blog.followNum} Người theo dõi
         </button>
       </div>
-      <div />
+      <div>
+        <PostsBlogs posts={posts} />
+      </div>
       <div />
     </div>
   )

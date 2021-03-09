@@ -1,5 +1,4 @@
 import React from 'react'
-import Emoji from 'Assets/icons/svg/emoji.svg'
 import Travel from 'Assets/icons/svg/travel.svg'
 import Qna from 'Assets/icons/svg/qna.svg'
 import Miscellaneous from 'Assets/icons/svg/miscellaneous.svg'
@@ -49,7 +48,8 @@ import Game from 'Assets/icons/svg/game.svg'
 import Math from 'Assets/icons/svg/math.svg'
 import VietNam from 'Assets/icons/svg/vietnam.svg'
 import World from 'Assets/icons/svg/world.svg'
-import { Forum } from 'Templates/icon/IconsSvg'
+import { Forum, Emoji } from 'Templates/icon/IconsSvg'
+// import Emoji from 'Assets/icons/svg/emoji.svg'
 
 export const Icons = {
   Emoji: 'Emoji',
@@ -159,15 +159,7 @@ const IconComponents = {
   Forum,
 }
 
-export const Icon = ({
-  icon,
-  slug,
-  clickable,
-  width,
-  height,
-  color,
-  ...rest
-}) => {
+export const Icon = ({ icon, width, height, color, ...rest }) => {
   const IconFile = IconComponents[icon]
 
   return (

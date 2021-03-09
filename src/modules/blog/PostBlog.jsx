@@ -35,10 +35,10 @@ function PostBlog({ post }) {
       </S_PostMain>
 
       <S_PostFooter>
-        <S_FooterLink to={`/topics/posts/${post.id}`}>
+        <S_FooterLink to={`/blogs/posts/${post.id}`}>
           <S_Comment />
           <span style={{ marginLeft: 4, marginRight: 19 }}>
-            {post.commentNum} Bình luận
+            {post.commentNum}
           </span>
         </S_FooterLink>
 

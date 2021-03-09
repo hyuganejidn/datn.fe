@@ -5,23 +5,28 @@ function Blog({ blog }) {
   const user = makeGetMe()
 
   const viewOptionBlog = () => {
-    if (user.blogsFollowing.length > 0) {
-      user.blogsFollowing.include(blog.id) ? (
-        <button type="button" onClick={() => 123}>
-          Đang theo dõi
-        </button>
-      ) : (
-        <button type="button" onClick={() => 123}>
-          Theo dõi
-        </button>
-      )
-    } else {
-      blog.author?.id === user.id && (
+    if (!user.blogsFollowing && blog.author?.id === user.id)
+      return (
         <button type="button" onClick={() => 123}>
           Viết bài
         </button>
       )
+
+    if (
+      user.blogsFollowing.length > 0 &&
+      user.blogsFollowing.includes(blog.id)
+    ) {
+      return (
+        <button type="button" onClick={() => 123}>
+          Đang theo dõi
+        </button>
+      )
     }
+    return (
+      <button type="button" onClick={() => 123}>
+        Theo dõi
+      </button>
+    )
   }
 
   return (

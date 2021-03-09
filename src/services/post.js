@@ -10,5 +10,18 @@ export const votePost = (id, vote) => http.put(`${path}/${id}/vote`, { vote })
 
 export const getPostsUserVoted = () => http.get(`/users/posts_vote?type=forum`)
 
+export const getPostsUserLiked = () => http.get(`/users/posts_vote?type=blog`)
+
+export const getCommentsVoted = postId =>
+  http.get(`users/comments_vote?post=${postId}&type=forum`)
+
+export const getCommentsLiked = postId =>
+  http.get(`users/comments_vote?post=${postId}&type=blog`)
+
+export const likePost = id => http.put(`${path}/${id}/like`)
+
 export const listComment = id =>
   http.get(`${path}/${id}/comments`).then(res => res.data)
+
+export const create = ({ title, content, classify, blog, topic, avatar }) =>
+  http.post(`${path}`, { title, content, classify, blog, topic, avatar })

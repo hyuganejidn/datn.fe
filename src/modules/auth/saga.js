@@ -1,4 +1,11 @@
-import { all, call, delay, put, takeLatest } from 'redux-saga/effects'
+import {
+  all,
+  call,
+  delay,
+  put,
+  takeEvery,
+  takeLatest,
+} from 'redux-saga/effects'
 
 import { removeAuthToken, setAuthToken } from '@/helpers/storage'
 import { AuthAPI, UserAPI } from '@/services'
@@ -42,10 +49,21 @@ function* signUp({ payload }) {
   }
 }
 
+function* getMe() {
+  try {
+    const user = yield call(UserAPI.me)
+    yield put({ type: types.AUTH_SET_USER, payload: user })
+    yield put({ type: types.AUTH_LOGIN_SUCCESSFUL })
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+
 export default function* authSaga() {
   yield all([
     takeLatest(types.S_AUTH_LOGIN_REQUEST, login),
     takeLatest(types.S_AUTH_LOGOUT_REQUEST, logout),
     takeLatest(types.S_AUTH_SIGNUP_REQUEST, signUp),
+    takeEvery(types.S_AUTH_GET_ME, getMe),
   ])
 }

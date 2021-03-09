@@ -1,8 +1,50 @@
 import { emojiIndex } from 'emoji-mart'
 import 'emoji-mart/css/emoji-mart.css'
 import React, { useRef } from 'react'
+import styled from 'styled-components'
 
 import useClickOutside from '../../hooks/useClickOutside'
+
+const S_Box = styled.ul`
+  position: absolute;
+  top: 40px;
+  background: white;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+  height: 300px;
+  overflow: hidden;
+  z-index: 10;
+  :hover {
+    overflow: auto;
+  }
+  ::-webkit-scrollbar {
+    width: 4px;
+    visibility: hidden;
+    /* background-color: #f5f5f5; */
+  }
+  ::-webkit-scrollbar-thumb {
+    width: 4px;
+    border-radius: 3px;
+    background-color: #b2b2b26b;
+  }
+`
+const S_EmojiItem = styled.li`
+  cursor: pointer;
+  padding: 5px 0px;
+  transition: 0.3s;
+  border-radius: 4px;
+  :hover {
+    background: #48bb78;
+  }
+  button {
+    font-size: 16px;
+    display: block;
+    border: none;
+    background: none;
+    width: 100%;
+  }
+`
 
 const getEmojisFromEmojiSearchTerm = emojiSearchTerm =>
   emojiIndex.search(emojiSearchTerm)
@@ -54,7 +96,7 @@ const EmojiSuggestion = ({ value, onSelection }) => {
   })
 
   const EmojiResult = ({ emoji }) => (
-    <li>
+    <S_EmojiItem className="emoji-item">
       <button
         type="button"
         onClick={() => replaceEmoji(emojiSearchTerm, emoji, value)}
@@ -62,18 +104,18 @@ const EmojiSuggestion = ({ value, onSelection }) => {
         {'native' in emoji && emoji.native}
         {emoji.colons}
       </button>
-    </li>
+    </S_EmojiItem>
   )
 
   return (
     <>
       {displayed && (
-        <div ref={suggestions}>
+        <S_Box ref={suggestions}>
           Suggestions for <b>{emojiSearchTerm}</b>
           {emojis.map((emoji, i) => (
             <EmojiResult key={i} emoji={emoji} />
           ))}
-        </div>
+        </S_Box>
       )}
     </>
   )

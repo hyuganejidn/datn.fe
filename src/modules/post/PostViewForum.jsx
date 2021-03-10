@@ -5,15 +5,16 @@ import { capitalizeFirstLetter, timeSince } from '@/helpers/common'
 import { Icons } from 'Templates/icon/Icon'
 import { PostAPI } from '@/services'
 import { useDispatch } from 'react-redux'
+import { LayoutContainer } from '@/_layouts'
 import {
   S_Icon,
-  S_Post,
-  S_PostContent,
   S_PostInfo,
-  S_PostMain,
-  S_PostTitle,
   S_PostTop,
   S_TopLink,
+  S_PostMain,
+  S_PostMainTitle,
+  S_PostMainForum,
+  S_PostMainContent,
 } from '../home/Post.style'
 import Comments from '../comment/Comments'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
@@ -69,51 +70,34 @@ function PostViewForum() {
   }
 
   return (
-    <div>
+    <LayoutContainer>
       {!loading && post && (
-        <S_Post>
+        <S_PostMainForum>
           <S_PostInfo>
             <S_PostTop>
               <S_TopLink to={`/topics/${post.topic?.slug}`}>
-                <S_Icon
-                  icon={Icons[capitalizeFirstLetter(post.topic?.slug)]}
-                  width={16}
-                />
+                <S_Icon icon={Icons[capitalizeFirstLetter(post.topic?.slug)]} width={16} />
                 {post.topic?.name}
               </S_TopLink>
               &ensp;•&ensp;bởi&ensp;
-              <S_TopLink to={`/users/${post.author?.id}`}>
-                {post.author?.fullName}
-              </S_TopLink>
+              <S_TopLink to={`/users/${post.author?.id}`}>{post.author?.fullName}</S_TopLink>
               &ensp;•&ensp;{timeSince(post.createdAt)}
             </S_PostTop>
 
             <S_PostMain>
-              <S_PostTitle>{post.title}</S_PostTitle>
-              <S_PostContent>{post.content}</S_PostContent>
+              <S_PostMainTitle>{post.title}</S_PostMainTitle>
+              <S_PostMainContent dangerouslySetInnerHTML={{ __html: post.content }} />
             </S_PostMain>
 
-            <PostViewFooterForum
-              post={post}
-              userId={user.id}
-              isVote={isAuthenticated && postUserVote[post.id]}
-            />
+            <PostViewFooterForum post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
 
-            <Comments
-              type="forum"
-              comments={comments}
-              isAuth={isAuthenticated}
-              commentsUserVote={commentsUserVote}
-            />
+            <Comments type="forum" comments={comments} isAuth={isAuthenticated} commentsUserVote={commentsUserVote} />
 
-            <InputComment
-              placeholder="Viết bình luận..."
-              onSubmitComment={handleSubmitComment}
-            />
+            <InputComment placeholder="Viết bình luận..." onSubmitComment={handleSubmitComment} />
           </S_PostInfo>
-        </S_Post>
+        </S_PostMainForum>
       )}
-    </div>
+    </LayoutContainer>
   )
 }
 

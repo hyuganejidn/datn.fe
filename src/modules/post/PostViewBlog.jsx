@@ -3,23 +3,19 @@ import { Link, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Avatar } from '@material-ui/core'
 
-import { timeSince } from '@/helpers/common'
 import { PostAPI } from '@/services'
+import { timeSince } from '@/helpers/common'
+import { LayoutContainer } from '@/_layouts'
 import { Visibility } from 'Templates/icon/IconsSvg'
+
 import Comments from '../comment/Comments'
-import {
-  S_InfoUser,
-  S_Post,
-  S_PostInfo,
-  S_PostMain,
-  S_PostMainContent,
-} from '../home/Post.style'
-import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
-import { makeGetCommentsPost } from '../comment/store/selector'
-import * as types from '../comment/store/action_types'
 import InputComment from '../comment/InputComment'
-import PostViewFooterBlog from './components/PostViewFooterBlog'
+import * as types from '../comment/store/action_types'
 import { S_NameAuthorLink } from '../comment/Comment.style'
+import { makeGetCommentsPost } from '../comment/store/selector'
+import PostViewFooterBlog from './components/PostViewFooterBlog'
+import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
+import { S_InfoUser, S_PostInfo, S_PostMain, S_PostMainContent, S_PostMainForum } from '../home/Post.style'
 
 function PostViewBlog() {
   const { id } = useParams()
@@ -41,9 +37,7 @@ function PostViewBlog() {
           Theo dõi
         </button>
       )
-    const isFollowing =
-      user.blogsFollowing.length > 0 &&
-      user.blogsFollowing.includes(post.blog.id)
+    const isFollowing = user.blogsFollowing.length > 0 && user.blogsFollowing.includes(post.blog.id)
 
     if (!user.blogsFollowing && post.author?.id === user.id)
       return (
@@ -99,36 +93,28 @@ function PostViewBlog() {
   }
 
   return (
-    <div style={{ padding: '8px 6px' }}>
+    <LayoutContainer style={{ padding: '8px 6px' }}>
       {!loading && post && (
-        <S_Post>
+        <S_PostMainForum>
           <S_PostInfo>
             <S_PostMain>
               <div style={{ display: 'flex' }}>
-                <Link to={`/blogs/${post.blog?.id}`}>
-                  Blog / {post.blog?.title}
-                  {viewOptionBlog()}
-                </Link>
+                <Link to={`/blogs/${post.blog?.slug}`}>Blog / {post.blog?.title}</Link>
+                {viewOptionBlog()}
               </div>
               <h1 style={{ marginTop: 24 }}>{post.title}</h1>
 
               <S_InfoUser>
                 <div>
                   {post.author?.avatarUrl ? (
-                    <Avatar
-                      alt={post.author?.fullName}
-                      src={post.author?.avatarUrl}
-                    />
+                    <Avatar alt={post.author?.fullName} src={post.author?.avatarUrl} />
                   ) : (
                     <Avatar>{post.author?.fullName[0].toUpperCase()}</Avatar>
                   )}
                 </div>
 
                 <div style={{ marginLeft: '16px' }}>
-                  <S_NameAuthorLink
-                    style={{ fontSize: '1rem', fontWeight: 400 }}
-                    to={`/users/${post.author?.id}`}
-                  >
+                  <S_NameAuthorLink style={{ fontSize: '1rem', fontWeight: 400 }} to={`/users/${post.author?.id}`}>
                     {post.author.fullName}
                   </S_NameAuthorLink>
                   {/* <p>{post.author?.fullName}</p> */}
@@ -150,26 +136,15 @@ function PostViewBlog() {
               <S_PostMainContent>{post.content}</S_PostMainContent>
             </S_PostMain>
 
-            <PostViewFooterBlog
-              post={post}
-              userId={user.id}
-              isVote={isAuthenticated && postUserVote[post.id]}
-            />
+            <PostViewFooterBlog post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
 
-            <Comments
-              type="blog"
-              comments={comments}
-              commentsUserVote={isAuthenticated ? commentsUserVote : {}}
-            />
+            <Comments type="blog" comments={comments} commentsUserVote={isAuthenticated ? commentsUserVote : {}} />
 
-            <InputComment
-              placeholder="Viết bình luận..."
-              onSubmitComment={handleSubmitComment}
-            />
+            <InputComment placeholder="Viết bình luận..." onSubmitComment={handleSubmitComment} />
           </S_PostInfo>
-        </S_Post>
+        </S_PostMainForum>
       )}
-    </div>
+    </LayoutContainer>
   )
 }
 

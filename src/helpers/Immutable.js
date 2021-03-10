@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-underscore-dangle */
 import cloneDeep from 'lodash.clonedeep'
@@ -11,31 +12,33 @@ export class Immutable {
     return this._state
   }
 
+  formatTypePayload(payload, stateWithKey) {
+    if (typeof payload === 'function') payload = payload(stateWithKey)
+    return payload
+  }
+
   set(key, payload) {
     if (typeof key !== 'string') throw new Error(`${key} not found in state`)
-
-    this._state[key] = payload
+    this._state[key] = this.formatTypePayload(payload, this._state[key])
     return this
   }
 
   setIn(keys, payload) {
     if (typeof keys === 'string') {
-      Object.assign(this._state[keys], payload)
+      this.set(keys, payload)
     } else if (Array.isArray(keys)) {
       let state = this._state
 
       for (const key of keys) {
-        if (typeof state[key] === 'undefined')
-          throw new Error(`${key} not found in state`)
+        if (typeof state[key] === 'undefined') throw new Error(`${key} not found in state`)
 
-        if (
-          typeof state[key] === 'object' &&
-          !(keys[keys.length - 1] === key && typeof payload === 'object')
-        ) {
+        if (typeof state[key] === 'object' && !(keys[keys.length - 1] === key && typeof payload === 'object')) {
           state = state[key]
         } else {
-          if (typeof payload === 'object') Object.assign(state[key], payload)
-          else state[key] = payload
+          if (typeof payload === 'object') Object.assign(state[key], this.formatTypePayload(payload, this._state[key]))
+          else {
+            state[key] = this.formatTypePayload(payload, state[key])
+          }
           break
         }
       }
@@ -47,8 +50,7 @@ export class Immutable {
 
   update(key, payload) {
     if (typeof key !== 'string') throw new Error(`${key} not found in state`)
-    if (this._state[key] === undefined)
-      throw new Error(`${key} not found in state`)
+    if (this._state[key] === undefined) throw new Error(`${key} not found in state`)
 
     if (typeof payload === 'function') payload = payload(this._state[key])
 

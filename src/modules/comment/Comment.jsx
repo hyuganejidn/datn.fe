@@ -21,14 +21,7 @@ import InputComment from './InputComment'
 import CommentVote from './components/CommentVote'
 import * as types from './store/action_types'
 
-function Comment({
-  type,
-  comment,
-  userId,
-  handleReplyCommentChild,
-  commentsUserVote,
-  isLasts,
-}) {
+function Comment({ type, comment, userId, handleReplyCommentChild, commentsUserVote, isLasts }) {
   const dispatch = useDispatch()
 
   const [isReply, setIsReply] = useState(false)
@@ -74,10 +67,7 @@ function Comment({
     <S_Comment>
       <S_Avatar style={{ position: 'relative' }}>
         {comment.author?.avatarUrl ? (
-          <Avatar
-            alt={comment.author?.fullName}
-            src={comment.author?.avatarUrl}
-          />
+          <Avatar alt={comment.author?.fullName} src={comment.author?.avatarUrl} />
         ) : (
           <Avatar>{comment.author?.fullName[0].toUpperCase()}</Avatar>
         )}
@@ -91,18 +81,12 @@ function Comment({
       <S_CommentMain style={{ width: '100%' }}>
         <S_CommentContent>
           <div>
-            <S_NameAuthorLink to={`/users/${comment.author.id}`}>
-              {comment.author.fullName}
-            </S_NameAuthorLink>
-            {comment.userBeingReply &&
-              comment.userBeingReply.id !== comment.author.id && (
-                <Link
-                  to={`/users/${comment.userBeingReply.id}`}
-                  style={{ color: '#38a169', fontSize: '0.875rem' }}
-                >
-                  @{comment.userBeingReply.fullName}
-                </Link>
-              )}
+            <S_NameAuthorLink to={`/users/${comment.author.id}`}>{comment.author.fullName}</S_NameAuthorLink>
+            {comment.userBeingReply && comment.userBeingReply.id !== comment.author.id && (
+              <Link to={`/users/${comment.userBeingReply.id}`} style={{ color: '#38a169', fontSize: '0.875rem' }}>
+                @{comment.userBeingReply.fullName}
+              </Link>
+            )}
           </div>
           <div style={{ margin: `6px 0px` }}>{comment.content}</div>
         </S_CommentContent>
@@ -115,11 +99,7 @@ function Comment({
             isVote={commentsUserVote[comment.id]}
           />
 
-          <S_FooterLink
-            type="button"
-            onClick={handleReplyComment}
-            style={{ margin: '0 8px', color: '#718096' }}
-          >
+          <S_FooterLink type="button" onClick={handleReplyComment} style={{ margin: '0 8px', color: '#718096' }}>
             <CommentLine width={14} style={{ marginRight: '2px' }} />
             Trả lời
           </S_FooterLink>
@@ -145,9 +125,7 @@ function Comment({
                 key={commentChild.id}
                 comment={commentChild}
                 commentsUserVote={commentsUserVote}
-                handleReplyCommentChild={() =>
-                  onReplyCommentChild(commentChild)
-                }
+                handleReplyCommentChild={() => onReplyCommentChild(commentChild)}
               />
             ))}
           </div>
@@ -157,10 +135,7 @@ function Comment({
           <>
             <S_TitleReply>
               Đang trả lời cho
-              <Link
-                to={`/users/${commentReply.author?.id}`}
-                style={{ color: '#38a169' }}
-              >
+              <Link to={`/users/${commentReply.author?.id}`} style={{ color: '#38a169' }}>
                 {commentReply.author?.fullName}
               </Link>
             </S_TitleReply>

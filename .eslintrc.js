@@ -5,13 +5,7 @@ module.exports = {
     es6: true,
     es2020: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:react/recommended',
-    'airbnb',
-    'prettier',
-    'prettier/react',
-  ],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'airbnb', 'prettier', 'prettier/react'],
   rules: {
     'import/prefer-default-export': 0,
     'react-hooks/exhaustive-deps': 0,
@@ -26,10 +20,7 @@ module.exports = {
     'no-console': 1,
     'no-use-before-define': 1,
     'object-curly-spacing': [1, 'always'],
-    'no-unused-expressions': [
-      2,
-      { allowTernary: true, allowShortCircuit: true },
-    ],
+    'no-unused-expressions': [2, { allowTernary: true, allowShortCircuit: true }],
     'arrow-spacing': ['error', { before: true, after: true }],
     'space-before-function-paren': [
       2,
@@ -70,7 +61,7 @@ module.exports = {
         endOfLine: 'lf',
         singleQuote: true,
         tabWidth: 2,
-        printWidth: 80,
+        printWidth: 120,
       },
     ],
     'react/jsx-props-no-spreading': [

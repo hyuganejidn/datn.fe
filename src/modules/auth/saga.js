@@ -1,11 +1,4 @@
-import {
-  all,
-  call,
-  delay,
-  put,
-  takeEvery,
-  takeLatest,
-} from 'redux-saga/effects'
+import { all, call, delay, put, takeEvery, takeLatest } from 'redux-saga/effects'
 
 import { removeAuthToken, setAuthToken } from '@/helpers/storage'
 import { AuthAPI, UserAPI } from '@/services'
@@ -56,6 +49,8 @@ function* getMe() {
     yield put({ type: types.AUTH_LOGIN_SUCCESSFUL })
   } catch (error) {
     console.log('error', error)
+  } finally {
+    yield put({ type: types.AUTH_SET_PROCESSING, payload: { key: 'login' } })
   }
 }
 

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { topics } from '@/_constants/data'
 import Forum from './Forum'
 import Topics from './Topics'
+import { makeGetIsAuthenticated } from '../auth/store/selector'
 
 const S_Layout = styled.div`
   display: flex;
@@ -40,6 +41,8 @@ const S_Forum = styled(Forum)`
 `
 
 function Home() {
+  const isAuth = makeGetIsAuthenticated()
+  console.log(isAuth)
   return (
     <S_Layout>
       <S_Topics topics={topics} />

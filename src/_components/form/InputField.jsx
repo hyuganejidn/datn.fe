@@ -4,15 +4,18 @@ import { FormHelperText, TextField } from '@material-ui/core'
 
 function InputField(props) {
   const {
-    field,
     form,
-    label,
-    disabled,
     type,
+    label,
+    field,
+    classes,
+    maxLength,
+    disabled,
+    errorText,
+    className,
+    helperText,
     placeholder,
     autoComplete,
-    helperText,
-    errorText,
   } = props
 
   const { name } = field
@@ -21,12 +24,16 @@ function InputField(props) {
   const showError = (errors[name] && touched[name]) || !!errorText
 
   return (
-    <div className="form-group">
+    <div className={className}>
       <TextField
         {...field}
         id={name}
         label={label}
+        inputProps={{
+          maxLength,
+        }}
         error={showError}
+        className={classes}
         type={type || 'text'}
         helperText={helperText}
         placeholder={placeholder}
@@ -36,10 +43,7 @@ function InputField(props) {
       />
 
       {showError && (
-        <div
-          className="MuiFormHelperText-root"
-          style={{ color: 'red', fontSize: '0.75rem' }}
-        >
+        <div className="MuiFormHelperText-root" style={{ color: 'red', fontSize: '0.75rem' }}>
           {errorText}
         </div>
       )}

@@ -1,25 +1,11 @@
 import React, { useState } from 'react'
 import { ErrorMessage } from 'formik'
-import {
-  FormHelperText,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from '@material-ui/core'
+import { FormHelperText, TextField, InputAdornment, IconButton } from '@material-ui/core'
 
 import { Visibility, VisibilityOff } from 'Templates/icon/IconsSvg'
 
 function InputField(props) {
-  const {
-    field,
-    form,
-    label,
-    disabled,
-    placeholder,
-    autoComplete,
-    helperText,
-    errorText,
-  } = props
+  const { field, form, label, disabled, placeholder, autoComplete, helperText, errorText } = props
 
   const { name } = field
   const { errors, touched } = form
@@ -40,10 +26,7 @@ function InputField(props) {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton
-                aria-label="toggle password visibility"
-                onClick={handleClickShowPassword}
-              >
+              <IconButton aria-label="toggle password visibility" onClick={handleClickShowPassword}>
                 {showPassword ? (
                   <Visibility style={{ width: '16px', height: '16px' }} />
                 ) : (
@@ -59,16 +42,14 @@ function InputField(props) {
         aria-describedby={`${name}-error`}
       />
 
-      {showError && (
-        <ErrorMessage
-          name={name}
-          component={() => (
-            <FormHelperText id={`${name}-error`} style={{ color: 'red' }}>
-              {errors[name] || errorText}
-            </FormHelperText>
-          )}
-        />
-      )}
+      <ErrorMessage
+        name={name}
+        component={() => (
+          <FormHelperText id={`${name}-error`} style={{ color: 'red' }}>
+            {errors[name] || errorText}
+          </FormHelperText>
+        )}
+      />
     </div>
   )
 }

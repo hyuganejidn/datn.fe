@@ -49,13 +49,22 @@ export const S_Avatar = styled(Link)`
   margin: 8px 0px 8px 4px;
 `
 export const S_AvatarDefault = styled.div`
-  min-width: 100%;
+  position: relative;
   display: flex;
   align-items: center;
-  min-height: 110px;
+  height: 110px;
   background: #f5f5f5;
   justify-content: center;
   border-radius: 5px;
+`
+export const S_ImageAvatar = styled.img`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
 `
 
 const M_Comment = css`
@@ -101,12 +110,7 @@ export const S_PostTop = styled.div`
 export const S_PostInfo = styled.div`
   width: 100%;
 `
-export const S_PostMain = styled.div`
-  display: inline-flex;
-  flex-direction: column;
-  margin: 0 8px;
-  /* font-size: 50px !important;  */
-`
+
 export const S_PostFooter = styled.div`
   display: flex;
   align-items: center;
@@ -125,33 +129,34 @@ export const S_PostViewFooter = styled.div`
   line-height: 24px;
   font-size: 14px !important;
 `
+export const S_TextFormat = css`
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  line-height: 1.2rem;
+`
 
 export const S_PostTitle = styled(Link)`
-  display: inline-block;
   font-weight: 500;
   color: #1a202c !important;
   font-size: 16px !important;
   cursor: pointer;
+  -webkit-line-clamp: 1;
+
+  ${S_TextFormat}
 `
 
 export const S_PostContent = styled(Link)`
-  display: inline-block;
   padding: 4px 0;
   color: #718096 !important;
   font-weight: 500;
   font-size: 13px !important;
-  cursor: pointer;
-`
-
-export const S_PostMainContent = styled(Link)`
-  display: inline-block;
-  padding: 4px 0;
-  color: #718096 !important;
-  font-weight: 500;
-  font-size: 13px !important;
+  min-height: 44px;
   cursor: pointer;
 
-  margin-top: 32px;
+  ${S_TextFormat}
+  -webkit-line-clamp: 2;
 `
 
 export const S_FooterLink = styled(Link)`
@@ -160,7 +165,6 @@ export const S_FooterLink = styled(Link)`
   color: inherit !important;
   padding: 4px 4px;
   border-radius: 4px;
-  margin-right: 18px;
   cursor: pointer;
   :hover {
     background-color: rgba(237, 242, 247, var(--bg-opacity));
@@ -187,8 +191,7 @@ export const S_UpVote = styled.button`
   background: none;
   outline: none;
   border: none;
-  color: ${props =>
-    !props.isVoted ? ' rgb(113, 128, 150)!important' : '#63b3ed !important'};
+  color: ${props => (!props.isVoted ? ' rgb(113, 128, 150)!important' : '#63b3ed !important')};
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -201,8 +204,7 @@ export const S_DownVote = styled.button`
   outline: none;
   border: none;
   /* color: rgb(113, 128, 150) !important; */
-  color: ${props =>
-    !props.isVoted ? ' rgb(113, 128, 150)!important' : '#e53e3e !important'};
+  color: ${props => (!props.isVoted ? ' rgb(113, 128, 150)!important' : '#e53e3e !important')};
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -219,4 +221,49 @@ export const S_InfoUser = styled.div`
   display: flex;
   align-items: center;
   margin-top: 8px;
+`
+
+export const S_PostMain = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  margin: 0 8px;
+  /* font-size: 50px !important;  */
+`
+
+export const S_PostMainContent = styled.div`
+  display: inline-block;
+  padding: 4px 0;
+  /* color: #718096 !important; */
+  /* font-weight: 500; */
+  /* font-size: 13px !important; */
+  /* cursor: pointer; */
+
+  margin-top: 25px;
+`
+
+export const S_PostMainTitle = styled.div`
+  font-weight: 500;
+  color: #1a202c !important;
+  font-size: 20px !important;
+  cursor: pointer;
+`
+
+export const S_PostMainForum = styled.div`
+  display: flex;
+  /* flex-direction: column; */
+  /* margin: 0 8px; */
+  /* font-size: 50px !important;  */
+`
+
+export const S_FooterMainLink = styled.button`
+  display: flex;
+  align-items: center;
+  color: inherit !important;
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-right: 18px;
+  cursor: pointer;
+  :hover {
+    background-color: rgba(237, 242, 247, var(--bg-opacity));
+  }
 `

@@ -4,6 +4,10 @@ import * as types from './action_types'
 const initialState = {
   user: {},
   isAuthenticated: false,
+  processing: {
+    login: true,
+    password: true,
+  },
   errors: {
     login: {
       username: '',
@@ -36,14 +40,14 @@ const reducer = (_state = initialState, { type, payload }) => {
     case types.AUTH_LOGIN_SUCCESSFUL:
       return immutableState.update('isAuthenticated', bool => !bool).state
     case types.AUTH_LOGOUT_SUCCESSFUL:
-      return immutableState
-        .update('user', {})
-        .update('isAuthenticated', bool => !bool).state
+      return immutableState.update('user', {}).update('isAuthenticated', bool => !bool).state
     case types.AUTH_RESET_ERRORS:
       return immutableState.setIn(['errors', 'login'], {
         username: '',
         password: '',
       }).state
+    case types.AUTH_SET_PROCESSING:
+      return immutableState.setIn(['processing', payload.key], bool => !bool).state
     default:
       return _state
   }

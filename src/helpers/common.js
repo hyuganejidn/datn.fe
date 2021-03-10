@@ -72,9 +72,14 @@ function b64toBlob(b64Data, contentType, sliceSize) {
   return blob
 }
 
+// function isBase64(s) {
+//   const regexCheckBase64 = /^\s*data:([a-z]+\/[a-z]+(;[a-z\-]+\=[a-z\-]+)?)?(;base64)?,[a-z0-9\!\$\&\'\,\(\)\*\+\,\;\=\-\.\_\~\:\@\/\?\%\s]*\s*$/i
+//   return !!s.match(regexCheckBase64)
+// }
+
 export function getImages(xmlString) {
-  const doc = new DOMParser().parseFromString(xmlString, 'text/xml')
-  const elImages = doc.querySelectorAll('img')
+  const doc = new DOMParser().parseFromString(xmlString, 'text/html')
+  const elImages = doc.body.querySelectorAll('img[src^="data:image/"]')
   const imagesBase = Array.from(elImages).map(el => {
     const srcBase = el.getAttribute('src')
     if (srcBase) {
@@ -87,17 +92,27 @@ export function getImages(xmlString) {
     return {}
   })
 
-  const imgs = imagesBase.map((img, i) =>
-    b64toBlob(img.realData, img.contentType, i)
-  )
+  const imgs = imagesBase.map((img, i) => b64toBlob(img.realData, img.contentType, i))
   return imgs
 }
 
 export const replaceSrcImg = (xmlString, srcImgs) => {
-  const doc = new DOMParser().parseFromString(xmlString, 'text/xml')
-  const elImages = doc.querySelectorAll('img')
+  const doc = new DOMParser().parseFromString(xmlString, 'text/html')
+  const elImages = doc.body.querySelectorAll('img[src^="data:image/"]')
   for (let i = 0; i < elImages.length; i += 1) {
     elImages[i].setAttribute('src', srcImgs[i].path)
   }
   return doc
+}
+
+export const getFirstTagImg = xmlString => {
+  const doc = new DOMParser().parseFromString(xmlString, 'text/html')
+  const elImgFirst = doc.body.querySelector('img')
+  return elImgFirst
+}
+
+export const getInnerText = xmlString => {
+  const dom = new DOMParser().parseFromString(xmlString, 'text/html')
+  const elContent = dom.body.firstChild
+  return elContent.innerText
 }

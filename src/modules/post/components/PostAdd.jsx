@@ -4,11 +4,11 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 import styled from 'styled-components'
 import { FastField, Formik, Form } from 'formik'
-import { useLocation } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { InputEmoji } from 'Templates/form'
 import queryString from 'query-string'
 
-import { getImages, replaceSrcImg } from '@/helpers/common'
+import { getFirstTagImg, getImages, replaceSrcImg } from '@/helpers/common'
 import http from '@/helpers/axios'
 import SelectTopic from 'Templates/form/SelectTopic'
 import { PostAPI } from '@/services'
@@ -58,12 +58,7 @@ const formats = [
 const modules = {
   toolbar: [
     ['bold', 'italic', 'underline', 'blockquote'],
-    [
-      { list: 'ordered' },
-      { list: 'bullet' },
-      { indent: '-1' },
-      { indent: '+1' },
-    ],
+    [{ list: 'ordered' }, { list: 'bullet' }, { indent: '-1' }, { indent: '+1' }],
     [{ color: [] }, { background: [] }],
     [{ align: [] }],
     ['link', 'image'],
@@ -77,7 +72,9 @@ const modules = {
 
 function PostAdd() {
   const location = useLocation()
+  const history = useHistory()
   const { classify } = queryString.parse(location.search)
+
   const [content, setContent] = useState('')
   const [topicSelected, setTopicSelected] = useState({})
 
@@ -112,49 +109,37 @@ function PostAdd() {
 
   const onSubmitPost = async values => {
     const imgs = await saveImages(content)
-    // console.log()
     const contentNew = replaceImgSrc(imgs, content)
+    const elImgFirst = getFirstTagImg(contentNew)
+
     const data = {
       classify,
       title: values.title,
       content: contentNew,
-      avatar: imgs[0] ? imgs[0].path : '',
+      avatar: elImgFirst ? elImgFirst.getAttribute('src') : '',
     }
-    classify === 'forum'
-      ? (data.topic = topicSelected.slug)
-      : (data.blog = '123')
+    classify === 'forum' ? (data.topic = topicSelected.slug) : (data.blog = '123')
 
-    const post = await PostAPI.create(data)
-    console.log(post)
+    try {
+      const post = await PostAPI.create(data)
+      history.push('/')
+      console.log(post)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (
     <div className="m-auto md:max-w-3xl">
-      <Formik
-        initialValues={{ title: '' }}
-        onSubmit={(values, action) => onSubmitPost(values, action)}
-      >
+      <Formik initialValues={{ title: '' }} onSubmit={(values, action) => onSubmitPost(values, action)}>
         {() => (
           <Form>
-            <SelectTopic
-              topics={topics}
-              topicSelected={topicSelected}
-              onChange={handleChangeSelect}
-            />
+            <SelectTopic topics={topics} topicSelected={topicSelected} onChange={handleChangeSelect} />
 
             <div className="rounded-lg px-2 md:px-4 mt-2 p-2 border border-gray-200 bg-white rounded-lg border">
-              <S_InputTitle
-                name="title"
-                component={InputEmoji}
-                placeholder="Tiêu đề"
-              />
+              <S_InputTitle name="title" component={InputEmoji} placeholder="Tiêu đề" />
 
-              <S_Editor
-                value={content}
-                modules={modules}
-                formats={formats}
-                onChange={handleChange}
-              >
+              <S_Editor value={content} modules={modules} formats={formats} onChange={handleChange}>
                 {/* <S_EditingArea /> */}
               </S_Editor>
               <div className="flex justify-between">

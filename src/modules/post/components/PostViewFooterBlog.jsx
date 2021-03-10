@@ -1,21 +1,8 @@
 import React, { useState } from 'react'
 
-import {
-  CommentSquareLine,
-  Heart,
-  HeartLine,
-  ShareLine,
-} from 'Templates/icon/IconsSvg'
-import {
-  S_FooterLink,
-  S_PostViewFooter,
-  S_FooterText,
-} from '@/modules/home/Post.style'
-import {
-  S_HeartLike,
-  S_Like,
-  S_ThreeDotMenu,
-} from '@/modules/comment/Comment.style'
+import { CommentSquareLine, Heart, HeartLine, ShareLine } from 'Templates/icon/IconsSvg'
+import { S_FooterMainLink, S_PostViewFooter, S_FooterText } from '@/modules/home/Post.style'
+import { S_HeartLike, S_Like, S_ThreeDotMenu } from '@/modules/comment/Comment.style'
 import { PostAPI } from '@/services'
 
 function PostViewFooterBlog({ isVote, userId, post }) {
@@ -58,15 +45,15 @@ function PostViewFooterBlog({ isVote, userId, post }) {
             <S_FooterText>{voteTotal || post.voteNum} lượt thích</S_FooterText>
           </S_Like>
 
-          <S_FooterLink>
+          <S_FooterMainLink>
             <CommentSquareLine width={16} />
             <S_FooterText>{post.commentNum} Bình luận</S_FooterText>
-          </S_FooterLink>
+          </S_FooterMainLink>
 
-          <S_FooterLink>
+          <S_FooterMainLink>
             <ShareLine width={16} />
             <S_FooterText>Chia sẽ</S_FooterText>
-          </S_FooterLink>
+          </S_FooterMainLink>
 
           <S_ThreeDotMenu
             options={

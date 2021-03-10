@@ -4,7 +4,7 @@ import {
   S_UpVote,
   S_VoteRow,
   S_PostViewFooter,
-  S_FooterLink,
+  S_FooterMainLink,
   S_FooterText,
 } from '@/modules/home/Post.style'
 import { PostAPI } from '@/services'
@@ -42,32 +42,24 @@ function PostViewFooterForum({ isVote, userId, post }) {
       {post && (
         <S_PostViewFooter>
           <S_VoteRow>
-            <S_UpVote
-              onClick={() => handleVotePost(post.id, 1)}
-              isVoted={vote?.vote === 1 || isVoted === 1}
-            >
+            <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
               <UpVote width={18} />
             </S_UpVote>
-            <span style={{ margin: '0 4px' }}>
-              {vote ? vote?.voteTotal : post.voteNum}
-            </span>
-            <S_DownVote
-              onClick={() => handleVotePost(post.id, -1)}
-              isVoted={vote?.vote === -1 || isVoted === -1}
-            >
+            <span style={{ margin: '0 4px' }}>{vote ? vote?.voteTotal : post.voteNum}</span>
+            <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1 || isVoted === -1}>
               <DownVote width={18} />
             </S_DownVote>
           </S_VoteRow>
 
-          <S_FooterLink>
+          <S_FooterMainLink>
             <CommentSquare width={16} />
             <S_FooterText>{post.commentNum} Bình luận</S_FooterText>
-          </S_FooterLink>
+          </S_FooterMainLink>
 
-          <S_FooterLink>
+          <S_FooterMainLink>
             <Share width={16} />
             <S_FooterText>Chia sẽ</S_FooterText>
-          </S_FooterLink>
+          </S_FooterMainLink>
 
           <S_ThreeDotMenu
             options={

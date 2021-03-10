@@ -49,9 +49,7 @@ const convertLocationToIndex = search => {
 
 function BlogHome() {
   const location = useLocation()
-  const [tabValue, setTabValue] = useState(
-    convertLocationToIndex(location.search)
-  )
+  const [tabValue, setTabValue] = useState(convertLocationToIndex(location.search))
 
   const [postsNew, setPostsNew] = useState([])
   const [blogsTop, setBlogsTop] = useState([])
@@ -117,12 +115,13 @@ function BlogHome() {
   }, [location])
 
   return (
-    <div>
+    <div className="nav-blogs">
       <AppBar position="static">
         <Tabs
           variant="fullWidth"
           value={tabValue}
           onChange={handleChange}
+          className="md:max-w-2xl m-auto"
           aria-label="nav tabs example"
         >
           <LinkTab label="Bài mới" to="?tab=news" {...a11yProps(0)} />
@@ -131,18 +130,20 @@ function BlogHome() {
           <LinkTab label="Blogs của tôi" to="?tab=me" {...a11yProps(3)} />
         </Tabs>
       </AppBar>
-      <TabPanel value={tabValue} index={0}>
-        <PostsBlogs posts={postsNew} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={1}>
-        <Blogs blogs={blogsTop} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={2}>
-        <PostsBlogs posts={postsUserFollowed} />
-      </TabPanel>
-      <TabPanel value={tabValue} index={3}>
-        <Blogs blogs={blogsMe} />
-      </TabPanel>
+      <div className="md:max-w-2xl m-auto">
+        <TabPanel value={tabValue} index={0}>
+          <PostsBlogs posts={postsNew} />
+        </TabPanel>
+        <TabPanel value={tabValue} index={1}>
+          <Blogs blogs={blogsTop} />
+        </TabPanel>
+        <TabPanel value={tabValue} index={2}>
+          <PostsBlogs posts={postsUserFollowed} />
+        </TabPanel>
+        <TabPanel value={tabValue} index={3}>
+          <Blogs blogs={blogsMe} />
+        </TabPanel>
+      </div>
     </div>
   )
 }

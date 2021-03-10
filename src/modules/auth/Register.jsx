@@ -48,16 +48,11 @@ export default function Register() {
       .oneOf([Yup.ref('password')], 'Mật khẩu không giống'),
   })
 
-  const signIn = values =>
-    dispatch({ type: types.S_AUTH_SIGNUP_REQUEST, payload: values })
+  const signIn = values => dispatch({ type: types.S_AUTH_SIGNUP_REQUEST, payload: values })
 
   return (
     <div>
-      <Formik
-        initialValues={initialDataUser}
-        onSubmit={signIn}
-        validationSchema={validationSchema}
-      >
+      <Formik initialValues={initialDataUser} onSubmit={signIn} validationSchema={validationSchema}>
         <Form>
           <FastField
             name="fullName"

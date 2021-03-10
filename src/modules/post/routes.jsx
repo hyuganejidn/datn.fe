@@ -26,6 +26,7 @@ export default [
   },
   {
     path: '/posts/add',
+    auth: true,
     exact: true,
     component: () => (
       <Suspense fallback={<Loading />}>

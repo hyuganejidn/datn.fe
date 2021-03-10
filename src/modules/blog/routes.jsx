@@ -3,6 +3,7 @@ import React, { lazy, Suspense } from 'react'
 
 const BlogView = lazy(() => import('./BlogView'))
 const BlogHome = lazy(() => import('./BlogHome'))
+const BlogAdd = lazy(() => import('./BlogAdd'))
 
 export default [
   {
@@ -12,6 +13,16 @@ export default [
     component: props => (
       <Suspense fallback={<Loading />}>
         <BlogHome {...props} />
+      </Suspense>
+    ),
+  },
+  {
+    path: '/blogs/add',
+    auth: true,
+    exact: true,
+    component: props => (
+      <Suspense fallback={<Loading />}>
+        <BlogAdd {...props} />
       </Suspense>
     ),
   },

@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { votePost } from '@/services/post'
 import { capitalizeFirstLetter, getInnerText, timeSince } from '@/helpers/common'
 import { Icons } from 'Templates/icon/Icon'
 import { DownVote, UpVote } from 'Templates/icon/IconsSvg'
+import { useDispatch } from 'react-redux'
+import { PostAPI } from '@/services'
 import {
   S_Avatar,
   S_AvatarDefault,
@@ -21,15 +23,21 @@ import {
   S_PostTitle,
   S_PostTop,
   S_Share,
-  S_ThreeDot,
   S_TopLink,
   S_UpVote,
   S_Vote,
 } from './Post.style'
+import { S_ThreeDotMenu } from '../comment/Comment.style'
+import * as types from './store/action_types'
 
-function Post({ post, isVote }) {
+function Post({ post, isVote, userId }) {
   const [vote, setVote] = useState(undefined)
+  const dispatch = useDispatch()
   const [isVoted, setIsVoted] = useState(isVote)
+
+  useEffect(() => {
+    setIsVoted(() => isVote)
+  }, [isVote])
 
   const handleVotePost = async (postId, voteNum) => {
     const voteData = await votePost(postId, voteNum)
@@ -40,8 +48,27 @@ function Post({ post, isVote }) {
     setIsVoted(isVoted === voteNum ? 0 : voteNum)
   }
 
+  const handleDelete = async id => {
+    try {
+      await PostAPI.destroy(id)
+      dispatch({ type: types.REMOVE_POST, payload: id })
+    } catch (error) {
+      throw new Error(error)
+    }
+    // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
+  }
+
+  const handleUpdate = () => {
+    console.log('update')
+    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+  }
+
+  const handleReport = () => {
+    dispatch({ type: types.APP_UPDATE_ISHOWREPORT })
+  }
+
   return (
-    <S_Post>
+    <S_Post className="shadow-box-2 rounded-lg" style={{ margin: '8px 0' }}>
       <S_Vote>
         <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
           <UpVote />
@@ -79,13 +106,20 @@ function Post({ post, isVote }) {
             <S_Comment />
             <span style={{ marginLeft: 4, marginRight: 19 }}>{post.commentNum} Bình luận</span>
           </S_FooterLink>
-          <S_FooterLink>
+          <S_FooterLink to={`/topics/posts/${post.id}`}>
             <S_Share />
             <span style={{ marginLeft: 4, marginRight: 19 }}>Chia sẽ</span>
           </S_FooterLink>
-          <S_FooterLink>
-            <S_ThreeDot />
-          </S_FooterLink>
+          <S_ThreeDotMenu
+            options={
+              userId === post.author?.id
+                ? [
+                    { title: 'Xóa bài viết', onClick: () => handleDelete(post.id) },
+                    { title: 'Sửa bài viết', onClick: handleUpdate },
+                  ]
+                : [{ title: 'Báo xấu', onClick: handleReport }]
+            }
+          />
         </S_PostFooter>
       </S_PostInfo>
     </S_Post>

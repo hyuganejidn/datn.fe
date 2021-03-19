@@ -14,6 +14,7 @@ function Comments({ type, comments, commentsUserVote }) {
           comment={comment}
           commentsUserVote={commentsUserVote}
           isLasts={i === comments.length - 1}
+          i={i}
         />
       ))}
     </>

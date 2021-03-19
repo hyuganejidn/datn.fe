@@ -42,9 +42,7 @@ function Topic({ topic }) {
   const { slug: slugParam } = useParams()
   const { slug, name, icon } = topic
   return (
-    <S_Li
-      isActive={slugParam === slug || (slugParam === undefined && slug === '')}
-    >
+    <S_Li isActive={slugParam === slug || (slugParam === undefined && slug === '')}>
       <S_Link to={slug === '' ? '/' : `/topics/${slug}`}>
         <S_Icon icon={icon} width={22} />
         <S_Span>{name}</S_Span>

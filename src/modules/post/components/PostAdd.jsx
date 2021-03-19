@@ -1,45 +1,18 @@
-import { topics } from '@/_constants/data'
-import React, { useState } from 'react'
-import ReactQuill from 'react-quill'
-import 'react-quill/dist/quill.snow.css'
-import styled from 'styled-components'
-import { FastField, Formik, Form } from 'formik'
-import { useHistory, useLocation } from 'react-router-dom'
-import { InputEmoji } from 'Templates/form'
+import React, { useEffect, useState } from 'react'
 import queryString from 'query-string'
+import styled from 'styled-components'
+import ReactQuill from 'react-quill'
+import { FastField, Formik, Form } from 'formik'
+import { Link, useHistory, useLocation } from 'react-router-dom'
+import 'react-quill/dist/quill.snow.css'
 
-import { getFirstTagImg, getImages, replaceSrcImg } from '@/helpers/common'
-import http from '@/helpers/axios'
+import { InputEmoji } from 'Templates/form'
 import SelectTopic from 'Templates/form/SelectTopic'
-import { PostAPI } from '@/services'
-
-const S_Editor = styled(ReactQuill)`
-  .ql-editor {
-    min-height: 200px;
-  }
-`
-const S_InputTitle = styled(FastField)`
-  display: flex;
-  position: relative;
-  border-width: 1px;
-  padding: 8px;
-  padding-left: 10px;
-  background: #fff;
-  .textarea {
-    outline: none;
-    font-family: 'Roboto';
-    border: none;
-    overflow: hidden;
-    text-align: justify;
-  }
-  .emoji {
-    height: 18px;
-    margin-left: 5px;
-    text-align: end;
-    position: relative;
-    cursor: pointer;
-  }
-`
+import http from '@/helpers/axios'
+import { BlogAPI, PostAPI } from '@/services'
+import { LayoutBg } from '@/_layouts'
+import { topicsSelect } from '@/_constants/data'
+import { getFirstTagImg, getImages, replaceSrcImg } from '@/helpers/common'
 
 const formats = [
   'bold',
@@ -73,10 +46,11 @@ const modules = {
 function PostAdd() {
   const location = useLocation()
   const history = useHistory()
-  const { classify } = queryString.parse(location.search)
-
+  const { classify, blogSlug } = queryString.parse(location.search)
+  console.log(blogSlug)
   const [content, setContent] = useState('')
   const [topicSelected, setTopicSelected] = useState({})
+  const [blog, setBlog] = useState({})
 
   const handleChange = value => {
     setContent(value)
@@ -118,52 +92,107 @@ function PostAdd() {
       content: contentNew,
       avatar: elImgFirst ? elImgFirst.getAttribute('src') : '',
     }
-    classify === 'forum' ? (data.topic = topicSelected.slug) : (data.blog = '123')
+    classify === 'forum' ? (data.topic = topicSelected.slug) : (data.blog = blog.id)
 
     try {
       const post = await PostAPI.create(data)
-      history.push('/')
+      history.push(classify === 'forum' ? '/' : `/blogs/${blog.slug}`)
       console.log(post)
     } catch (error) {
-      console.log(error)
+      throw new Error(error)
     }
   }
 
+  useEffect(() => {
+    if (blogSlug) {
+      const getBlog = async () => {
+        try {
+          const blogRes = await BlogAPI.getBlogById(blogSlug)
+          setBlog(blogRes)
+        } catch (error) {
+          throw new Error(error)
+        }
+      }
+
+      getBlog()
+    }
+  }, [blogSlug])
+
   return (
-    <div className="m-auto md:max-w-3xl">
-      <Formik initialValues={{ title: '' }} onSubmit={(values, action) => onSubmitPost(values, action)}>
-        {() => (
-          <Form>
-            <SelectTopic topics={topics} topicSelected={topicSelected} onChange={handleChangeSelect} />
+    <LayoutBg>
+      <div className="m-auto md:max-w-3xl" style={{ paddingTop: 16 }}>
+        {classify === 'forum' ? (
+          <SelectTopic topics={topicsSelect} topicSelected={topicSelected} onChange={handleChangeSelect} />
+        ) : (
+          <Link
+            to={`/blogs/${blogSlug}`}
+            className="rounded-sm font-light py-2 text-lg px-3 hover:underline hover:text-blue-600 text-green-500 bg-white no-underline"
+            style={{ marginBottom: 16, display: 'inline-block' }}
+          >
+            Blog/{blog.title}
+          </Link>
+        )}
 
-            <div className="rounded-lg px-2 md:px-4 mt-2 p-2 border border-gray-200 bg-white rounded-lg border">
-              <S_InputTitle name="title" component={InputEmoji} placeholder="Tiêu đề" />
+        <Formik initialValues={{ title: '' }} onSubmit={(values, action) => onSubmitPost(values, action)}>
+          {() => (
+            <Form>
+              <div className="rounded-lg px-2 md:px-4 mt-2 p-2 border border-gray-200 bg-white rounded-lg border">
+                <S_InputTitle name="title" component={InputEmoji} placeholder="Tiêu đề" />
 
-              <S_Editor value={content} modules={modules} formats={formats} onChange={handleChange}>
-                {/* <S_EditingArea /> */}
-              </S_Editor>
-              <div className="flex justify-between">
-                <div className="flex mt-2">
-                  <button
-                    type="button"
-                    className="mr-3 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium py-1 px-2 rounded focus:outline-none"
-                  >
-                    Hủy
-                  </button>
-                  <button
-                    type="submit"
-                    className="bg-green-500 hover:bg-green-700 text-sm font-medium text-white py-1 px-2 rounded focus:outline-none"
-                  >
-                    Đăng bài diễn đàn
-                  </button>
+                <S_Editor value={content} modules={modules} formats={formats} onChange={handleChange}>
+                  {/* <S_EditingArea /> */}
+                </S_Editor>
+                <div className="flex justify-between">
+                  <div className="flex mt-2">
+                    <button
+                      type="button"
+                      className="mr-3 bg-gray-500 hover:bg-gray-600 text-white text-sm font-medium py-1 px-2 rounded focus:outline-none"
+                    >
+                      Hủy
+                    </button>
+                    <button
+                      type="submit"
+                      className="bg-green-500 hover:bg-green-700 text-sm font-medium text-white py-1 px-2 rounded focus:outline-none"
+                    >
+                      {classify === 'forum' ? 'Đăng bài diễn đàn' : 'Tạo bài viết'}
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
+    </LayoutBg>
   )
 }
 
 export default PostAdd
+
+const S_Editor = styled(ReactQuill)`
+  .ql-editor {
+    min-height: 200px;
+  }
+`
+const S_InputTitle = styled(FastField)`
+  display: flex;
+  position: relative;
+  border-width: 1px;
+  padding: 8px;
+  padding-left: 10px;
+  background: #fff;
+  .textarea {
+    outline: none;
+    font-family: 'Roboto';
+    border: none;
+    overflow: hidden;
+    text-align: justify;
+  }
+  .emoji {
+    height: 18px;
+    margin-left: 5px;
+    text-align: end;
+    position: relative;
+    cursor: pointer;
+  }
+`

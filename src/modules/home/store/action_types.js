@@ -1,1 +1,9 @@
-export const TEST = 'TEST'
+export const SET_POSTS = 'SET_POSTS'
+export const REMOVE_POST = 'REMOVE_POST'
+export const SET_POSTS_VOTED = 'SET_POSTS_VOTED'
+export const SET_PROCESSING = 'SET_PROCESSING'
+export const APP_UPDATE_ISHOWREPORT = 'APP_UPDATE_ISHOWREPORT'
+
+export const S_FETCH_POSTS = 'S_FETCH_POSTS'
+export const S_FETCH_POSTS_VOTED = 'S_FETCH_POSTS_VOTED'
+export const S_FETCH_POSTS_USER = 'S_FETCH_POSTS_USER'

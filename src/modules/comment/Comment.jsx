@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { CommentLine } from 'Templates/icon/IconsSvg'
+import * as typesHome from '@/modules/home/store/action_types'
 import {
   S_Footer,
   S_FooterLink,
@@ -21,7 +22,7 @@ import InputComment from './InputComment'
 import CommentVote from './components/CommentVote'
 import * as types from './store/action_types'
 
-function Comment({ type, comment, userId, handleReplyCommentChild, commentsUserVote, isLasts }) {
+function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUserVote, isLasts }) {
   const dispatch = useDispatch()
 
   const [isReply, setIsReply] = useState(false)
@@ -60,7 +61,7 @@ function Comment({ type, comment, userId, handleReplyCommentChild, commentsUserV
   }
 
   const handleReport = () => {
-    console.log('report')
+    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
   }
 
   return (
@@ -74,7 +75,7 @@ function Comment({ type, comment, userId, handleReplyCommentChild, commentsUserV
         {handleReplyCommentChild ? (
           <S_LineCurves />
         ) : (
-          <S_LineStraight style={{ height: isLasts && 'calc(50% - 40px)' }} />
+          (!isLasts || i === 0 || (isLasts && comment.commentsChild.length > 0)) && <S_LineStraight />
         )}
       </S_Avatar>
 
@@ -134,7 +135,7 @@ function Comment({ type, comment, userId, handleReplyCommentChild, commentsUserV
         {isReply && !handleReplyCommentChild && (
           <>
             <S_TitleReply>
-              Đang trả lời cho
+              Đang trả lời cho &ensp;•&ensp;
               <Link to={`/users/${commentReply.author?.id}`} style={{ color: '#38a169' }}>
                 {commentReply.author?.fullName}
               </Link>

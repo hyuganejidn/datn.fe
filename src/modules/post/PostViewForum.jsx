@@ -5,13 +5,13 @@ import { capitalizeFirstLetter, timeSince } from '@/helpers/common'
 import { Icons } from 'Templates/icon/Icon'
 import { PostAPI } from '@/services'
 import { useDispatch } from 'react-redux'
-import { LayoutContainer } from '@/_layouts'
+import { LayoutBg, LayoutContainer } from '@/_layouts'
 import {
   S_Icon,
   S_PostInfo,
-  S_PostTop,
+  S_PostMainTop,
   S_TopLink,
-  S_PostMain,
+  S_PostMainView,
   S_PostMainTitle,
   S_PostMainForum,
   S_PostMainContent,
@@ -70,34 +70,40 @@ function PostViewForum() {
   }
 
   return (
-    <LayoutContainer>
-      {!loading && post && (
-        <S_PostMainForum>
-          <S_PostInfo>
-            <S_PostTop>
-              <S_TopLink to={`/topics/${post.topic?.slug}`}>
-                <S_Icon icon={Icons[capitalizeFirstLetter(post.topic?.slug)]} width={16} />
-                {post.topic?.name}
-              </S_TopLink>
-              &ensp;•&ensp;bởi&ensp;
-              <S_TopLink to={`/users/${post.author?.id}`}>{post.author?.fullName}</S_TopLink>
-              &ensp;•&ensp;{timeSince(post.createdAt)}
-            </S_PostTop>
+    <LayoutBg>
+      <LayoutContainer>
+        {!loading && post && (
+          <S_PostMainForum className="shadow-box-2" style={{ paddingBottom: 50 }}>
+            <S_PostInfo>
+              <S_PostMainTop>
+                <S_TopLink
+                  to={`/topics/${post.topic?.slug}`}
+                  className="font-medium text-sm hover:underline text-black no-underline"
+                >
+                  <S_Icon icon={Icons[capitalizeFirstLetter(post.topic?.slug)]} width={20} />
+                  {post.topic?.name}
+                </S_TopLink>
+                &ensp;•&ensp;bởi&ensp;
+                <S_TopLink to={`/users/${post.author?.id}`}>{post.author?.fullName}</S_TopLink>
+                &ensp;•&ensp;{timeSince(post.createdAt)}
+              </S_PostMainTop>
 
-            <S_PostMain>
-              <S_PostMainTitle>{post.title}</S_PostMainTitle>
-              <S_PostMainContent dangerouslySetInnerHTML={{ __html: post.content }} />
-            </S_PostMain>
+              <S_PostMainView>
+                <S_PostMainTitle>{post.title}</S_PostMainTitle>
+                <S_PostMainContent dangerouslySetInnerHTML={{ __html: post.content }} />
+              </S_PostMainView>
 
-            <PostViewFooterForum post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
+              <PostViewFooterForum post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
+              <div className="h-px bg-gray-200 mt-5" />
 
-            <Comments type="forum" comments={comments} isAuth={isAuthenticated} commentsUserVote={commentsUserVote} />
+              <Comments type="forum" comments={comments} isAuth={isAuthenticated} commentsUserVote={commentsUserVote} />
 
-            <InputComment placeholder="Viết bình luận..." onSubmitComment={handleSubmitComment} />
-          </S_PostInfo>
-        </S_PostMainForum>
-      )}
-    </LayoutContainer>
+              <InputComment placeholder="Viết bình luận..." onSubmitComment={handleSubmitComment} />
+            </S_PostInfo>
+          </S_PostMainForum>
+        )}
+      </LayoutContainer>
+    </LayoutBg>
   )
 }
 

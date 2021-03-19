@@ -22,7 +22,7 @@ function* logout() {
     removeAuthToken()
     yield put({ type: types.AUTH_LOGOUT_SUCCESSFUL })
   } catch (error) {
-    console.log('error', error)
+    throw new Error(error)
   }
 }
 
@@ -38,7 +38,7 @@ function* signUp({ payload }) {
     )
   } catch (error) {
     yield put({ type: types.AUTH_SIGNUP_ERRORS, payload: error })
-    console.log('error', error)
+    throw new Error(error)
   }
 }
 
@@ -48,9 +48,18 @@ function* getMe() {
     yield put({ type: types.AUTH_SET_USER, payload: user })
     yield put({ type: types.AUTH_LOGIN_SUCCESSFUL })
   } catch (error) {
-    console.log('error', error)
+    throw new Error(error)
   } finally {
     yield put({ type: types.AUTH_SET_PROCESSING, payload: { key: 'login' } })
+  }
+}
+function* updateMe() {
+  try {
+    const user = yield call(UserAPI.me)
+    console.log(user)
+    yield put({ type: types.AUTH_SET_USER, payload: user })
+  } catch (error) {
+    throw new Error(error)
   }
 }
 
@@ -60,5 +69,6 @@ export default function* authSaga() {
     takeLatest(types.S_AUTH_LOGOUT_REQUEST, logout),
     takeLatest(types.S_AUTH_SIGNUP_REQUEST, signUp),
     takeEvery(types.S_AUTH_GET_ME, getMe),
+    takeEvery(types.S_AUTH_UPDATE_ME, updateMe),
   ])
 }

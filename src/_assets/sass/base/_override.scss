@@ -14,9 +14,13 @@
     background-color: transparent;
   }
   .MuiPaper-elevation4 {
-    box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.2), 0px 4px 2px 0px rgba(0, 0, 0, 0.14);
+    // box-shadow: 0px 2px 2px -1px rgba(0, 0, 0, 0.2), 0px 4px 2px 0px rgba(0, 0, 0, 0.14);
+    box-shadow: none;
   }
   .MuiTab-root {
     text-transform: none;
+  }
+  span[class^='PrivateTabIndicator'] {
+    background-color: #48bb78 !important;
   }
 }

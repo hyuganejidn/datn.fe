@@ -32,7 +32,7 @@ export const S_NameAuthorLink = styled(Link)`
     text-decoration: underline;
   }
 `
-export const S_TitleReply = styled(Link)`
+export const S_TitleReply = styled.div`
   margin-top: 4px;
   color: rgb(113, 128, 150);
   font-size: 13px;
@@ -55,8 +55,7 @@ export const S_UpVote = styled.div`
   padding: 2px;
   background: none;
 
-  color: ${props =>
-    !props.isVoted ? '#a0aec0 !important' : '#63b3ed !important'};
+  color: ${props => (!props.isVoted ? '#a0aec0 !important' : '#63b3ed !important')};
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -71,12 +70,10 @@ export const S_Like = styled.div`
 `
 
 export const S_HeartLike = styled.div`
-  height: 20px;
   padding: 2px;
   background: none;
 
-  /* color: ${props =>
-    !props.isVoted ? '#a0aec0 !important' : '#63b3ed !important'}; */
+  /* color: ${props => (!props.isVoted ? '#a0aec0 !important' : '#63b3ed !important')}; */
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -89,8 +86,7 @@ export const S_DownVote = styled.div`
   padding: 2px;
   background: none;
 
-  color: ${props =>
-    !props.isVoted ? '#a0aec0 !important' : '#e53e3e !important'};
+  color: ${props => (!props.isVoted ? '#a0aec0 !important' : '#e53e3e !important')};
   cursor: pointer;
   :hover {
     border-radius: 4px;
@@ -99,7 +95,7 @@ export const S_DownVote = styled.div`
 `
 
 export const S_Footer = styled.div`
-  display: inline-flex;
+  display: flex;
   align-items: center;
   margin-top: 4px;
 `
@@ -153,7 +149,7 @@ export const S_LineCurves = styled.div`
 `
 
 export const S_LineStraight = styled.div`
-  height: calc(100% - 40px);
+  height: calc(100% - 150px);
   width: 2px;
   margin: 10% auto;
 

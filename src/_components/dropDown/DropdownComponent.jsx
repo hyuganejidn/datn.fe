@@ -6,9 +6,7 @@ import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
 import MenuList from '@material-ui/core/MenuList'
 
-import { S_ThreeDot } from '@/modules/comment/Comment.style'
-
-function ThreeDotMenu({ className, options }) {
+function DropdownComponent({ component: Component, options, className }) {
   const [open, setOpen] = React.useState(false)
   const anchorRef = React.useRef(null)
 
@@ -51,7 +49,7 @@ function ThreeDotMenu({ className, options }) {
         aria-haspopup="true"
         onClick={handleToggle}
       >
-        <S_ThreeDot />
+        <Component />
       </button>
       <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
         {({ TransitionProps, placement }) => (
@@ -65,15 +63,15 @@ function ThreeDotMenu({ className, options }) {
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="menu-list-grow" onKeyDown={handleListKeyDown}>
                   {options &&
-                    options.map((option, i) => (
+                    options.map(({ title, onClick, component: ComponentItem }, i) => (
                       <MenuItem
                         key={i}
                         onClick={event => {
-                          option.onClick()
+                          onClick()
                           handleClose(event)
                         }}
                       >
-                        {option.title}
+                        {title || <ComponentItem />}
                       </MenuItem>
                     ))}
                 </MenuList>
@@ -86,4 +84,4 @@ function ThreeDotMenu({ className, options }) {
   )
 }
 
-export default ThreeDotMenu
+export default DropdownComponent

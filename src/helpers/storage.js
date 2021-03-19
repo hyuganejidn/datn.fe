@@ -1,13 +1,9 @@
 import { TOKEN_STORAGE_KEY } from '@/_constants/common'
 
 export const setAuthToken = (token, persist) =>
-  persist
-    ? localStorage.setItem(TOKEN_STORAGE_KEY, token)
-    : sessionStorage.setItem(TOKEN_STORAGE_KEY, token)
+  persist ? localStorage.setItem(TOKEN_STORAGE_KEY, token) : sessionStorage.setItem(TOKEN_STORAGE_KEY, token)
 
-export const getAuthToken = () =>
-  localStorage.getItem(TOKEN_STORAGE_KEY) ||
-  sessionStorage.getItem(TOKEN_STORAGE_KEY)
+export const getAuthToken = () => localStorage.getItem(TOKEN_STORAGE_KEY) || sessionStorage.getItem(TOKEN_STORAGE_KEY)
 
 export const removeAuthToken = () => {
   localStorage.removeItem(TOKEN_STORAGE_KEY)

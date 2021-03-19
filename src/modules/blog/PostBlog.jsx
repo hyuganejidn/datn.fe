@@ -1,51 +1,110 @@
-import { timeSince } from '@/helpers/common'
+import { timeSince, capitalizeFirstLetter, getInnerText } from '@/helpers/common'
 import React from 'react'
-import {
-  S_Comment,
-  S_FooterLink,
-  S_PostContent,
-  S_PostFooter,
-  S_PostMain,
-  S_PostTitle,
-  S_PostTop,
-  S_ThreeDot,
-  S_TopLink,
-} from '../home/Post.style'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
-function PostBlog({ post }) {
+import { CommentLine, HeartLine } from 'Templates/icon/IconsSvg'
+import * as typesHome from '@/modules/home/store/action_types'
+import { S_Footer, S_ThreeDotMenu } from '../comment/Comment.style'
+import { S_ImageAvatar, S_PostContent, S_FooterLink, S_PostMain, S_PostTop, S_TopLink } from '../home/Post.style'
+
+function PostBlog({ post, userId }) {
+  const dispatch = useDispatch()
+
+  const handleDelete = () => {
+    // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
+  }
+
+  const handleUpdate = () => {
+    console.log('update')
+    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+  }
+
+  const handleReport = () => {
+    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+  }
   return (
-    <div>
-      <S_PostTop>
-        <S_TopLink to={`/blogs/${post.blog?.slug}`}>
-          <img src={post.blog?.avatar} alt={post.title} />
-          {post.blog?.title}
-        </S_TopLink>
-        &ensp;•&ensp;bởi&ensp;
-        <S_TopLink to={`/users/${post.author?.id}`}>
-          {post.author?.fullName}
-        </S_TopLink>
-        &ensp;•&ensp;{timeSince(post.createdAt)}
-      </S_PostTop>
+    <div className="py-6 flex justify-between">
+      <div>
+        <S_PostTop>
+          <S_TopLink to={`/blogs/${post.blog?.slug}`} className="font-medium text-sm text-black truncate no-underline">
+            <div className="w-5 h-5 rounded-full mr-2 flex-shrink-0 no-underline">
+              {post.blog?.avatar !== 'avatar' ? (
+                <img
+                  src={post.blog?.avatar}
+                  alt={post.title}
+                  style={{ objectFit: 'cover', height: '100%', borderRadius: 3 }}
+                  // className="w-5 h-5 rounded-full mr-2 flex-shrink-0 no-underline"
+                />
+              ) : (
+                <span
+                  style={{
+                    background: '#bdbdbd',
+                    borderRadius: '50%',
+                    width: '100%',
+                    height: '100%',
+                    display: 'block',
+                    textAlign: 'center',
+                    lineHeight: '20px',
+                  }}
+                >
+                  {capitalizeFirstLetter(post.author.fullName[0])}
+                </span>
+              )}
+            </div>
 
-      <S_PostMain>
-        <S_PostTitle to={`/blogs/posts/${post.id}`}>{post.title}</S_PostTitle>
-        <S_PostContent to={`/blogs/posts/${post.id}`}>
-          {post.content}
-        </S_PostContent>
-      </S_PostMain>
+            <div className="hover:underline">{post.blog?.title}</div>
+          </S_TopLink>
+          &ensp;bởi&ensp;
+          <S_TopLink
+            to={`/users/${post.author?.id}`}
+            className="font-medium text-sm hover:underline text-black no-underline"
+          >
+            {post.author?.fullName}
+          </S_TopLink>
+        </S_PostTop>
 
-      <S_PostFooter>
-        <S_FooterLink to={`/blogs/posts/${post.id}`}>
-          <S_Comment />
-          <span style={{ marginLeft: 4, marginRight: 19 }}>
-            {post.commentNum}
-          </span>
-        </S_FooterLink>
+        <S_PostMain>
+          <Link to={`/blogs/posts/${post.id}`} className="mt-1 text-lg font-medium text-black">
+            {post.title}
+          </Link>
+          <S_PostContent to={`/blogs/posts/${post.id}`}>{getInnerText(post.content)}</S_PostContent>
+        </S_PostMain>
 
-        <S_FooterLink>
-          <S_ThreeDot />
-        </S_FooterLink>
-      </S_PostFooter>
+        <S_Footer>
+          <S_FooterLink to={`/blogs/posts/${post.id}`} style={{ margin: '0 4px', color: '#718096' }}>
+            <span style={{ fontSize: 14, color: '#718096' }}>{timeSince(post.createdAt)} &ensp;•&ensp;</span>
+            <HeartLine width={14} style={{ color: '#f56565' }} />
+            &ensp;
+            <span style={{ fontSize: 14, color: '#718096' }}>{post.voteNum}</span>
+            &ensp;•&ensp;
+            <CommentLine width={14} style={{ marginRight: '2px' }} />
+            &ensp;
+            <span style={{ fontSize: 14, color: '#718096' }}>{post.commentNum}</span>
+          </S_FooterLink>
+          <S_ThreeDotMenu
+            options={
+              userId === post.author?.id
+                ? [
+                    { title: 'Xóa', onClick: handleDelete },
+                    { title: 'Chỉnh sửa', onClick: handleUpdate },
+                  ]
+                : [{ title: 'Báo xấu', onClick: handleReport }]
+            }
+          />
+        </S_Footer>
+      </div>
+      {post.avatar && (
+        <div className="w-1/4 flex-shrink-0 ml-2 no-underline">
+          <Link to={`/topics/posts/${post.id}`}>
+            <div className="w-full relative" style={{ paddingTop: '65%' }}>
+              <div className="absolute top-0 w-full h-full rounded-t">
+                <S_ImageAvatar src={post.avatar} alt={post.topic?.slug} />
+              </div>
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }

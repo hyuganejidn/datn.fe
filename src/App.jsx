@@ -18,11 +18,7 @@ const App = () => (
       <Layout>
         <Switch>
           {routes.map((route, i) =>
-            route.auth ? (
-              <PrivateRoute key={i} {...route} />
-            ) : (
-              <PublicRoute key={i} {...route} />
-            )
+            route.auth ? <PrivateRoute key={i} {...route} /> : <PublicRoute key={i} {...route} />
           )}
         </Switch>
       </Layout>

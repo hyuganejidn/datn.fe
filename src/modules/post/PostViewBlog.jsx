@@ -15,7 +15,8 @@ import { S_NameAuthorLink } from '../comment/Comment.style'
 import { makeGetCommentsPost } from '../comment/store/selector'
 import PostViewFooterBlog from './components/PostViewFooterBlog'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
-import { S_InfoUser, S_PostInfo, S_PostMain, S_PostMainContent, S_PostMainForum } from '../home/Post.style'
+import { S_InfoUser, S_PostInfo, S_PostMainView, S_PostMainContent, S_PostMainForum } from '../home/Post.style'
+import StatusBlogView from '../blog/containers/StatusBlogView'
 
 function PostViewBlog() {
   const { id } = useParams()
@@ -29,36 +30,6 @@ function PostViewBlog() {
   const [post, setPost] = useState(null)
   const [commentsUserVote, setCommentsUserVote] = useState({})
   const [postUserVote, setPostUserVote] = useState({})
-
-  const viewOptionBlog = () => {
-    if (!isAuthenticated)
-      return (
-        <button type="button" onClick={() => 123}>
-          Theo dõi
-        </button>
-      )
-    const isFollowing = user.blogsFollowing.length > 0 && user.blogsFollowing.includes(post.blog.id)
-
-    if (!user.blogsFollowing && post.author?.id === user.id)
-      return (
-        <button type="button" onClick={() => 123}>
-          Tạo bài mới
-        </button>
-      )
-
-    if (isFollowing) {
-      return (
-        <button type="button" onClick={() => 123}>
-          Đang theo dõi
-        </button>
-      )
-    }
-    return (
-      <button type="button" onClick={() => 123}>
-        Theo dõi
-      </button>
-    )
-  }
 
   useEffect(() => {
     // document.body.style.backgroundColor = '#fff'
@@ -95,12 +66,15 @@ function PostViewBlog() {
   return (
     <LayoutContainer style={{ padding: '8px 6px' }}>
       {!loading && post && (
-        <S_PostMainForum>
+        <S_PostMainForum style={{ paddingBottom: 50 }}>
           <S_PostInfo>
-            <S_PostMain>
-              <div style={{ display: 'flex' }}>
-                <Link to={`/blogs/${post.blog?.slug}`}>Blog / {post.blog?.title}</Link>
-                {viewOptionBlog()}
+            <S_PostMainView>
+              <div className="flex items-center">
+                <Link to={`/blogs/${post.blog?.slug}`} className="text-sm font-medium break-words block no-underline">
+                  Blog / <span> {post.blog?.title} </span>
+                </Link>
+
+                <StatusBlogView blogId={post.blog?.id} authorId={post.blog?.author?.id} />
               </div>
               <h1 style={{ marginTop: 24 }}>{post.title}</h1>
 
@@ -133,10 +107,11 @@ function PostViewBlog() {
                 </div>
               </S_InfoUser>
 
-              <S_PostMainContent>{post.content}</S_PostMainContent>
-            </S_PostMain>
+              <S_PostMainContent dangerouslySetInnerHTML={{ __html: post.content }} />
+            </S_PostMainView>
 
             <PostViewFooterBlog post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
+            <div className="h-px bg-gray-200 mt-5" />
 
             <Comments type="blog" comments={comments} commentsUserVote={isAuthenticated ? commentsUserVote : {}} />
 

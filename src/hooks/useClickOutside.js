@@ -2,14 +2,10 @@ import { useEffect, useCallback } from 'react'
 
 const isRefArray = r => 'length' in r
 
-const isTarget = (ref, event) =>
-  ref && ref.current && ref.current.contains(event.target)
+const isTarget = (ref, event) => ref && ref.current && ref.current.contains(event.target)
 
 const trueForAny = (array, condition) =>
-  array.reduce(
-    (conditionAlreadyMet, ref) => conditionAlreadyMet || condition(ref),
-    false
-  )
+  array.reduce((conditionAlreadyMet, ref) => conditionAlreadyMet || condition(ref), false)
 
 const useClickOutside = (ref, onclick) => {
   const handleClick = useCallback(
@@ -17,7 +13,7 @@ const useClickOutside = (ref, onclick) => {
       if (!isRefArray(ref)) {
         if (isTarget(ref, event)) return
       } else if (trueForAny(ref, r => isTarget(r, event))) return
-
+      console.log(onclick, ref)
       onclick()
     },
     [onclick, ref]

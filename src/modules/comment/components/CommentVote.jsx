@@ -3,13 +3,7 @@ import React, { useState } from 'react'
 import { DownVote, UpVote, Heart, HeartLine } from 'Templates/icon/IconsSvg'
 import { CommentAPI } from '@/services'
 
-import {
-  S_DownVote,
-  S_Like,
-  S_UpVote,
-  S_Vote,
-  S_HeartLike,
-} from '../Comment.style'
+import { S_DownVote, S_Like, S_UpVote, S_Vote, S_HeartLike } from '../Comment.style'
 
 function CommentVote({ type, isVote, commentId, commentVoteTotal }) {
   const [vote, setVote] = useState(undefined)
@@ -36,19 +30,13 @@ function CommentVote({ type, isVote, commentId, commentVoteTotal }) {
     <>
       {type === 'forum' ? (
         <S_Vote>
-          <S_UpVote
-            onClick={() => handleVoteComment(commentId, 1)}
-            isVoted={vote?.vote === 1 || isVoted === 1}
-          >
+          <S_UpVote onClick={() => handleVoteComment(commentId, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
             <UpVote width={14} />
           </S_UpVote>
           <span style={{ fontSize: 16, margin: '0 3px', color: '#718096' }}>
             {vote ? vote?.voteTotal : commentVoteTotal}
           </span>
-          <S_DownVote
-            onClick={() => handleVoteComment(commentId, -1)}
-            isVoted={vote?.vote === -1 || isVoted === -1}
-          >
+          <S_DownVote onClick={() => handleVoteComment(commentId, -1)} isVoted={vote?.vote === -1 || isVoted === -1}>
             <DownVote width={14} />
           </S_DownVote>
         </S_Vote>

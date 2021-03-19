@@ -10,4 +10,6 @@ export const resetPassword = () => http.get(`${path}/me/reset_password`)
 
 export const show = id => http.get(`${path}/${id}`)
 
-export const followBlog = blogId => http.get(`${path}/follow_blog`, { blogId })
+export const posts = id => http.get(`${path}/${id}/posts?sort=-createdAt`)
+
+export const followBlog = blogId => http.post(`${path}/follow_blog`, { blogId })

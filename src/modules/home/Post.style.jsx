@@ -16,9 +16,9 @@ export const S_Post = styled.div`
   display: flex;
   /* align-items: flex-start; */
   --border-opacity: 1;
-  border-top: 1px solid rgba(203, 213, 224, var(--border-opacity));
-  border-right: 1px solid rgba(203, 213, 224, var(--border-opacity));
-  border-left: 1px solid rgba(203, 213, 224, var(--border-opacity));
+  /* border-top: 1px solid rgba(203, 213, 224, var(--border-opacity)); */
+  /* border-right: 1px solid rgba(203, 213, 224, var(--border-opacity)); */
+  /* border-left: 1px solid rgba(203, 213, 224, var(--border-opacity)); */
   background-color: white;
 `
 export const S_Vote = styled.div`
@@ -27,6 +27,8 @@ export const S_Vote = styled.div`
   justify-content: flex-start;
   align-items: center;
   background-color: rgb(248, 249, 250);
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
 
   width: 32px;
   padding: 8px 4px;
@@ -98,6 +100,15 @@ export const S_ThreeDot = styled(ThreeDot)`
   color: rgb(113, 128, 150);
 `
 
+export const S_PostMainTop = styled.div`
+  display: flex;
+  align-items: center;
+  margin: 8px 0 16px 0;
+
+  color: #718096;
+  font-size: 13px !important;
+`
+
 export const S_PostTop = styled.div`
   display: flex;
   align-items: center;
@@ -118,6 +129,7 @@ export const S_PostFooter = styled.div`
   color: rgb(113, 128, 150);
   line-height: 24px;
   font-size: 14px !important;
+  font-weight: 500;
 `
 
 export const S_PostViewFooter = styled.div`
@@ -162,7 +174,7 @@ export const S_PostContent = styled(Link)`
 export const S_FooterLink = styled(Link)`
   display: flex;
   align-items: center;
-  color: inherit !important;
+  /* color: inherit !important; */
   padding: 4px 4px;
   border-radius: 4px;
   cursor: pointer;
@@ -173,8 +185,8 @@ export const S_FooterLink = styled(Link)`
 export const S_TopLink = styled(Link)`
   display: flex;
   align-items: center;
-  color: inherit !important;
-
+  /* color: inherit !important; */
+  color: rgba(113, 128, 150, 1);
   cursor: pointer;
   :hover {
     text-decoration: underline;
@@ -229,6 +241,12 @@ export const S_PostMain = styled.div`
   margin: 0 8px;
   /* font-size: 50px !important;  */
 `
+export const S_PostMainView = styled.div`
+  display: inline-flex;
+  flex-direction: column;
+  /* margin: 0 8px; */
+  /* font-size: 50px !important;  */
+`
 
 export const S_PostMainContent = styled.div`
   display: inline-block;
@@ -238,7 +256,7 @@ export const S_PostMainContent = styled.div`
   /* font-size: 13px !important; */
   /* cursor: pointer; */
 
-  margin-top: 25px;
+  /* margin-top: px; */
 `
 
 export const S_PostMainTitle = styled.div`
@@ -250,6 +268,9 @@ export const S_PostMainTitle = styled.div`
 
 export const S_PostMainForum = styled.div`
   display: flex;
+  height: 100%;
+  min-height: 100vh;
+  padding: 8px;
   /* flex-direction: column; */
   /* margin: 0 8px; */
   /* font-size: 50px !important;  */
@@ -258,7 +279,7 @@ export const S_PostMainForum = styled.div`
 export const S_FooterMainLink = styled.button`
   display: flex;
   align-items: center;
-  color: inherit !important;
+  /* color: inherit !important; */
   padding: 4px 4px;
   border-radius: 4px;
   margin-right: 18px;

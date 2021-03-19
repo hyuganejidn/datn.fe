@@ -1,11 +1,12 @@
 import { Icons } from 'Templates/icon/Icon'
 
-export const topics = [
-  {
-    slug: '',
-    name: 'Diễn đàn',
-    icon: Icons.Forum,
-  },
+const forum = {
+  slug: '',
+  name: 'Diễn đàn',
+  icon: Icons.Forum,
+}
+
+export const topicsSelect = [
   {
     slug: 'food',
     name: 'Ăn uống- Nấu nướng',
@@ -248,6 +249,7 @@ export const topics = [
   },
 ]
 
+export const topics = [forum, ...topicsSelect]
 export const topicObj = {
   food: {
     name: 'ăn uống- Nấu nướng',

@@ -1,3 +1,11 @@
+export function formatDate(_date) {
+  const option = {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  }
+  return new Date(_date).toLocaleDateString('vi-VN', option)
+}
 export function timeSince(_date) {
   const date = new Date(_date)
   const seconds = Math.floor((new Date() - date) / 1000)

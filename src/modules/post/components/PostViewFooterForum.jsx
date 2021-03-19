@@ -9,9 +9,15 @@ import {
 } from '@/modules/home/Post.style'
 import { PostAPI } from '@/services'
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { DownVote, UpVote, CommentSquare, Share } from 'Templates/icon/IconsSvg'
+import * as typesHome from '@/modules/home/store/action_types'
+import { useDispatch } from 'react-redux'
 
 function PostViewFooterForum({ isVote, userId, post }) {
+  const history = useHistory()
+  const dispatch = useDispatch()
+
   const [vote, setVote] = useState(undefined)
   const [isVoted, setIsVoted] = useState(isVote)
 
@@ -24,8 +30,13 @@ function PostViewFooterForum({ isVote, userId, post }) {
     setIsVoted(isVoted === voteNum ? 0 : voteNum)
   }
 
-  const handleDelete = () => {
-    console.log('xoas')
+  const handleDelete = async id => {
+    try {
+      await PostAPI.destroy(id)
+      history.push('/')
+    } catch (error) {
+      throw new Error(error)
+    }
     // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
   }
 
@@ -35,7 +46,7 @@ function PostViewFooterForum({ isVote, userId, post }) {
   }
 
   const handleReport = () => {
-    console.log('report')
+    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
   }
   return (
     <>
@@ -65,7 +76,7 @@ function PostViewFooterForum({ isVote, userId, post }) {
             options={
               userId === post.author?.id
                 ? [
-                    { title: 'Xóa', onClick: handleDelete },
+                    { title: 'Xóa', onClick: () => handleDelete(post.id) },
                     { title: 'Chỉnh sửa', onClick: handleUpdate },
                   ]
                 : [{ title: 'Báo xấu', onClick: handleReport }]

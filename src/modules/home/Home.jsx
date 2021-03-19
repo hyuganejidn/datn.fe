@@ -1,6 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { topics } from '@/_constants/data'
+import { LayoutBg } from '@/_layouts'
 import Forum from './Forum'
 import Topics from './Topics'
 import { makeGetIsAuthenticated } from '../auth/store/selector'
@@ -19,6 +20,7 @@ const S_Topics = styled(Topics)`
   max-height: calc(100vh - 50px);
   overflow-y: scroll;
   transition: 0.7s;
+  margin-top: 16px;
   :hover {
     ::-webkit-scrollbar {
       width: 4px;
@@ -38,16 +40,21 @@ const S_Topics = styled(Topics)`
 `
 const S_Forum = styled(Forum)`
   width: 100%;
+  margin-top: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
 `
 
 function Home() {
   const isAuth = makeGetIsAuthenticated()
   console.log(isAuth)
   return (
-    <S_Layout>
-      <S_Topics topics={topics} />
-      <S_Forum />
-    </S_Layout>
+    <LayoutBg>
+      <S_Layout>
+        <S_Topics topics={topics} />
+        <S_Forum />
+      </S_Layout>
+    </LayoutBg>
   )
 }
 

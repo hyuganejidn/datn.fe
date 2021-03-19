@@ -1,11 +1,16 @@
 body {
   --bg-opacity: 1;
   font-family: Roboto;
-  // background-color: #edf2f7;
+  // min-height: 100vh;
 }
-.layouts {
-  min-height: 100vh;
+.layout {
   display: table;
+  width: 100%;
+  min-height: 100vh;
+  height: 100vh;
 }
-.theme {
+.theme-bg {
+  display: table;
+  width: 100%;
+  background-color: rgba(237, 242, 247, 1);
 }

@@ -4,8 +4,12 @@ import { CommentSquareLine, Heart, HeartLine, ShareLine } from 'Templates/icon/I
 import { S_FooterMainLink, S_PostViewFooter, S_FooterText } from '@/modules/home/Post.style'
 import { S_HeartLike, S_Like, S_ThreeDotMenu } from '@/modules/comment/Comment.style'
 import { PostAPI } from '@/services'
+import * as typesHome from '@/modules/home/store/action_types'
+import { useDispatch } from 'react-redux'
 
 function PostViewFooterBlog({ isVote, userId, post }) {
+  const dispatch = useDispatch()
+
   const [voteTotal, setVoteTotal] = useState(undefined)
   const [isVoted, setIsVoted] = useState(isVote)
 
@@ -26,7 +30,7 @@ function PostViewFooterBlog({ isVote, userId, post }) {
   }
 
   const handleReport = () => {
-    console.log('report')
+    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
   }
 
   return (

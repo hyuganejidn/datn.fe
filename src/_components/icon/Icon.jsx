@@ -73,7 +73,7 @@ export const Icons = {
   Literature: 'Literature',
   School: 'School',
   Housing: 'Housing',
-  MysticalSpirituality: 'MysticalSpirituality',
+  MysticalSpirituality: 'Mystical-spirituality',
   Cars: 'Cars',
   Stock: 'Stock',
   Business: 'Business',
@@ -162,11 +162,5 @@ const IconComponents = {
 export const Icon = ({ icon, width, height, color, ...rest }) => {
   const IconFile = IconComponents[icon]
 
-  return (
-    <>
-      {IconFile && (
-        <IconFile {...rest} width={width || 24} height={height} color={color} />
-      )}
-    </>
-  )
+  return <>{IconFile && <IconFile {...rest} width={width || 24} height={height} color={color} />}</>
 }

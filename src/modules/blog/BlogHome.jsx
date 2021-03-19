@@ -20,7 +20,7 @@ function TabPanel(props) {
       aria-labelledby={`nav-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={3}>{children}</Box>}
+      {value === index && <Box>{children}</Box>}
     </div>
   )
 }
@@ -72,6 +72,7 @@ function BlogHome() {
   const fetchBlogs = async () => {
     try {
       const blogsData = await BlogAPI.getBlogs()
+      console.log(blogsData)
       setBlogsTop(blogsData)
     } catch (error) {
       throw new Error(error)
@@ -121,7 +122,7 @@ function BlogHome() {
           variant="fullWidth"
           value={tabValue}
           onChange={handleChange}
-          className="md:max-w-2xl m-auto"
+          className="md:w-3xl m-auto"
           aria-label="nav tabs example"
         >
           <LinkTab label="Bài mới" to="?tab=news" {...a11yProps(0)} />

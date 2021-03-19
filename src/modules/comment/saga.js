@@ -8,7 +8,7 @@ function* getCommentsPost({ payload }) {
     const comments = yield call(() => PostAPI.listComment(payload))
     yield put({ type: types.SET_COMMENTS_POST, payload: comments })
   } catch (error) {
-    console.log(error)
+    throw new Error(error)
   }
 }
 
@@ -17,7 +17,7 @@ function* createComment({ payload }) {
     const comment = yield call(() => CommentAPI.create(payload))
     yield put({ type: types.ADD_COMMENT, payload: comment })
   } catch (error) {
-    console.log(error)
+    throw new Error(error)
   }
 }
 
@@ -26,7 +26,7 @@ function* createChildComment({ payload }) {
     const comment = yield call(() => CommentAPI.create(payload))
     yield call(() => getCommentsPost({ payload: comment.post.id }))
   } catch (error) {
-    console.log(error)
+    throw new Error(error)
   }
 }
 
@@ -35,7 +35,7 @@ function* deleteComment({ payload }) {
     yield call(() => CommentAPI.destroy(payload.id))
     yield call(() => getCommentsPost({ payload: payload.post.id }))
   } catch (error) {
-    console.log(error)
+    throw new Error(error)
   }
 }
 

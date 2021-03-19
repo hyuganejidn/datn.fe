@@ -10,11 +10,15 @@ export const getPostsOfBLogs = () => http.get('/posts?classify=blog').then(res =
 
 export const getBlogs = () => http.get(`${path}`).then(res => res.data)
 
-export const getBlogsUserFollowed = () => http.get(`${path}/users_followed`).then(res => res.data)
+export const getBlogsUserFollowed = () => http.get(`${path}/blogs_followed`).then(res => res.data)
 
 export const getPostsUserFollowed = () => http.get(`posts/blogs_followed`).then(res => res.data)
 
 export const getBlogsMe = () => http.get(`users/me/blogs`).then(res => res.data)
 
+export const getBlogsUser = userId => http.get(`users/${userId}/blogs`).then(res => res.data)
+
 export const create = ({ title, description, slug, avatar, cover }) =>
   http.post(path, { title, description, slug, avatar, cover })
+
+export const getUserFollowed = blogId => http.get(`${path}/${blogId}/users_followed`).then(res => res.data)

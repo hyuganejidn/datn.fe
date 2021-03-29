@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { CommentSquareLine, Heart, HeartLine, ShareLine } from 'Templates/icon/IconsSvg'
 import { S_FooterMainLink, S_PostViewFooter, S_FooterText } from '@/modules/home/Post.style'
@@ -6,31 +6,54 @@ import { S_HeartLike, S_Like, S_ThreeDotMenu } from '@/modules/comment/Comment.s
 import { PostAPI } from '@/services'
 import * as typesHome from '@/modules/home/store/action_types'
 import { useDispatch } from 'react-redux'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { useHistory } from 'react-router-dom'
+import Modal3 from 'Templates/commons/Modal3'
+import PostUpdate from './PostUpdate'
 
-function PostViewFooterBlog({ isVote, userId, post }) {
+function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const [voteTotal, setVoteTotal] = useState(undefined)
   const [isVoted, setIsVoted] = useState(isVote)
+  const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
+
+  useEffect(() => {
+    const handleLike = _vote => {
+      setVoteTotal(_vote)
+    }
+
+    socket.on('LikePost', handleLike)
+    return () => socket.off('LikePost', handleLike)
+  }, [])
 
   const handleLikePost = async _postId => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     const likeData = await PostAPI.likePost(_postId)
+    socket.emit('LikePost', likeData.vote)
     setVoteTotal(likeData.vote)
     setIsVoted(prev => !prev)
   }
 
-  const handleDelete = () => {
-    console.log('xoas')
-    // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
+  const handleDelete = async id => {
+    try {
+      await PostAPI.destroy(id)
+      socket.emit('DeletePost', id)
+      history.push('/')
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   const handleUpdate = () => {
-    console.log('update')
-    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+    setIsShowUpdatePost(prev => !prev)
   }
 
   const handleReport = () => {
-    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
   }
 
   return (
@@ -63,13 +86,23 @@ function PostViewFooterBlog({ isVote, userId, post }) {
             options={
               userId === post.author?.id
                 ? [
-                    { title: 'Xóa', onClick: handleDelete },
+                    { title: 'Xóa', onClick: () => handleDelete(post.id) },
                     { title: 'Chỉnh sửa', onClick: handleUpdate },
                   ]
                 : [{ title: 'Báo xấu', onClick: handleReport }]
             }
           />
         </S_PostViewFooter>
+      )}
+      {isShowUpdatePost && (
+        <Modal3
+          title="Chỉnh sửa bài viết"
+          setIsShowModal={setIsShowUpdatePost}
+          component={PostUpdate}
+          dataPost={post}
+          classify="blog"
+          type="blog"
+        />
       )}
     </>
   )

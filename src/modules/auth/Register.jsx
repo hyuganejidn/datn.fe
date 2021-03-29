@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { FastField, Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { useHistory } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 
 import InputField from 'Templates/form/InputField'
@@ -21,11 +21,11 @@ export default function Register() {
   const history = useHistory()
 
   const errors = makeGetErrorsSignUp()
-  const isAuthenticated = makeGetIsAuthenticated()
+  const isAuth = makeGetIsAuthenticated()
 
   useEffect(() => {
-    if (isAuthenticated) history.push('/')
-  }, [isAuthenticated])
+    if (isAuth) history.push('/')
+  }, [isAuth])
 
   const validationSchema = Yup.object({
     fullName: Yup.string()
@@ -52,42 +52,81 @@ export default function Register() {
 
   return (
     <div>
-      <Formik initialValues={initialDataUser} onSubmit={signIn} validationSchema={validationSchema}>
-        <Form>
-          <FastField
-            name="fullName"
-            component={InputField}
-            label="Họ và Tên"
-            placeholder="Họ và Tên"
-            helperText="Ít nhất 3 ký tự"
-            errorText={errors.fullName}
-          />
-          <FastField
-            name="username"
-            component={InputField}
-            label="Tên đăng nhập"
-            helperText="Viết liền không dấu, không ký tự đặc biệt(nickname)"
-            errorText={errors.username}
-          />
-          <FastField
-            name="password"
-            component={InputPassword}
-            label="Mật khẩu"
-            helperText="Ít nhất 6 ký tự"
-            errorText={errors.password}
-          />
-          <FastField
-            name="passwordConfirm"
-            component={InputField}
-            label="Mật khẩu xác nhận"
-            helperText="Ít nhất 6 ký tự"
-            errorText={errors.passwordConfirm}
-          />
-          <button type="submit" className="text-lg">
-            Đăng ký
-          </button>
-        </Form>
-      </Formik>
+      <div className="pt-5 mx-4 md:mx-0">
+        <div className="m-auto md:max-w-md">
+          <div>
+            <div className="text-3xl text-green-500 m-auto text-center" style={{ fontFamily: 'Bangers, cursive' }}>
+              Ly kafe
+            </div>
+            <div className="m-auto text-center text-gray-500 text-sm">Đăng ký tài khoản </div>
+            <Formik initialValues={initialDataUser} onSubmit={signIn} validationSchema={validationSchema}>
+              <Form>
+                <div className="mb-1 flex flex-col">
+                  <div className="flex items-center mt-6 border-gray-400 ">
+                    <FastField
+                      name="fullName"
+                      component={InputField}
+                      label="Họ và Tên"
+                      placeholder="Họ và Tên"
+                      helperText="Ít nhất 3 ký tự"
+                      errorText={errors.fullName}
+                      className="rounded w-full py-1 pr-1 font-roboto outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center mt-8 border-gray-400 ">
+                    <FastField
+                      name="username"
+                      component={InputField}
+                      label="Tên đăng nhập"
+                      helperText="Viết liền không dấu, không ký tự đặc biệt(nickname)"
+                      errorText={errors.username}
+                      className="rounded w-full py-1 pr-1 font-roboto outline-none"
+                    />
+                  </div>
+                  <div className="flex items-center mt-8 border-gray-600 ">
+                    <FastField
+                      name="password"
+                      component={InputPassword}
+                      label="Mật khẩu"
+                      helperText="Ít nhất 6 ký tự"
+                      className="flex-grow pr-1 py-1 font-roboto outline-none rounded-l"
+                      errorText={errors.password}
+                    />
+
+                    <span className="text-gray-600 hover:text-black cursor-pointer mx-2">
+                      <i className="fas fa-eye-slash " />
+                    </span>
+                  </div>
+                  <div className="flex items-center mt-8 border-gray-400 ">
+                    <FastField
+                      name="passwordConfirm"
+                      className="rounded flex-grow pr-1 py-1 font-roboto outline-none"
+                      component={InputPassword}
+                      label="Mật khẩu xác nhận"
+                      helperText="Ít nhất 6 ký tự"
+                      errorText={errors.passwordConfirm}
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center justify-between mt-8">
+                  <Link
+                    to="/login"
+                    className="font-bold text-sm text-green-500 hover:text-green-700 underline text-center"
+                  >
+                    Đăng nhập
+                  </Link>
+                  <button
+                    className="bg-green-500 hover:bg-green-700 text-white py-1 px-4 rounded focus:outline-none text-sm"
+                    type="submit"
+                  >
+                    Đăng ký
+                  </button>
+                </div>
+              </Form>
+            </Formik>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

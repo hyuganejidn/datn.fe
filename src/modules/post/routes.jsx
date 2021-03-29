@@ -1,6 +1,6 @@
-import Loading from '@/_components/commons/Loader'
 import React, { lazy, Suspense } from 'react'
-
+import Loading from '@/_components/commons/Loader'
+// const { SocketPost } = lazy(() => import('@/_layouts/Socket'))
 const PostViewForum = lazy(() => import('./PostViewForum'))
 const PostViewBlog = lazy(() => import('./PostViewBlog'))
 const PostAdd = lazy(() => import('./components/PostAdd'))

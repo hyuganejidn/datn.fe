@@ -1,49 +1,82 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { DownVote, UpVote, Heart, HeartLine } from 'Templates/icon/IconsSvg'
 import { CommentAPI } from '@/services'
 
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { useDispatch } from 'react-redux'
+import { makeGetSocketWithType } from '@/_layouts/Socket'
 import { S_DownVote, S_Like, S_UpVote, S_Vote, S_HeartLike } from '../Comment.style'
 
-function CommentVote({ type, isVote, commentId, commentVoteTotal }) {
-  const [vote, setVote] = useState(undefined)
-  const [isVoted, setIsVoted] = useState(isVote)
+function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal }) {
+  const dispatch = useDispatch()
+  const socket = makeGetSocketWithType()
+
+  const [vote, setVote] = useState({
+    voteTotal: commentVoteTotal,
+    vote: isVote || 0,
+  })
+
+  useEffect(() => {
+    const handleVote = ({ _vote, _commentId }) => {
+      if (_commentId === commentId) {
+        setVote(prev => ({ ...prev, voteTotal: _vote.voteTotal }))
+      }
+    }
+
+    socket.on('VoteComment', handleVote)
+    socket.on('LikeComment', handleVote)
+    return () => {
+      socket.off('VoteComment', handleVote)
+      socket.off('LikeComment', handleVote)
+    }
+  }, [])
 
   const handleVoteComment = async (postId, voteNum) => {
-    const voteData = await CommentAPI.voteComment(postId, voteNum)
-    setVote({
-      voteTotal: voteData.vote,
-      vote: isVoted === voteNum ? 0 : voteNum,
-    })
-    setIsVoted(isVoted === voteNum ? 0 : voteNum)
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
+    try {
+      const voteData = await CommentAPI.voteComment(postId, voteNum)
+      const voteNew = {
+        voteTotal: voteData.vote,
+        vote: vote.vote === voteNum ? 0 : voteNum,
+      }
+      setVote(voteNew)
+
+      socket.emit('VoteComment', { vote, voteNum, commentId })
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   const handleLikeComment = async postId => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     const voteData = await CommentAPI.likeComment(postId)
-    setVote({
+    const voteNew = {
       voteTotal: voteData.vote,
-    })
-    setIsVoted(prev => !prev)
+      vote: !vote.vote,
+    }
+    socket.emit('LikeComment', { vote: voteNew, commentId })
+    setVote(voteNew)
   }
 
   return (
     <>
       {type === 'forum' ? (
         <S_Vote>
-          <S_UpVote onClick={() => handleVoteComment(commentId, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
+          <S_UpVote onClick={() => handleVoteComment(commentId, 1)} isVoted={vote?.vote === 1}>
             <UpVote width={14} />
           </S_UpVote>
-          <span style={{ fontSize: 16, margin: '0 3px', color: '#718096' }}>
-            {vote ? vote?.voteTotal : commentVoteTotal}
-          </span>
-          <S_DownVote onClick={() => handleVoteComment(commentId, -1)} isVoted={vote?.vote === -1 || isVoted === -1}>
+          <span style={{ fontSize: 16, margin: '0 3px', color: '#718096' }}>{vote?.voteTotal}</span>
+          <S_DownVote onClick={() => handleVoteComment(commentId, -1)} isVoted={vote?.vote === -1}>
             <DownVote width={14} />
           </S_DownVote>
         </S_Vote>
       ) : (
         <S_Like>
           <S_HeartLike onClick={() => handleLikeComment(commentId)}>
-            {isVoted ? (
+            {vote.vote ? (
               <Heart width={14} style={{ color: '#f56565' }} />
             ) : (
               <HeartLine width={14} style={{ color: '#f56565' }} />

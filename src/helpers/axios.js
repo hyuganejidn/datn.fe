@@ -12,10 +12,7 @@ instance.interceptors.request.use(
     const token = localStorage.getItem('access_token')
     if (token) config.headers.authorization = `Bearer ${token}`
 
-    if (
-      config.method === 'post' &&
-      pathsNotAuthenticated.some(pathUrl => pathUrl === config.url)
-    )
+    if (config.method === 'post' && pathsNotAuthenticated.some(pathUrl => pathUrl === config.url))
       delete config.headers.authorization
 
     return config

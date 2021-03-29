@@ -13,3 +13,6 @@ export const show = id => http.get(`${path}/${id}`)
 export const posts = id => http.get(`${path}/${id}/posts?sort=-createdAt`)
 
 export const followBlog = blogId => http.post(`${path}/follow_blog`, { blogId })
+
+export const updateAvatar = ({ avatarUrl }) => http.put(`${path}/avatar`, { avatarUrl })
+export const updateInfo = ({ fullName, introduction }) => http.put(`${path}/info`, { fullName, introduction })

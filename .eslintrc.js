@@ -17,6 +17,7 @@ module.exports = {
     camelcase: 0,
     'import/named': 0,
     'import/no-cycle': 0,
+
     'no-console': 1,
     'no-use-before-define': 1,
     'object-curly-spacing': [1, 'always'],

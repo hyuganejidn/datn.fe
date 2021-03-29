@@ -4,13 +4,13 @@ import { Route, Redirect } from 'react-router-dom'
 import { makeGetIsAuthenticated } from '@/modules/auth/store/selector'
 
 const PrivateRoute = ({ component: Component, ...rest }) => {
-  const isAuthenticated = makeGetIsAuthenticated()
+  const isAuth = makeGetIsAuthenticated()
 
   return (
     <Route
       {...rest}
       render={props =>
-        isAuthenticated ? (
+        isAuth ? (
           <Component {...props} />
         ) : (
           <Redirect

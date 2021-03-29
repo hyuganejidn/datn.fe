@@ -37,6 +37,7 @@ function InputField(props) {
         type={type || 'text'}
         helperText={helperText}
         placeholder={placeholder}
+        fullWidth
         disabled={disabled || false}
         autoComplete={autoComplete || 'off'}
         aria-describedby={`${name}-error`}

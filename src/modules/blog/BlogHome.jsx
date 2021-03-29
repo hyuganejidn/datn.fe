@@ -1,9 +1,12 @@
-import { BlogAPI } from '@/services'
 import { AppBar, Box, Tab, Tabs } from '@material-ui/core'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, useLocation } from 'react-router-dom'
 import Blogs from './Blogs'
 import PostsBlogs from './PostsBlogs'
+import { makeGetBlogsMe, makeGetBlogsTop, makeGetPostsNew, makeGetPostsUserFollowed } from './store/selector'
+import * as types from './store/action_types'
+import { makeGetIsAuthenticated } from '../auth/store/selector'
 
 function LinkTab(props) {
   return <Tab component={Link} {...props} />
@@ -49,52 +52,30 @@ const convertLocationToIndex = search => {
 
 function BlogHome() {
   const location = useLocation()
+  const dispatch = useDispatch()
+
+  const isAuth = makeGetIsAuthenticated()
+  const postsNew = makeGetPostsNew()
+  const blogsTop = makeGetBlogsTop()
+  const blogsMe = makeGetBlogsMe()
+  const postsUserFollowed = makeGetPostsUserFollowed()
+
   const [tabValue, setTabValue] = useState(convertLocationToIndex(location.search))
 
-  const [postsNew, setPostsNew] = useState([])
-  const [blogsTop, setBlogsTop] = useState([])
-  const [blogsMe, setBlogsMe] = useState([])
-  const [postsUserFollowed, setPostsUserFollowed] = useState([])
-
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setTabValue(newValue)
   }
 
-  const fetchPostNew = async () => {
-    try {
-      const postsNewData = await BlogAPI.getPostsOfBLogs()
-      setPostsNew(postsNewData)
-    } catch (error) {
-      throw new Error(error)
-    }
+  const fetchPostNew = () => dispatch({ type: types.S_FETCH_POSTS_NEW })
+
+  const fetchBlogs = () => dispatch({ type: types.S_FETCH_BLOGS_TOP })
+
+  const fetchPostsUserFollowed = () => {
+    if (isAuth) dispatch({ type: types.S_FETCH_POSTS_USER_FOLLOWED })
   }
 
-  const fetchBlogs = async () => {
-    try {
-      const blogsData = await BlogAPI.getBlogs()
-      console.log(blogsData)
-      setBlogsTop(blogsData)
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  const fetchPostsUserFollowed = async () => {
-    try {
-      const postData = await BlogAPI.getPostsUserFollowed()
-      setPostsUserFollowed(postData)
-    } catch (error) {
-      throw new Error(error)
-    }
-  }
-
-  const fetchBlogsMe = async () => {
-    try {
-      const blogsData = await BlogAPI.getBlogsMe()
-      setBlogsMe(blogsData)
-    } catch (error) {
-      throw new Error(error)
-    }
+  const fetchBlogsMe = () => {
+    if (isAuth) dispatch({ type: types.S_FETCH_BLOGS_ME })
   }
 
   useEffect(() => {
@@ -127,23 +108,30 @@ function BlogHome() {
         >
           <LinkTab label="Bài mới" to="?tab=news" {...a11yProps(0)} />
           <LinkTab label="Top blogs" to="?tab=top" {...a11yProps(1)} />
+          {/* {isAuth && (
+            <> */}
           <LinkTab label="Theo dõi" to="?tab=follow" {...a11yProps(2)} />
-          <LinkTab label="Blogs của tôi" to="?tab=me" {...a11yProps(3)} />
+          <LinkTab label="Blogs của tôi" to="?tab=me" {...a11yProps(3)} /> {/* </>
+          )} */}
         </Tabs>
       </AppBar>
       <div className="md:max-w-2xl m-auto">
         <TabPanel value={tabValue} index={0}>
-          <PostsBlogs posts={postsNew} />
+          <PostsBlogs posts={postsNew} type="postsNew" />
         </TabPanel>
         <TabPanel value={tabValue} index={1}>
           <Blogs blogs={blogsTop} />
         </TabPanel>
+        {/* {isAuth && (
+          <> */}
         <TabPanel value={tabValue} index={2}>
-          <PostsBlogs posts={postsUserFollowed} />
+          <PostsBlogs posts={postsUserFollowed} type="postsUserFollowed" />
         </TabPanel>
         <TabPanel value={tabValue} index={3}>
           <Blogs blogs={blogsMe} />
         </TabPanel>
+        {/* </>
+        )} */}
       </div>
     </div>
   )

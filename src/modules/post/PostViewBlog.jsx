@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useHistory, useParams } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Avatar } from '@material-ui/core'
 
 import { PostAPI } from '@/services'
-import { timeSince } from '@/helpers/common'
+import { replaceImg, timeSince } from '@/helpers/common'
 import { LayoutContainer } from '@/_layouts'
 import { Visibility } from 'Templates/icon/IconsSvg'
 
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { makeGetSocketWithType } from '@/_layouts/Socket'
 import Comments from '../comment/Comments'
 import InputComment from '../comment/InputComment'
 import * as types from '../comment/store/action_types'
@@ -17,30 +19,32 @@ import PostViewFooterBlog from './components/PostViewFooterBlog'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
 import { S_InfoUser, S_PostInfo, S_PostMainView, S_PostMainContent, S_PostMainForum } from '../home/Post.style'
 import StatusBlogView from '../blog/containers/StatusBlogView'
+import * as typesHome from '../home/store/action_types'
+import { makeGetPost } from '../home/store/selector'
 
 function PostViewBlog() {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const history = useHistory()
 
   const user = makeGetMe()
   const comments = makeGetCommentsPost()
-  const isAuthenticated = makeGetIsAuthenticated()
+  const isAuth = makeGetIsAuthenticated()
+  const socket = makeGetSocketWithType()
+  const post = makeGetPost()
 
   const [loading, setLoading] = useState(true)
-  const [post, setPost] = useState(null)
   const [commentsUserVote, setCommentsUserVote] = useState({})
   const [postUserVote, setPostUserVote] = useState({})
 
   useEffect(() => {
-    // document.body.style.backgroundColor = '#fff'
+    dispatch({ type: types.S_FETCH_COMMENTS_POST, payload: id })
+    dispatch({ type: typesHome.S_GET_POST, payload: { id, socket } })
+    socket.on('DeletePost', () => history.push('/'))
 
     const fetchPost = async () => {
       try {
-        const data = await PostAPI.getPostById(id)
-        dispatch({ type: types.S_FETCH_COMMENTS_POST, payload: id })
-        setPost(data)
-
-        if (isAuthenticated) {
+        if (isAuth) {
           const postsUserVoted = await PostAPI.getPostsUserLiked()
           const commentsVoted = await PostAPI.getCommentsLiked(id)
 
@@ -55,18 +59,29 @@ function PostViewBlog() {
     }
 
     fetchPost()
+
+    return () => {
+      socket.off('DeletePost')
+      socket.emit('LeavingRoom')
+      dispatch({ type: typesHome.RESET_POST })
+    }
   }, [])
 
   const handleSubmitComment = async ({ content }, { resetForm }) => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) {
+      resetForm()
+      return
+    }
+
     const data = { content: content.slice(0, -1), postId: post.id }
-    dispatch({ type: types.S_CREATE_COMMENT_POST, payload: data })
+    dispatch({ type: types.S_CREATE_COMMENT_POST, payload: { data, socket } })
     resetForm()
   }
 
   return (
     <LayoutContainer style={{ padding: '8px 6px' }}>
       {!loading && post && (
-        <S_PostMainForum style={{ paddingBottom: 50 }}>
+        <S_PostMainForum style={{ paddingBottom: 200 }}>
           <S_PostInfo>
             <S_PostMainView>
               <div className="flex items-center">
@@ -107,13 +122,19 @@ function PostViewBlog() {
                 </div>
               </S_InfoUser>
 
-              <S_PostMainContent dangerouslySetInnerHTML={{ __html: post.content }} />
+              <S_PostMainContent dangerouslySetInnerHTML={{ __html: replaceImg(post.content) }} />
             </S_PostMainView>
 
-            <PostViewFooterBlog post={post} userId={user.id} isVote={isAuthenticated && postUserVote[post.id]} />
+            <PostViewFooterBlog
+              post={post}
+              socket={socket}
+              isAuth={isAuth}
+              userId={user.id}
+              isVote={isAuth && postUserVote[post.id]}
+            />
             <div className="h-px bg-gray-200 mt-5" />
 
-            <Comments type="blog" comments={comments} commentsUserVote={isAuthenticated ? commentsUserVote : {}} />
+            <Comments type="blog" comments={comments} commentsUserVote={isAuth ? commentsUserVote : {}} />
 
             <InputComment placeholder="Viết bình luận..." onSubmitComment={handleSubmitComment} />
           </S_PostInfo>

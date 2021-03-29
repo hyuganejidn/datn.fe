@@ -5,7 +5,7 @@ import { FormHelperText, TextField, InputAdornment, IconButton } from '@material
 import { Visibility, VisibilityOff } from 'Templates/icon/IconsSvg'
 
 function InputField(props) {
-  const { field, form, label, disabled, placeholder, autoComplete, helperText, errorText } = props
+  const { field, form, label, disabled, placeholder, autoComplete, helperText, errorText, className } = props
 
   const { name } = field
   const { errors, touched } = form
@@ -15,7 +15,7 @@ function InputField(props) {
   const handleClickShowPassword = () => setShowPassword(pre => !pre)
 
   return (
-    <div className="form-group">
+    <div className={className}>
       <TextField
         {...field}
         id={name}
@@ -23,6 +23,7 @@ function InputField(props) {
         error={showError}
         type={showPassword ? 'text' : 'password'}
         helperText={helperText}
+        fullWidth
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">

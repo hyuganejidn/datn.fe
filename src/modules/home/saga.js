@@ -1,12 +1,23 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 
 import { PostAPI, TopicAPI, UserAPI } from '@/services'
+
 import * as types from './store/action_types'
 
-function* getPosts({ payload }) {
+function* fetchPosts({ payload }) {
   try {
     const posts = yield call(() => TopicAPI.getPostsOfTopic(payload))
     yield put({ type: types.SET_POSTS, payload: posts })
+  } catch (error) {
+    throw new Error(error)
+  }
+}
+
+function* getPost({ payload: { id, socket } }) {
+  try {
+    const post = yield call(() => PostAPI.getPostById(id))
+    socket.emit('JoiningRoom', post)
+    yield put({ type: types.SET_POST, payload: post })
   } catch (error) {
     throw new Error(error)
   }
@@ -25,7 +36,6 @@ function* getPostsVoted() {
   try {
     yield put({ type: types.SET_PROCESSING })
     const postsUserVoted = yield call(() => PostAPI.getPostsUserVoted())
-    console.log(postsUserVoted)
     yield put({ type: types.SET_POSTS_VOTED, payload: postsUserVoted })
   } catch (error) {
     throw new Error(error)
@@ -35,7 +45,8 @@ function* getPostsVoted() {
 }
 
 export default function* commentSaga() {
-  yield all([takeLatest(types.S_FETCH_POSTS, getPosts)])
+  yield all([takeLatest(types.S_FETCH_POSTS, fetchPosts)])
+  yield all([takeLatest(types.S_GET_POST, getPost)])
   yield all([takeLatest(types.S_FETCH_POSTS_USER, getPostsUser)])
   yield all([takeLatest(types.S_FETCH_POSTS_VOTED, getPostsVoted)])
 }

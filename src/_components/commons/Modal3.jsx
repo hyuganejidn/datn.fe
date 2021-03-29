@@ -5,12 +5,7 @@ function Modal(props) {
 
   return (
     <div className="z-40 fixed w-full h-full top-0 left-0 pb-64 overflow-scroll">
-      <div
-        className="fixed w-full bg-gray-800 h-full overflow-y-auto"
-        style={{ opacity: '0.35' }}
-        onClick={() => setIsShowModal(false)}
-        aria-hidden="true"
-      />
+      <div className="fixed w-full bg-gray-800 h-full overflow-y-auto" style={{ opacity: '0.35' }} />
       <div className="relative bg-white w-11/12 md:w-3/5 mx-auto rounded shadow-lg z-40 mt-10 overflow-y-auto">
         <div className="flex justify-between items-center py-1 px-3 bg-gray-200">
           <p className="text-gray-900 font-medium text-sm w-full pl-1">{title}</p>

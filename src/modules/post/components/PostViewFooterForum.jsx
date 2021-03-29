@@ -8,31 +8,50 @@ import {
   S_FooterText,
 } from '@/modules/home/Post.style'
 import { PostAPI } from '@/services'
-import React, { useState } from 'react'
+import Modal3 from 'Templates/commons/Modal3'
+import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { DownVote, UpVote, CommentSquare, Share } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
 import { useDispatch } from 'react-redux'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import PostUpdate from './PostUpdate'
 
-function PostViewFooterForum({ isVote, userId, post }) {
+function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
   const history = useHistory()
   const dispatch = useDispatch()
+  const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
 
-  const [vote, setVote] = useState(undefined)
-  const [isVoted, setIsVoted] = useState(isVote)
+  const [vote, setVote] = useState({
+    voteTotal: post.voteNum,
+    vote: isVote,
+  })
+
+  useEffect(() => {
+    const handleVote = ({ _vote }) => {
+      setVote(prev => ({ ...prev, voteTotal: _vote.voteTotal }))
+    }
+
+    socket.on('VotePost', handleVote)
+    return () => socket.off('VotePost', handleVote)
+  }, [])
 
   const handleVotePost = async (_postId, voteNum) => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
+    socket.emit('VotePost', { voteNum, vote })
+
     const voteData = await PostAPI.votePost(_postId, voteNum)
     setVote({
       voteTotal: voteData.vote,
-      vote: isVoted === voteNum ? 0 : voteNum,
+      vote: vote.vote === voteNum ? 0 : voteNum,
     })
-    setIsVoted(isVoted === voteNum ? 0 : voteNum)
   }
 
   const handleDelete = async id => {
     try {
       await PostAPI.destroy(id)
+      socket.emit('DeletePost', id)
       history.push('/')
     } catch (error) {
       throw new Error(error)
@@ -41,23 +60,23 @@ function PostViewFooterForum({ isVote, userId, post }) {
   }
 
   const handleUpdate = () => {
-    console.log('update')
-    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+    setIsShowUpdatePost(prev => !prev)
   }
 
   const handleReport = () => {
-    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
   }
   return (
     <>
       {post && (
         <S_PostViewFooter>
           <S_VoteRow>
-            <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
+            <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1}>
               <UpVote width={18} />
             </S_UpVote>
             <span style={{ margin: '0 4px' }}>{vote ? vote?.voteTotal : post.voteNum}</span>
-            <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1 || isVoted === -1}>
+            <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1}>
               <DownVote width={18} />
             </S_DownVote>
           </S_VoteRow>
@@ -83,6 +102,16 @@ function PostViewFooterForum({ isVote, userId, post }) {
             }
           />
         </S_PostViewFooter>
+      )}
+      {isShowUpdatePost && (
+        <Modal3
+          title="Chỉnh sửa bài viết"
+          setIsShowModal={setIsShowUpdatePost}
+          component={PostUpdate}
+          dataPost={post}
+          classify="forum"
+          type="post"
+        />
       )}
     </>
   )

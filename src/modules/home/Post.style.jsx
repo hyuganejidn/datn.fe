@@ -21,6 +21,7 @@ export const S_Post = styled.div`
   /* border-left: 1px solid rgba(203, 213, 224, var(--border-opacity)); */
   background-color: white;
 `
+
 export const S_Vote = styled.div`
   display: flex;
   flex-direction: column;

@@ -1,9 +1,9 @@
-import { Immutable } from '@/helpers/Immutable'
+import produce from 'immer'
 import * as types from './action_types'
 
 const initialState = {
   user: {},
-  isAuthenticated: false,
+  isAuthenticate: false,
   processing: {
     login: true,
     password: true,
@@ -28,28 +28,52 @@ const initialState = {
   },
 }
 
-const reducer = (_state = initialState, { type, payload }) => {
-  const immutableState = new Immutable(_state)
-  switch (type) {
-    case types.AUTH_SET_USER:
-      return immutableState.set('user', payload).state
-    case types.AUTH_LOGIN_ERRORS:
-      return immutableState.setIn(['errors', 'login'], payload).state
-    case types.AUTH_SIGNUP_ERRORS:
-      return immutableState.setIn(['errors', 'signUp'], payload).state
-    case types.AUTH_LOGIN_SUCCESSFUL:
-      return immutableState.update('isAuthenticated', bool => !bool).state
-    case types.AUTH_LOGOUT_SUCCESSFUL:
-      return immutableState.update('user', {}).update('isAuthenticated', bool => !bool).state
-    case types.AUTH_RESET_ERRORS:
-      return immutableState.setIn(['errors', 'login'], {
-        username: '',
-        password: '',
-      }).state
-    case types.AUTH_SET_PROCESSING:
-      return immutableState.setIn(['processing', payload.key], bool => !bool).state
-    default:
-      return _state
-  }
-}
+const reducer = (state = initialState, { type, payload }) =>
+  produce(state, draft => {
+    switch (type) {
+      case types.AUTH_SET_USER:
+        draft.user = { ...payload }
+        break
+
+      case types.AUTH_LOGIN_ERRORS:
+        draft.errors.login = payload
+        break
+
+      case types.AUTH_SIGNUP_ERRORS:
+        draft.errors.signUp = payload
+        break
+
+      case types.AUTH_LOGIN_SUCCESSFUL:
+        draft.isAuthenticate = !state.isAuthenticate
+        break
+
+      case types.AUTH_LOGOUT_SUCCESSFUL:
+        draft.user = {}
+        draft.isAuthenticate = !state.isAuthenticate
+        break
+
+      case types.AUTH_SET_PROCESSING:
+        draft.processing[payload.key] = !state.processing[payload.key]
+        break
+
+      case types.AUTH_RESET_ERRORS:
+        draft.errors.login = {
+          username: '',
+          password: '',
+        }
+        break
+
+      case types.UPDATE_USER_AVATAR:
+        draft.user.avatarUrl = payload
+        break
+
+      case types.UPDATE_USER_INFO:
+        draft.user = { ...state.user, ...payload }
+        break
+
+      default:
+        break
+    }
+  })
+
 export default reducer

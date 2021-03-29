@@ -10,8 +10,8 @@ function UserFollower({ users }) {
         users.map(user => (
           <Link key={user.id} to={`/users/${user.id}`} className="flex items-center my-3  text-black">
             <div id="like_matrix" className="w-8 h-8 rounded-full">
-              {user.avatar ? (
-                <Avatar alt="" src={user.avatar} style={{ width: '2rem', height: '2rem' }} />
+              {user.avatarUrl ? (
+                <Avatar alt="" src={user.avatarUrl} style={{ width: '2rem', height: '2rem' }} />
               ) : (
                 <Avatar style={{ width: '2rem', height: '2rem' }}>{user.fullName[0].toUpperCase()}</Avatar>
               )}

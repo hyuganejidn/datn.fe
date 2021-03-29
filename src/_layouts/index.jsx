@@ -7,24 +7,24 @@ import { getAuthToken } from '@/helpers/storage'
 import * as types from '@/modules/auth/store/action_types'
 import * as typesHome from '@/modules/home/store/action_types'
 import { makeGetProcessing } from '@/modules/auth/store/selector'
-import { makeGetIsShowReport } from '@/modules/home/store/selector'
+import { makeGetIsShowReport, makeGetIsLogin } from '@/modules/home/store/selector'
 
 import HeaderNav from '@/_components/header/'
 import Report from 'Templates/features/Report'
 import Modal from 'Templates/commons/Modal2'
+import ShouldLogin from 'Templates/commons/ModalShouldLogin'
 
 const Layout = ({ children, ...props }) => {
   const dispatch = useDispatch()
   const loadingLogin = makeGetProcessing('login')
   const isShowReport = makeGetIsShowReport()
+  const isShowLogin = makeGetIsLogin()
 
   useEffect(() => {
     const token = getAuthToken()
     if (token) dispatch({ type: types.S_AUTH_GET_ME })
     else dispatch({ type: types.AUTH_SET_PROCESSING, payload: { key: 'login' } })
   }, [])
-
-  console.log(isShowReport)
 
   return (
     <div className="theme">
@@ -42,9 +42,18 @@ const Layout = ({ children, ...props }) => {
         <Modal
           title="Chọn lý do báo xấu"
           setIsShowModal={() => {
-            dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+            dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
           }}
           component={Report}
+        />
+      )}
+      {isShowLogin && (
+        <Modal
+          title="Bạn chưa đăng nhập"
+          setIsShowModal={() => {
+            dispatch({ type: typesHome.APP_UPDATE_IS_LOGIN })
+          }}
+          component={ShouldLogin}
         />
       )}
     </div>

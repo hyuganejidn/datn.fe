@@ -13,7 +13,6 @@ const useClickOutside = (ref, onclick) => {
       if (!isRefArray(ref)) {
         if (isTarget(ref, event)) return
       } else if (trueForAny(ref, r => isTarget(r, event))) return
-      console.log(onclick, ref)
       onclick()
     },
     [onclick, ref]

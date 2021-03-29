@@ -47,7 +47,6 @@ function PostAdd() {
   const location = useLocation()
   const history = useHistory()
   const { classify, blogSlug } = queryString.parse(location.search)
-  console.log(blogSlug)
   const [content, setContent] = useState('')
   const [topicSelected, setTopicSelected] = useState({})
   const [blog, setBlog] = useState({})
@@ -93,7 +92,6 @@ function PostAdd() {
       avatar: elImgFirst ? elImgFirst.getAttribute('src') : '',
     }
     classify === 'forum' ? (data.topic = topicSelected.slug) : (data.blog = blog.id)
-
     try {
       const post = await PostAPI.create(data)
       history.push(classify === 'forum' ? '/' : `/blogs/${blog.slug}`)

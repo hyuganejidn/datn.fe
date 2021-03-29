@@ -23,4 +23,7 @@ export const listComment = id => http.get(`${path}/${id}/comments`).then(res => 
 export const create = ({ title, content, classify, blog, topic, avatar }) =>
   http.post(`${path}`, { title, content, classify, blog, topic, avatar })
 
+export const update = (id, { title, content, avatar, topic }) =>
+  http.put(`${path}/${id}`, { title, content, avatar, topic })
+
 export const destroy = id => http.delete(`${path}/${id}`)

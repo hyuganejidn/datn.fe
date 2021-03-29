@@ -1,3 +1,5 @@
+import { ENV } from '@/_constants/common'
+
 export function formatDate(_date) {
   const option = {
     month: 'long',
@@ -111,6 +113,16 @@ export const replaceSrcImg = (xmlString, srcImgs) => {
     elImages[i].setAttribute('src', srcImgs[i].path)
   }
   return doc
+}
+
+export const replaceImg = xmlString => {
+  const doc = new DOMParser().parseFromString(xmlString, 'text/html')
+  const elImages = doc.body.querySelectorAll('img[src^="/public/images/"]')
+  for (let i = 0; i < elImages.length; i += 1) {
+    const src = elImages[i].getAttribute('src')
+    elImages[i].setAttribute('src', `${ENV.API_SERVER}${src}`)
+  }
+  return doc.firstChild.outerHTML
 }
 
 export const getFirstTagImg = xmlString => {

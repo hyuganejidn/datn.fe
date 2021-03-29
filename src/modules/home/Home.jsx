@@ -6,6 +6,21 @@ import Forum from './Forum'
 import Topics from './Topics'
 import { makeGetIsAuthenticated } from '../auth/store/selector'
 
+function Home() {
+  const isAuth = makeGetIsAuthenticated()
+  console.log(isAuth)
+  return (
+    <LayoutBg>
+      <S_Layout>
+        <S_Topics topics={topics} />
+        <S_Forum />
+      </S_Layout>
+    </LayoutBg>
+  )
+}
+
+export default Home
+
 const S_Layout = styled.div`
   display: flex;
   width: 90%;
@@ -44,18 +59,3 @@ const S_Forum = styled(Forum)`
   margin-left: 16px;
   margin-right: 16px;
 `
-
-function Home() {
-  const isAuth = makeGetIsAuthenticated()
-  console.log(isAuth)
-  return (
-    <LayoutBg>
-      <S_Layout>
-        <S_Topics topics={topics} />
-        <S_Forum />
-      </S_Layout>
-    </LayoutBg>
-  )
-}
-
-export default Home

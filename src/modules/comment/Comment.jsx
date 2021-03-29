@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 
 import { CommentLine } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { makeGetSocketWithType } from '@/_layouts/Socket'
 import {
   S_Footer,
   S_FooterLink,
@@ -17,51 +19,83 @@ import {
   S_ThreeDotMenu,
   S_LineCurves,
   S_LineStraight,
+  S_EditComment,
 } from './Comment.style'
 import InputComment from './InputComment'
 import CommentVote from './components/CommentVote'
 import * as types from './store/action_types'
 
-function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUserVote, isLasts }) {
+function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUserVote, isLasts, isAuth }) {
   const dispatch = useDispatch()
+  const socket = makeGetSocketWithType()
 
   const [isReply, setIsReply] = useState(false)
+  const [isEdit, setIsEdit] = useState(false)
 
   const [commentReply, setCommentReply] = useState(comment)
 
   const handleSubmitComment = async ({ content }) => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     const data = {
-      content,
+      content: content.slice(0, -1),
       postId: commentReply.post.id,
       parentId: commentReply.id,
     }
-    dispatch({ type: types.S_CREATE_CHILD_COMMENT, payload: data })
+    dispatch({ type: types.S_CREATE_CHILD_COMMENT, payload: { data, socket } })
     setIsReply(prev => !prev)
   }
 
+  const handleEditComment = async ({ content }) => {
+    dispatch({ type: types.S_UPDATE_COMMENT, payload: { comment, content: content.slice(0, -1), socket } })
+    setIsEdit(prev => !prev)
+  }
+
   const onReplyCommentChild = _comment => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     setIsReply(true)
     setCommentReply(_comment)
   }
 
+  const cancelReply = e => {
+    console.log(e.key)
+    if (e.key === 'Escape') {
+      setIsReply(false)
+      document.body.removeEventListener('keydown', cancelReply)
+    }
+  }
+
   const handleReplyComment = () => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     if (handleReplyCommentChild) {
       handleReplyCommentChild()
     }
+    document.body.addEventListener('keydown', cancelReply)
     setIsReply(true)
   }
 
   const handleDelete = () => {
-    dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
+    dispatch({ type: types.S_DELETE_COMMENT, payload: { comment, socket } })
+  }
+
+  const cancelEdit = e => {
+    if (e.key === 'Escape') {
+      setIsEdit(false)
+      document.body.removeEventListener('keydown', cancelEdit)
+    }
   }
 
   const handleUpdate = () => {
-    console.log('update')
-    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+    setIsEdit(true)
+    document.body.addEventListener('keydown', cancelEdit)
   }
 
   const handleReport = () => {
-    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
   }
 
   return (
@@ -78,49 +112,62 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
           (!isLasts || i === 0 || (isLasts && comment.commentsChild.length > 0)) && <S_LineStraight />
         )}
       </S_Avatar>
-
       <S_CommentMain style={{ width: '100%' }}>
-        <S_CommentContent>
-          <div>
-            <S_NameAuthorLink to={`/users/${comment.author.id}`}>{comment.author.fullName}</S_NameAuthorLink>
-            {comment.userBeingReply && comment.userBeingReply.id !== comment.author.id && (
-              <Link to={`/users/${comment.userBeingReply.id}`} style={{ color: '#38a169', fontSize: '0.875rem' }}>
-                @{comment.userBeingReply.fullName}
-              </Link>
-            )}
-          </div>
-          <div style={{ margin: `6px 0px` }}>{comment.content}</div>
-        </S_CommentContent>
+        {isEdit ? (
+          <S_EditComment>
+            <InputComment comment={comment} onSubmitComment={handleEditComment} />
+            <span className="edit-text">Nhấn Esc để </span>{' '}
+            <span type="button" className="cancel-edit" onClick={() => setIsEdit(false)} aria-hidden="true">
+              hủy
+            </span>
+          </S_EditComment>
+        ) : (
+          <>
+            <S_CommentContent>
+              <div>
+                <S_NameAuthorLink to={`/users/${comment.author.id}`}>{comment.author.fullName}</S_NameAuthorLink>
+                {comment.userBeingReply && comment.userBeingReply.id !== comment.author.id && (
+                  <Link to={`/users/${comment.userBeingReply.id}`} style={{ color: '#38a169', fontSize: '0.875rem' }}>
+                    @{comment.userBeingReply.fullName}
+                  </Link>
+                )}
+              </div>
+              <div style={{ margin: `6px 0px` }}>{comment.content}</div>
+            </S_CommentContent>
 
-        <S_Footer>
-          <CommentVote
-            type={type}
-            commentId={comment.id}
-            commentVoteTotal={comment.voteNum}
-            isVote={commentsUserVote[comment.id]}
-          />
+            <S_Footer>
+              <CommentVote
+                type={type}
+                isAuth={isAuth}
+                commentId={comment.id}
+                commentVoteTotal={comment.voteNum}
+                isVote={commentsUserVote[comment.id]}
+              />
 
-          <S_FooterLink type="button" onClick={handleReplyComment} style={{ margin: '0 8px', color: '#718096' }}>
-            <CommentLine width={14} style={{ marginRight: '2px' }} />
-            Trả lời
-          </S_FooterLink>
+              <S_FooterLink type="button" onClick={handleReplyComment} style={{ margin: '0 8px', color: '#718096' }}>
+                <CommentLine width={14} style={{ marginRight: '2px' }} />
+                Trả lời
+              </S_FooterLink>
 
-          <S_ThreeDotMenu
-            options={
-              userId === comment.author?.id
-                ? [
-                    { title: 'Xóa', onClick: handleDelete },
-                    { title: 'Chỉnh sửa', onClick: handleUpdate },
-                  ]
-                : [{ title: 'Báo xấu', onClick: handleReport }]
-            }
-          />
-        </S_Footer>
+              <S_ThreeDotMenu
+                options={
+                  userId === comment.author?.id
+                    ? [
+                        { title: 'Xóa', onClick: handleDelete },
+                        { title: 'Chỉnh sửa', onClick: handleUpdate },
+                      ]
+                    : [{ title: 'Báo xấu', onClick: handleReport }]
+                }
+              />
+            </S_Footer>
+          </>
+        )}
 
         {comment.commentsChild?.length > 0 && (
           <div className="commentChild" style={{ marginTop: '8px' }}>
             {comment.commentsChild.map(commentChild => (
               <Comment
+                isAuth={isAuth}
                 type={type}
                 userId={userId}
                 key={commentChild.id}
@@ -140,12 +187,13 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
                 {commentReply.author?.fullName}
               </Link>
             </S_TitleReply>
-
-            <InputComment
-              comment={commentReply}
-              placeholder="Viết câu trả lời..."
-              onSubmitComment={handleSubmitComment}
-            />
+            <S_EditComment>
+              <InputComment placeholder="Viết câu trả lời..." onSubmitComment={handleSubmitComment} />
+              <span className="edit-text">Nhấn Esc để </span>{' '}
+              <span type="button" className="cancel-edit" onClick={() => setIsReply(false)} aria-hidden="true">
+                hủy
+              </span>
+            </S_EditComment>
           </>
         )}
       </S_CommentMain>

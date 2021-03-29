@@ -1,60 +1,35 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { FastField, Formik, Form } from 'formik'
 import * as Yup from 'yup'
-import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
 
-import { InputTextArea, InputFile } from 'Templates/form'
-import InputField from 'Templates/form/InputField'
-import { Close } from 'Templates/icon/IconsSvg'
 import { BlogAPI } from '@/services'
 import http from '@/helpers/axios'
-import { LayoutBg } from '@/_layouts'
-// import { makeGetIsAuthenticated } from '../auth/store/selector'
+import { useDispatch } from 'react-redux'
+import { InputFile } from 'Templates/form'
+import { S_Close, S_InputField, S_InputFile, S_InputTextArea } from './Blog.style'
+import * as types from '../store/action_types'
+import { makeGetErrorWithType } from '../store/selector'
 
-const S_InputField = styled(InputField)`
-  width: 100%;
-`
-const S_InputTextArea = styled(InputTextArea)`
-  width: 100%;
-`
-const S_InputFile = styled(InputFile)`
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  z-index: 10;
-`
-
-const S_Close = styled(Close)`
-  position: absolute;
-  top: -12px;
-  right: -12px;
-  background: white;
-  border-radius: 50%;
-  color: red;
-  z-index: 10;
-  cursor: pointer;
-`
-
-const initialForm = {
-  avatar: '',
-  cover: '',
-  title: '',
-  description: '',
-  slug: '',
-  info: {
-    email: '',
-    fallback: '',
-    twitter: '',
-  },
-}
-
-function BlogAdd() {
-  // const isAuth = makeGetIsAuthenticated()
-  const history = useHistory()
+function BlogUpdate({ dataBlog, setIsShowModal }) {
+  const [initialForm] = useState({
+    avatar: dataBlog.avatar,
+    cover: dataBlog.cover,
+    title: dataBlog.title,
+    description: dataBlog.description,
+    slug: dataBlog.slug,
+    info: dataBlog.info
+      ? JSON.parse(dataBlog.info)
+      : {
+          email: '',
+          fallback: '',
+          twitter: '',
+        },
+  })
+  const dispatch = useDispatch()
   const rInputAvatar = useRef(null)
   const rInputCover = useRef(null)
+
+  const errors = makeGetErrorWithType('blog')
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -77,28 +52,33 @@ function BlogAdd() {
 
   const saveAvatar = async (avatar, cover) => {
     const formData = new FormData()
-    formData.append('imgs', avatar)
-    cover && formData.append('imgs', cover)
+    typeof avatar !== 'string' && formData.append('imgs', avatar)
+    cover && typeof cover !== 'string' && formData.append('imgs', cover)
 
-    const data = await http.post('/images', formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    })
-    return data
+    if (formData.has('imgs')) {
+      const data = await http.post('/images', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      if (typeof avatar !== 'string' && typeof cover !== 'string') return { avatar: data[0].path, cover: data[1].path }
+      if (typeof avatar !== 'string' && typeof cover === 'string') return { avatar: data[0].path, cover }
+      if (typeof avatar === 'string' && typeof cover !== 'string') return { cover: data[0].path, avatar }
+    }
+    return { avatar, cover }
   }
 
-  const handleCreateBlog = async ({ avatar, cover, title, description, slug, info }) => {
-    const avatarObj = await saveAvatar(avatar, cover)
-    const data = {
-      slug,
-      title,
-      description,
-      info: JSON.stringify(info),
-      avatar: avatarObj[0].path,
-      cover: avatarObj[1] ? avatarObj[1].path : '',
-    }
+  const handleUpdateBlog = async ({ avatar, cover, title, description, slug, info }) => {
     try {
-      await BlogAPI.create(data)
-      history.push('/blogs?tab=me')
+      const avatarObj = await saveAvatar(avatar, cover)
+      const data = {
+        ...avatarObj,
+        slug,
+        title,
+        description,
+        info: JSON.stringify(info),
+      }
+      const blog = await BlogAPI.update(dataBlog.id, data)
+      dispatch({ type: types.SET_BLOG, payload: blog })
+      setIsShowModal(false)
     } catch (error) {
       throw new Error(error)
     }
@@ -110,8 +90,8 @@ function BlogAdd() {
   }
 
   return (
-    <LayoutBg>
-      <Formik initialValues={initialForm} onSubmit={handleCreateBlog} validationSchema={validationSchema}>
+    <div>
+      <Formik initialValues={initialForm} onSubmit={handleUpdateBlog} validationSchema={validationSchema}>
         {({ values, setFieldValue }) => (
           <div className="relative bg-white w-11/12 md:max-w-xl mx-auto my-3 p-2  rounded-md">
             <div className="flex items-center">
@@ -126,6 +106,7 @@ function BlogAdd() {
                   maxLength={150}
                   placeholder="Nhập tên blog"
                   classes="py-1 outline-none w-full border-b border-gray-200"
+                  errorText={errors.title}
                 />
                 <span className="text-xs text-gray-500 px-1 ">{values.title.length}/150</span>
               </div>
@@ -137,6 +118,7 @@ function BlogAdd() {
                   placeholder="Nhập mô tả blog"
                   classes="py-1 outline-none w-full border-b border-gray-200 forum_frameIcon__2fNr2 "
                   maxLength={300}
+                  errorText={errors.description}
                 />
                 <span className="text-xs text-gray-500 px-1">{values.description.length}/300</span>
               </div>
@@ -148,6 +130,7 @@ function BlogAdd() {
                   component={S_InputField}
                   placeholder="Nhập định danh blog"
                   classes="py-1 outline-none w-full border-b border-gray-200"
+                  errorText={errors.slug}
                 />
                 <span className="text-xs text-gray-500 px-1 ">{values.slug.length}/50</span>
               </div>
@@ -176,7 +159,11 @@ function BlogAdd() {
                   onClick={handleUploadAvatar}
                 >
                   {values.avatar && (
-                    <img className="img-full rounded-md" src={URL.createObjectURL(values.avatar)} alt="blogs" />
+                    <img
+                      className="img-full rounded-md"
+                      src={typeof values.avatar === 'string' ? values.avatar : URL.createObjectURL(values.avatar)}
+                      alt="blogs"
+                    />
                   )}
                 </div>
               </div>
@@ -195,7 +182,11 @@ function BlogAdd() {
                   <>
                     <S_Close onClick={() => setFieldValue('cover', '')} />
                     <div style={{ paddingTop: values.cover && '56.25%' }}>
-                      <img className="img-full rounded-md" src={URL.createObjectURL(values.cover)} alt="blogs" />
+                      <img
+                        className="img-full rounded-md"
+                        src={typeof values.cover === 'string' ? values.cover : URL.createObjectURL(values.cover)}
+                        alt="blogs"
+                      />
                     </div>
                   </>
                 ) : (
@@ -249,7 +240,7 @@ function BlogAdd() {
                 <button
                   type="button"
                   className="px-2 py-1 rounded text-white font-medium bg-gray-500 hover:bg-gray-600 focus:outline-none mr-3"
-                  onClick={() => history.push('/blogs?tab=me')}
+                  onClick={() => setIsShowModal(false)}
                 >
                   Hủy
                 </button>
@@ -264,8 +255,8 @@ function BlogAdd() {
           </div>
         )}
       </Formik>
-    </LayoutBg>
+    </div>
   )
 }
 
-export default BlogAdd
+export default BlogUpdate

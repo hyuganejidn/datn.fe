@@ -50,7 +50,7 @@ export const S_Vote = styled.div`
   height: 22px;
 `
 
-export const S_UpVote = styled.div`
+export const S_UpVote = styled.button`
   height: 20px;
   padding: 2px;
   background: none;
@@ -81,7 +81,7 @@ export const S_HeartLike = styled.div`
   }
 `
 
-export const S_DownVote = styled.div`
+export const S_DownVote = styled.button`
   height: 20px;
   padding: 2px;
   background: none;
@@ -154,4 +154,20 @@ export const S_LineStraight = styled.div`
   margin: 10% auto;
 
   background: #d2d2d2;
+`
+
+export const S_EditComment = styled.div`
+  font-size: 12px;
+  .cancel-edit {
+    display: inline-block;
+    margin-top: 4px;
+    font-size: 12px;
+    text-decoration: underline;
+    color: #0357ff;
+    cursor: pointer;
+  }
+  .edit-text {
+    display: inline-block;
+    margin-top: 4px;
+  }
 `

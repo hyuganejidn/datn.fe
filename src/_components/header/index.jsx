@@ -2,22 +2,30 @@ import { makeGetIsAuthenticated, makeGetMe } from '@/modules/auth/store/selector
 import { Avatar } from '@material-ui/core'
 import React, { useCallback, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { Link, useHistory } from 'react-router-dom'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import {
   Menu,
   // ForumNav, BlogsNav,
   Search,
   BlogsNavColor,
   ForumNavColor,
+  BlogsNav,
+  ForumNav,
 } from 'Templates/icon/IconsSvg'
 import * as types from '@/modules/auth/store/action_types'
 import useClickOutside from '@/hooks/useClickOutside'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 
 function HeaderNav() {
   const user = makeGetMe()
   const isAuth = makeGetIsAuthenticated()
   const dropdown = useRef(null)
-
+  const location = useLocation()
+  const isTab = {
+    forum: /topics/.test(location.pathname) || location.pathname === '/',
+    blog: /blogs/.test(location.pathname),
+  }
+  console.log(location)
   const dispatch = useDispatch()
   const history = useHistory()
 
@@ -42,17 +50,27 @@ function HeaderNav() {
                 ly kafe
               </span>
             </a>
-            <Link to="/" className="ml-4 text-black flex items-center font-semibold no-underline">
-              <ForumNavColor width="1.25" unit="rem" />
+            <Link
+              to="/"
+              className={`ml-3 text-gray-600 flex items-center font-semibold no-underline ${
+                isTab.forum && 'text-black'
+              }`}
+            >
+              {isTab.forum ? <ForumNavColor width="1.25" unit="rem" /> : <ForumNav width="1.25" unit="rem" />}
               <span className="ml-1 font-semibold">Diễn đàn</span>
             </Link>
-            <Link to="/blogs?tab=news" className="ml-3 text-gray-600 flex items-center font-semibold no-underline">
-              <BlogsNavColor width="1.25" unit="rem" />
+            <Link
+              to="/blogs?tab=news"
+              className={`ml-3 text-gray-600 flex items-center font-semibold no-underline  ${
+                isTab.blog && 'text-black'
+              }`}
+            >
+              {isTab.blog ? <BlogsNavColor width="1.25" unit="rem" /> : <BlogsNav width="1.25" unit="rem" />}
               <span className="ml-1 font-semibold">Blog</span>
             </Link>
           </div>
 
-          <div className="hidden md:flex items-center flex-shrink ml-10 w-full h-full pl-8 border border-gray-lightest hover:border-gray-500 rounded relative bg-gray-100">
+          <div className=" md:flex items-center flex-shrink ml-10 w-full h-full pl-8 border border-gray-lightest hover:border-gray-500 rounded relative bg-gray-100">
             <Search width="16" />
             <input
               type="text"
@@ -61,15 +79,19 @@ function HeaderNav() {
               placeholder="Tìm kiếm"
             />
           </div>
-          <Link
-            to="/posts/add?classify=forum"
-            className="hidden md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full px-2 bg-green-500 py-px text-white no-underline"
+          <button
+            type="button"
+            onClick={() => {
+              if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+              history.push('/posts/add?classify=forum')
+            }}
+            className=" md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full px-2 bg-green-500 py-px text-white no-underline"
           >
             <span className="text-sm">&nbsp;Đăng bài</span>
-          </Link>
+          </button>
           <div className="flex items-center flex-shrink-0">
             {!isAuth ? (
-              <div className="hidden md:flex items-center flex-shrink-0">
+              <div className=" md:flex items-center flex-shrink-0">
                 <Link to="/login" className="ml-5 flex-shrink-0 hover:text-black no-underline text-gray-600">
                   <span className="font-medium text-sm">Đăng nhập</span>
                 </Link>
@@ -88,8 +110,8 @@ function HeaderNav() {
                   aria-hidden="true"
                 >
                   <div className="hover:text-black flex items-center">
-                    {user.avatar ? (
-                      <Avatar alt="" src={user.avatar} style={{ width: 28, height: 28 }} />
+                    {user.avatarUrl ? (
+                      <Avatar alt="" src={user.avatarUrl} style={{ width: 28, height: 28 }} />
                     ) : (
                       <Avatar style={{ width: 28, height: 28 }}>{user.fullName[0].toUpperCase()}</Avatar>
                     )}

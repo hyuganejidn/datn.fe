@@ -3,7 +3,7 @@ import React, { lazy, Suspense } from 'react'
 
 const BlogView = lazy(() => import('./BlogView'))
 const BlogHome = lazy(() => import('./BlogHome'))
-const BlogAdd = lazy(() => import('./BlogAdd'))
+const BlogAdd = lazy(() => import('./components/BlogAdd'))
 
 export default [
   {

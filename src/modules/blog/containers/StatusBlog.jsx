@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { makeGetIsAuthenticated, makeGetMe } from '@/modules/auth/store/selector'
 import { UserAPI } from '@/services'
 import { useDispatch } from 'react-redux'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import DropdownComponent from '../../../_components/dropDown/DropdownComponent'
 import * as types from '../../auth/store/action_types'
 
@@ -55,6 +56,8 @@ function StatusBlog({ blogId, blogAuthorId, blogSlug }) {
       className="flex-shrink-0 font-light cursor-pointer hover:bg-gray-200 rounded-full px-2 py-1"
       style={{ fontSize: 16 }}
       onClick={async () => {
+        if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
         await UserAPI.followBlog(blogId)
         dispatch({ type: types.S_AUTH_UPDATE_ME })
       }}

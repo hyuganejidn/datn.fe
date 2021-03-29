@@ -84,8 +84,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
               options: {
                 jsx: true, // true outputs JSX tags
                 outputPath: 'images',
-                name: () =>
-                  isDev ? '[path][name].[ext]' : '[contenthash].[ext]',
+                name: () => (isDev ? '[path][name].[ext]' : '[contenthash].[ext]'),
               },
             },
           ],
@@ -98,8 +97,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
               loader: 'file-loader',
               options: {
                 outputPath: 'images',
-                name: () =>
-                  isDev ? '[path][name].[ext]' : '[contenthash].[ext]',
+                name: () => (isDev ? '[path][name].[ext]' : '[contenthash].[ext]'),
               },
             },
           ],
@@ -133,11 +131,7 @@ const webpackConfig = (env, { mode = 'development' }) => {
       poll: 1000,
       ignored: /node_modules/,
     }
-    config.plugins = [
-      ...config.plugins,
-      new webpack.ProgressPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
-    ]
+    config.plugins = [...config.plugins, new webpack.ProgressPlugin(), new webpack.HotModuleReplacementPlugin()]
     config.devServer = {
       clientLogLevel: 'silent',
       contentBase: path.resolve(__dirname, 'src'),

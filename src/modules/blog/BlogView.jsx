@@ -1,39 +1,37 @@
 import { BlogAPI } from '@/services'
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import Modal from 'Templates/commons/Modal'
+import Modal3 from 'Templates/commons/Modal3'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
 import InfoUser from './components/InfoBlog'
 import UserFollower from './components/UserFollower'
 import StatusBlogView from './containers/StatusBlogView'
 import PostsBlogs from './PostsBlogs'
+import { makeGetBlog, makeGetPostsBlog } from './store/selector'
+import * as types from './store/action_types'
+import BlogUpdate from './components/BlogUpdate'
 
 function BlogView() {
   const { slug } = useParams()
+  const dispatch = useDispatch()
+
   const user = makeGetMe()
   const isAuth = makeGetIsAuthenticated()
+  const posts = makeGetPostsBlog()
+  const blog = makeGetBlog({})
 
-  const [blog, setBlog] = useState({})
-  const [posts, setPosts] = useState([])
   const [isShowModalFollower, setIsShowModalFollower] = useState(false)
   const [isShowModalInfoUser, setIsShowModalInfoUser] = useState(false)
+  const [isShowModalUpdateBlog, setIsShowModalUpdateBlog] = useState(false)
+
   const [usersFollowed, setUsersFollowed] = useState([])
 
   const isAuthorBlog = isAuth && blog.author?.id === user.id
 
   useEffect(() => {
-    const fetchDataBlog = async () => {
-      try {
-        const blogData = await BlogAPI.getBlogById(slug)
-        const postsData = await BlogAPI.getPostsOfBlogId(blogData.id)
-        setPosts(postsData)
-        setBlog(blogData)
-      } catch (error) {
-        throw new Error(error)
-      }
-    }
-
-    fetchDataBlog()
+    dispatch({ type: types.S_GET_BLOG, payload: slug })
   }, [])
 
   const fetchUserFollowed = async () => {
@@ -52,6 +50,9 @@ function BlogView() {
 
   const handleShowInfoUser = () => {
     setIsShowModalInfoUser(prev => !prev)
+  }
+  const handleShowUpdateBlog = () => {
+    setIsShowModalUpdateBlog(prev => !prev)
   }
 
   return (
@@ -83,7 +84,13 @@ function BlogView() {
                 Viết bài
               </Link>
               <div className="flex items-center text-sm mr-2">
-                <div className="font-light cursor-pointer hover:bg-gray-200 rounded p-1">Chỉnh sửa</div>
+                <div
+                  className="font-light cursor-pointer hover:bg-gray-200 rounded p-1"
+                  onClick={handleShowUpdateBlog}
+                  aria-hidden="true"
+                >
+                  Chỉnh sửa
+                </div>
               </div>
             </>
           ) : (
@@ -119,8 +126,17 @@ function BlogView() {
         <Modal title="Thông tin blog" setIsShowModal={setIsShowModalInfoUser} component={InfoUser} blog={blog} />
       )}
 
+      {isShowModalUpdateBlog && (
+        <Modal3
+          title="Chỉnh sửa blog"
+          setIsShowModal={setIsShowModalUpdateBlog}
+          component={BlogUpdate}
+          dataBlog={blog}
+        />
+      )}
+
       <div>
-        <PostsBlogs posts={posts} />
+        <PostsBlogs posts={posts} type="postsBlog" />
       </div>
     </div>
   )

@@ -1,27 +1,33 @@
-import { timeSince, capitalizeFirstLetter, getInnerText } from '@/helpers/common'
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
 import { CommentLine, HeartLine } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
+import Modal3 from 'Templates/commons/Modal3'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { timeSince, capitalizeFirstLetter, getInnerText } from '@/helpers/common'
+
 import { S_Footer, S_ThreeDotMenu } from '../comment/Comment.style'
 import { S_ImageAvatar, S_PostContent, S_FooterLink, S_PostMain, S_PostTop, S_TopLink } from '../home/Post.style'
+import PostUpdate from '../post/components/PostUpdate'
 
-function PostBlog({ post, userId }) {
+function PostBlog({ isAuth, post, userId, type }) {
   const dispatch = useDispatch()
+  const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
 
   const handleDelete = () => {
     // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
   }
 
   const handleUpdate = () => {
-    console.log('update')
-    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+    setIsShowUpdatePost(prev => !prev)
   }
 
   const handleReport = () => {
-    dispatch({ type: typesHome.APP_UPDATE_ISHOWREPORT })
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
   }
   return (
     <div className="py-6 flex justify-between">
@@ -104,6 +110,15 @@ function PostBlog({ post, userId }) {
             </div>
           </Link>
         </div>
+      )}
+      {isShowUpdatePost && (
+        <Modal3
+          title="Chỉnh sửa bài viết"
+          setIsShowModal={setIsShowUpdatePost}
+          component={PostUpdate}
+          dataPost={post}
+          type={type}
+        />
       )}
     </div>
   )

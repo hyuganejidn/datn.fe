@@ -250,7 +250,7 @@ export const topicsSelect = [
 ]
 
 export const topics = [forum, ...topicsSelect]
-export const topicObj = {
+export const topicsObj = {
   food: {
     name: 'ăn uống- Nấu nướng',
     icon: Icons.Food,

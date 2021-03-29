@@ -6,6 +6,9 @@ import { Icons } from 'Templates/icon/Icon'
 import { DownVote, UpVote } from 'Templates/icon/IconsSvg'
 import { useDispatch } from 'react-redux'
 import { PostAPI } from '@/services'
+import Modal3 from 'Templates/commons/Modal3'
+import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { ENV } from '@/_constants/common'
 import {
   S_Avatar,
   S_AvatarDefault,
@@ -29,23 +32,27 @@ import {
 } from './Post.style'
 import { S_ThreeDotMenu } from '../comment/Comment.style'
 import * as types from './store/action_types'
+import PostUpdate from '../post/components/PostUpdate'
 
-function Post({ post, isVote, userId }) {
+function Post({ isAuth, post, isVote, userId }) {
   const [vote, setVote] = useState(undefined)
   const dispatch = useDispatch()
   const [isVoted, setIsVoted] = useState(isVote)
+  const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
 
   useEffect(() => {
     setIsVoted(() => isVote)
   }, [isVote])
 
   const handleVotePost = async (postId, voteNum) => {
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+
     const voteData = await votePost(postId, voteNum)
     setVote({
       voteTotal: voteData.vote,
       vote: isVoted === voteNum ? 0 : voteNum,
     })
-    setIsVoted(isVoted === voteNum ? 0 : voteNum)
+    setIsVoted(isVoted === voteNum ? 1 : voteNum)
   }
 
   const handleDelete = async id => {
@@ -59,12 +66,12 @@ function Post({ post, isVote, userId }) {
   }
 
   const handleUpdate = () => {
-    console.log('update')
-    // dispatch({ type: types.S_UPDATE_COMMENT, payload: comment })
+    setIsShowUpdatePost(prev => !prev)
   }
 
   const handleReport = () => {
-    dispatch({ type: types.APP_UPDATE_ISHOWREPORT })
+    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    dispatch({ type: types.APP_UPDATE_IS_REPORT })
   }
 
   return (
@@ -81,7 +88,11 @@ function Post({ post, isVote, userId }) {
 
       <S_Avatar to={`/topics/posts/${post.id}`}>
         <S_AvatarDefault>
-          {post.avatar ? <S_ImageAvatar src={post.avatar} alt={post.topic?.slug} /> : <S_ImageDefault />}
+          {post.avatar ? (
+            <S_ImageAvatar src={`${ENV.API_SERVER}${post.avatar}`} alt={post.topic?.slug} />
+          ) : (
+            <S_ImageDefault />
+          )}
         </S_AvatarDefault>
       </S_Avatar>
 
@@ -122,6 +133,16 @@ function Post({ post, isVote, userId }) {
           />
         </S_PostFooter>
       </S_PostInfo>
+      {isShowUpdatePost && (
+        <Modal3
+          title="Chỉnh sửa bài viết"
+          setIsShowModal={setIsShowUpdatePost}
+          component={PostUpdate}
+          dataPost={post}
+          classify="forum"
+          type="topic"
+        />
+      )}
     </S_Post>
   )
 }

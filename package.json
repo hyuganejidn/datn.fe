@@ -22,7 +22,7 @@
     "./src/**/*": [
       "prettier --write --ignore-unknown --no-verify"
     ],
-    "**/*.{js,jsx,css}": [
+    "**/*.{js,jsx}": [
       "eslint --fix",
       "eslint ./ --ignore-path .eslintignore"
     ]
@@ -35,6 +35,7 @@
     "emoji-mart": "^3.0.0",
     "express": "^4.17.1",
     "formik": "^2.2.6",
+    "immer": "^9.0.1",
     "isomorphic-dompurify": "^0.12.0",
     "lodash.clonedeep": "^4.5.0",
     "node-sass": "^5.0.0",
@@ -57,6 +58,7 @@
     "redux": "^4.0.5",
     "redux-saga": "^1.1.3",
     "reselect": "^4.0.0",
+    "socket.io-client": "^4.0.0",
     "styled-components": "^5.2.1",
     "yup": "^0.32.9"
   },

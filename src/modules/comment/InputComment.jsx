@@ -27,30 +27,21 @@ const S_InputComment = styled(FastField)`
   }
 `
 
-function InputComment({ placeholder, onSubmitComment }) {
+function InputComment({ placeholder, onSubmitComment, comment }) {
   const handlePressEnter = (event, submitCallback) => {
-    if (
-      !event.shiftKey &&
-      event.key === 'Enter' &&
-      event.target.value.trim() !== ''
-    ) {
+    if (!event.shiftKey && event.key === 'Enter' && event.target.value.trim() !== '') {
       submitCallback()
-      // resetForm()
     }
   }
 
   return (
     <Formik
-      initialValues={{ content: '' }}
+      initialValues={{ content: comment ? comment.content : '' }}
       onSubmit={(values, action) => onSubmitComment(values, action)}
     >
       {({ handleSubmit }) => (
         <Form onKeyUp={e => handlePressEnter(e, handleSubmit)}>
-          <S_InputComment
-            name="content"
-            component={InputEmoji}
-            placeholder={placeholder}
-          />
+          <S_InputComment name="content" component={InputEmoji} placeholder={placeholder} />
         </Form>
       )}
     </Formik>

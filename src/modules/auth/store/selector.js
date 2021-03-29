@@ -40,7 +40,7 @@ export const makeGetMe = () => {
 export const makeGetIsAuthenticated = () => {
   const stateSelect = createSelector(
     state => state.auth,
-    auth => auth.isAuthenticated
+    auth => auth.isAuthenticate
   )
 
   return useSelector(stateSelect)

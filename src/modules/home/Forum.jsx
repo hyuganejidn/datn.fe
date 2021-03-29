@@ -8,14 +8,14 @@ import { makeGetIsAuthenticated } from '../auth/store/selector'
 function Forum({ className }) {
   const { slug } = useParams()
   const dispatch = useDispatch()
-  const isAuthenticated = makeGetIsAuthenticated()
+  const isAuth = makeGetIsAuthenticated()
 
-  const getPosts = () => dispatch({ type: types.S_FETCH_POSTS, payload: slug })
+  const fetchPosts = () => dispatch({ type: types.S_FETCH_POSTS, payload: slug })
   const getPostsVoted = () => dispatch({ type: types.S_FETCH_POSTS_VOTED })
 
   useEffect(() => {
-    getPosts()
-    if (isAuthenticated) {
+    fetchPosts()
+    if (isAuth) {
       getPostsVoted()
     }
   }, [slug])

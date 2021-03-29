@@ -18,7 +18,10 @@ export const getBlogsMe = () => http.get(`users/me/blogs`).then(res => res.data)
 
 export const getBlogsUser = userId => http.get(`users/${userId}/blogs`).then(res => res.data)
 
-export const create = ({ title, description, slug, avatar, cover }) =>
-  http.post(path, { title, description, slug, avatar, cover })
+export const create = ({ title, description, slug, avatar, cover, info }) =>
+  http.post(path, { title, description, slug, avatar, cover, info })
+
+export const update = (id, { title, description, slug, avatar, cover, info }) =>
+  http.put(`${path}/${id}`, { title, description, slug, avatar, cover, info })
 
 export const getUserFollowed = blogId => http.get(`${path}/${blogId}/users_followed`).then(res => res.data)

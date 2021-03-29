@@ -10,6 +10,15 @@ export const makeGetPosts = () => {
   return useSelector(stateSelect)
 }
 
+export const makeGetPost = () => {
+  const stateSelect = createSelector(
+    state => state.forum,
+    forum => forum.post
+  )
+
+  return useSelector(stateSelect)
+}
+
 export const makeGetPostsVoted = () => {
   const stateSelect = createSelector(
     state => state.forum,
@@ -32,6 +41,15 @@ export const makeGetIsShowReport = () => {
   const stateSelect = createSelector(
     state => state.forum,
     forum => forum.app.isShowReport
+  )
+
+  return useSelector(stateSelect)
+}
+
+export const makeGetIsLogin = () => {
+  const stateSelect = createSelector(
+    state => state.forum,
+    forum => forum.app.isLogin
   )
 
   return useSelector(stateSelect)

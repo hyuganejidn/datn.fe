@@ -1,6 +1,7 @@
 import React from 'react'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router, Switch } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify'
 
 import Layout from '@/_layouts'
 import PrivateRoute from 'Templates/commons/PrivateRoute'
@@ -11,6 +12,7 @@ import routes from './routes'
 
 import 'Assets/sass/main.scss'
 import { SocketWrapper } from './_layouts/Socket'
+import 'react-toastify/dist/ReactToastify.css'
 // import 'Assets/sass/index.scss'
 
 const App = () => (
@@ -26,6 +28,17 @@ const App = () => (
         </Layout>
       </Router>
     </SocketWrapper>
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
   </Provider>
 )
 

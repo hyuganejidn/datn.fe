@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 
 import { BlogAPI, UserAPI } from '@/services'
-import { timeSince } from '@/helpers/common'
+import { getAvatar, timeSince } from '@/helpers/common'
 import { LayoutBg, LayoutUser } from '@/_layouts'
 import { Avatar } from '@material-ui/core'
 import Modal3 from 'Templates/commons/Modal3'
@@ -15,6 +15,7 @@ import Posts from '../home/Posts'
 import * as types from '../home/store/action_types'
 import UploadAvatar from './components/UploadAvatar'
 import UpdateInfo from './components/UpdateInfo'
+import { makeGetPosts } from '../home/store/selector'
 
 const initialTabs = {
   blogs: false,
@@ -33,10 +34,11 @@ function UserView() {
   const [tabs, setTabs] = useState({ ...initialTabs, blogs: true })
   const [isShowUploadAvatar, setIsShowUploadAvatar] = useState(false)
   const [isShowUpdateInfo, setIsShowUpdateInfo] = useState(false)
+  const posts = makeGetPosts()
 
   useEffect(() => {
     setUser(() => ({ ...userMe }))
-  }, [userMe])
+  }, [userMe, id])
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -65,7 +67,7 @@ function UserView() {
     if (isAuth) {
       getPostsVoted()
     }
-  }, [])
+  }, [id])
 
   const moveTab = tab => {
     setTabs({ ...initialTabs, [tab]: true })
@@ -83,7 +85,7 @@ function UserView() {
             <div className="rounded-full bg-white" style={{ padding: 2 }}>
               <AvatarWrapper className="w-16 h-16 rounded-full relative ">
                 {user.avatarUrl ? (
-                  <Avatar style={{ width: 64, height: 64 }} src={user.avatarUrl} alt={user.username} />
+                  <Avatar style={{ width: 64, height: 64 }} src={getAvatar(user.avatarUrl)} alt={user.username} />
                 ) : (
                   <Avatar style={{ width: 64, height: 64 }}>{user.fullName[0].toUpperCase()}</Avatar>
                 )}
@@ -156,7 +158,7 @@ function UserView() {
           )}
         </div>
         <div className="mx-2">
-          <div className="py-2 md:py-5 md:pl-5 md:pr-3 min-w-0 w-full">{tabs.forum && <Posts />}</div>
+          <div className="py-2 md:py-5 md:pl-5 md:pr-3 min-w-0 w-full">{tabs.forum && <Posts posts={posts} />}</div>
         </div>
         {isAuth && isShowUploadAvatar && (
           <Modal3 title="Đổi ảnh đại diện" setIsShowModal={setIsShowUploadAvatar} component={UploadAvatar} />

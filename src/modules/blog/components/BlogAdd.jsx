@@ -9,6 +9,7 @@ import http from '@/helpers/axios'
 import { LayoutBg } from '@/_layouts'
 import { InputFile } from 'Templates/form'
 
+import { ENV } from '@/_constants/common'
 import { S_Close, S_InputField, S_InputFile, S_InputTextArea } from './Blog.style'
 import { makeGetErrorWithType } from '../store/selector'
 import * as types from '../store/action_types'
@@ -21,8 +22,7 @@ const initialForm = {
   slug: '',
   info: {
     email: '',
-    fallback: '',
-    twitter: '',
+    facebook: '',
   },
 }
 
@@ -48,8 +48,10 @@ function BlogAdd() {
 
     slug: Yup.string()
       .required('Vui lòng nhập định danh')
+      // .trim()
       .min(3, 'Tên blog có ít nhất 6 ký tự')
-      .max(50, 'Tên blog không vượt quá 60 ký tự'),
+      .max(50, 'Tên blog không vượt quá 60 ký tự')
+      .matches(/^[a-z-]+$/, 'Không đúng định dạng'),
 
     avatar: Yup.mixed().required('Vui lòng chọn ảnh đại diện'),
   })
@@ -137,7 +139,10 @@ function BlogAdd() {
 
               <div className="text-xs mt-2 text-gray-900 mr-8">
                 Định danh viết liền không dấu, không ký tự đặc biệt. Định danh tạo thành địa chỉ cho blog tại:{' '}
-                <span className="text-green-500">ly-kafe</span>
+                <span className="text-green-500">
+                  {ENV.HOST}
+                  {values.slug}
+                </span>
               </div>
 
               <div className="flex mt-10 text-gray-800 justify-between">
@@ -215,15 +220,6 @@ function BlogAdd() {
                   name="info.facebook"
                   component={S_InputField}
                   placeholder="Facebook"
-                  classes="py-1 outline-none w-full"
-                  maxLength={300}
-                />
-              </div>
-              <div className="flex mt-6 items-center border-b border-gray-200">
-                <FastField
-                  name="info.twitter"
-                  component={S_InputField}
-                  placeholder="Twitter"
                   classes="py-1 outline-none w-full"
                   maxLength={300}
                 />

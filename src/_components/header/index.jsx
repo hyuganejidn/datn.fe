@@ -15,6 +15,7 @@ import {
 import * as types from '@/modules/auth/store/action_types'
 import useClickOutside from '@/hooks/useClickOutside'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { getAvatar } from '@/helpers/common'
 
 function HeaderNav() {
   const user = makeGetMe()
@@ -25,15 +26,27 @@ function HeaderNav() {
     forum: /topics/.test(location.pathname) || location.pathname === '/',
     blog: /blogs/.test(location.pathname),
   }
-  console.log(location)
+
   const dispatch = useDispatch()
   const history = useHistory()
 
   const [isShowPopupUser, setIsShowPopupUser] = useState(false)
+  const [textSearch, setTextSearch] = useState('')
 
   const dismissDropdown = useCallback(() => {
     setIsShowPopupUser(false)
   }, [setIsShowPopupUser])
+
+  const handleSearch = async () => {
+    if (textSearch.length > 0) {
+      history.push(`/search?q=${textSearch}`)
+    }
+  }
+
+  const handleChangeSearch = event => {
+    console.log(event.target.value)
+    setTextSearch(event.target.value)
+  }
 
   useClickOutside(dropdown, dismissDropdown)
 
@@ -45,11 +58,11 @@ function HeaderNav() {
             <div className="md:hidden text-lg text-gray-700 ml-1">
               <Menu />
             </div>
-            <a className="bg-white hidden md:block no-underline" href="/">
+            <Link to="/" className="bg-white hidden md:block no-underline">
               <span className="text-green-500" style={{ fontFamily: '"Bangers", cursive', fontSize: 32 }}>
                 ly kafe
               </span>
-            </a>
+            </Link>
             <Link
               to="/"
               className={`ml-3 text-gray-600 flex items-center font-semibold no-underline ${
@@ -74,10 +87,20 @@ function HeaderNav() {
             <Search width="16" />
             <input
               type="text"
+              value={textSearch}
+              onChange={event => handleChangeSearch(event)}
               className="text-sm w-full my-1 outline-none bg-gray-100"
               name="search"
               placeholder="Tìm kiếm"
             />
+            <span onClick={() => handleSearch()} aria-hidden="true">
+              <svg width="1.2em" height="1.2em" viewBox="0 0 32 32" style={{ cursor: 'pointer', marginRight: 10 }}>
+                <path
+                  d="M27.71 4.29a1 1 0 0 0-1.05-.23l-22 8a1 1 0 0 0 0 1.87l9.6 3.84l3.84 9.6a1 1 0 0 0 .9.63a1 1 0 0 0 .92-.66l8-22a1 1 0 0 0-.21-1.05zM19 24.2l-2.79-7L21 12.41L19.59 11l-4.83 4.83L7.8 13l17.53-6.33z"
+                  fill="#626262"
+                />
+              </svg>
+            </span>
           </div>
           <button
             type="button"
@@ -111,7 +134,7 @@ function HeaderNav() {
                 >
                   <div className="hover:text-black flex items-center">
                     {user.avatarUrl ? (
-                      <Avatar alt="" src={user.avatarUrl} style={{ width: 28, height: 28 }} />
+                      <Avatar alt="" src={getAvatar(user.avatarUrl)} style={{ width: 28, height: 28 }} />
                     ) : (
                       <Avatar style={{ width: 28, height: 28 }}>{user.fullName[0].toUpperCase()}</Avatar>
                     )}
@@ -130,7 +153,7 @@ function HeaderNav() {
                         <div>Trang cá nhân</div>
                       </Link>
                       <Link
-                        to="/setting"
+                        to="/users/setting"
                         className="flex items-center px-6 py-2 text-black hover:bg-green-200 cursor-pointer no-underline"
                         onClick={() => setIsShowPopupUser(!isShowPopupUser)}
                       >

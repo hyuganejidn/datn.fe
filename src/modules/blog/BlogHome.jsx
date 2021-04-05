@@ -55,9 +55,9 @@ function BlogHome() {
   const dispatch = useDispatch()
 
   const isAuth = makeGetIsAuthenticated()
-  const postsNew = makeGetPostsNew()
   const blogsTop = makeGetBlogsTop()
   const blogsMe = makeGetBlogsMe()
+  const postsNew = makeGetPostsNew()
   const postsUserFollowed = makeGetPostsUserFollowed()
 
   const [tabValue, setTabValue] = useState(convertLocationToIndex(location.search))

@@ -5,6 +5,7 @@ import http from '@/helpers/axios'
 import { UserAPI } from '@/services'
 import * as types from '@/modules/auth/store/action_types'
 import { useDispatch } from 'react-redux'
+import { toast } from 'react-toastify'
 
 function UploadAvatar({ setIsShowModal }) {
   const dispatch = useDispatch()
@@ -29,6 +30,7 @@ function UploadAvatar({ setIsShowModal }) {
     try {
       const avatarUrl = await saveAvatar(avatar)
       const user = await UserAPI.updateAvatar({ avatarUrl })
+      toast.success('Cập nhật Avatar thành công')
       dispatch({
         type: types.UPDATE_USER_AVATAR,
         payload: user.avatarUrl,

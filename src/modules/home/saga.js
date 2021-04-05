@@ -16,7 +16,7 @@ function* fetchPosts({ payload }) {
 function* getPost({ payload: { id, socket } }) {
   try {
     const post = yield call(() => PostAPI.getPostById(id))
-    socket.emit('JoiningRoom', post)
+    socket.emit('JoiningRoom', post.id)
     yield put({ type: types.SET_POST, payload: post })
   } catch (error) {
     throw new Error(error)

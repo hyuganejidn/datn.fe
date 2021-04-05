@@ -59,6 +59,18 @@ const reducer = (state = initialState, { type, payload }) =>
         if (indexPost !== -1) draft.postsBlog[indexPost] = payload
         break
       }
+      case types.DELETE_POST_BLOG: {
+        draft.postsBlog = state.postsBlog.filter(post => post.id !== payload)
+        break
+      }
+      case types.DELETE_POST_USER_FOLLOW: {
+        draft.postsUserFollowed = state.postsUserFollowed.filter(post => post.id !== payload)
+        break
+      }
+      case types.DELETE_POST_NEW: {
+        draft.postsNew = state.postsNew.filter(post => post.id !== payload)
+        break
+      }
       default:
         break
     }

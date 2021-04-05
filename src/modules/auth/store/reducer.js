@@ -36,11 +36,11 @@ const reducer = (state = initialState, { type, payload }) =>
         break
 
       case types.AUTH_LOGIN_ERRORS:
-        draft.errors.login = payload
+        draft.errors.login = { ...draft.errors.login, ...payload }
         break
 
       case types.AUTH_SIGNUP_ERRORS:
-        draft.errors.signUp = payload
+        draft.errors.signUp = { ...draft.errors.signUp, ...payload }
         break
 
       case types.AUTH_LOGIN_SUCCESSFUL:

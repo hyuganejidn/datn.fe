@@ -43,6 +43,12 @@ function InputField(props) {
         aria-describedby={`${name}-error`}
       />
 
+      {showError && (
+        <div className="MuiFormHelperText-root" style={{ color: 'red', fontSize: '0.75rem' }}>
+          {errorText}
+        </div>
+      )}
+
       <ErrorMessage
         name={name}
         component={() => (

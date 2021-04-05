@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { topics } from '@/_constants/data'
 import { LayoutBg } from '@/_layouts'
+import { makeGetSocketWithType } from '@/_layouts/Socket'
 import Forum from './Forum'
 import Topics from './Topics'
 import { makeGetIsAuthenticated } from '../auth/store/selector'
 
 function Home() {
   const isAuth = makeGetIsAuthenticated()
+  const socket = makeGetSocketWithType()
+
+  useEffect(() => {
+    socket.emit('JoiningRoom', 'home')
+    return () => socket.emit('LeavingRoom')
+  }, [])
   console.log(isAuth)
   return (
     <LayoutBg>
@@ -23,7 +30,8 @@ export default Home
 
 const S_Layout = styled.div`
   display: flex;
-  width: 90%;
+  /* width: 90%; */
+  justify-content: center;
   margin: 0 auto;
 `
 
@@ -54,7 +62,9 @@ const S_Topics = styled(Topics)`
   }
 `
 const S_Forum = styled(Forum)`
-  width: 100%;
+  /* width: 100%; */
+  width: 900px;
+  max-width: 900px;
   margin-top: 8px;
   margin-left: 16px;
   margin-right: 16px;

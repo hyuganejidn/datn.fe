@@ -28,3 +28,14 @@ export const S_Close = styled(Close)`
   z-index: 10;
   cursor: pointer;
 `
+
+export const S_Description = styled.div`
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  line-height: 1.2rem;
+  -webkit-line-clamp: 3;
+  /* text-align: justify; */
+  font-style: italic;
+`

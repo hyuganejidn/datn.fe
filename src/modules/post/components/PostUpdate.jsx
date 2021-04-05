@@ -8,10 +8,11 @@ import { InputEmoji } from 'Templates/form'
 import SelectTopic from 'Templates/form/SelectTopic'
 import http from '@/helpers/axios'
 import { topicsSelect, topicsObj } from '@/_constants/data'
-import { getFirstTagImg, getImages, replaceSrcImg } from '@/helpers/common'
+import { getFirstTagImg, getImages, replaceImg, replaceSrcImg } from '@/helpers/common'
 import { PostAPI } from '@/services'
 import { useDispatch } from 'react-redux'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
+import { toast } from 'react-toastify'
 import * as types from '../../home/store/action_types'
 import * as typesBlog from '../../blog/store/action_types'
 
@@ -48,7 +49,7 @@ function PostUpdate({ classify, type, setIsShowModal, dataPost = {} }) {
   const dispatch = useDispatch()
   const socket = makeGetSocketWithType()
 
-  const [content, setContent] = useState(dataPost.content || '')
+  const [content, setContent] = useState(replaceImg(dataPost.content) || '')
   const [topicSelected, setTopicSelected] = useState(topicsObj[dataPost.topic?.slug] || {})
 
   const handleChange = value => {
@@ -73,11 +74,11 @@ function PostUpdate({ classify, type, setIsShowModal, dataPost = {} }) {
   }
 
   const replaceImgSrc = (imgs, _content) => {
-    if (imgs.length > 0) {
-      const doc = replaceSrcImg(_content, imgs)
-      return doc.firstChild.outerHTML
-    }
-    return _content
+    // if (imgs.length > 0) {
+    const doc = replaceSrcImg(_content, imgs)
+    return doc.firstChild.outerHTML
+    // }
+    // return _content
   }
 
   const handleUpdatePost = (_type, post) => {
@@ -106,9 +107,11 @@ function PostUpdate({ classify, type, setIsShowModal, dataPost = {} }) {
       avatar: elImgFirst ? elImgFirst.getAttribute('src') : '',
     }
     classify === 'forum' && (data.topic = topicSelected.slug)
+    console.log(data)
     try {
       const post = await PostAPI.update(dataPost.id, data)
       handleUpdatePost(type, post)
+      toast.success('Cập nhật bài viết thành công')
       socket.emit('UpdatePost', post)
       setIsShowModal(false)
     } catch (error) {

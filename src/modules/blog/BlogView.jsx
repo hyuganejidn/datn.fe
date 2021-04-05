@@ -4,6 +4,8 @@ import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import Modal from 'Templates/commons/Modal'
 import Modal3 from 'Templates/commons/Modal3'
+import { Avatar } from '@material-ui/core'
+import { getAvatar } from '@/helpers/common'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
 import InfoUser from './components/InfoBlog'
 import UserFollower from './components/UserFollower'
@@ -12,6 +14,7 @@ import PostsBlogs from './PostsBlogs'
 import { makeGetBlog, makeGetPostsBlog } from './store/selector'
 import * as types from './store/action_types'
 import BlogUpdate from './components/BlogUpdate'
+import { S_Description } from './components/Blog.style'
 
 function BlogView() {
   const { slug } = useParams()
@@ -59,16 +62,34 @@ function BlogView() {
     <div className="bg-white m-auto lg:max-w-2xl">
       <div>
         <div className="mt-3">
-          <img src={blog.cover} alt={blog.slug} className="h-56 w-full object-cover" />
+          <img src={getAvatar(blog.cover)} alt={blog.slug} className="h-56 w-full object-cover" />
         </div>
 
         <div className="flex my-3 mx-2 md:mx-0">
-          <img src={blog.avatar} alt={blog.title} className="w-16 h-16 rounded-sm mt-3 flex-shrink-0 object-cover" />
+          <img
+            src={getAvatar(blog.avatar)}
+            alt={blog.title}
+            className="w-16 h-16 rounded-sm flex-shrink-0 object-cover"
+          />
+
           <div className="ml-4 break-words min-w-0">
             <div className="font-medium text-2xl">{blog.title}</div>
-            <div className="font-light">{blog.description}</div>
+            <S_Description className="font-light">{blog.description}</S_Description>
             <Link className="flex mt-1 items-center no-underline" to={`/users/${blog.author?.id}`}>
-              <img src={blog.author?.avatar} alt={blog.title} className="rounded-full w-6 h-6" />
+              {/* <img
+                src={`${ENV.API_SERVER}${blog.author?.avatarUrl}`}
+                alt={blog.title}
+                className="rounded-full w-6 h-6"
+              /> */}
+              {blog.author?.avatarUrl ? (
+                <Avatar
+                  style={{ width: 28, height: 28 }}
+                  src={getAvatar(blog.author?.avatarUrl)}
+                  alt={blog.author?.fullName}
+                />
+              ) : (
+                <Avatar style={{ width: 28, height: 28 }}>{blog.author?.fullName[0].toUpperCase()}</Avatar>
+              )}
               <span className="text-gray-800 mr-3 text-sm ml-1 hover:underline">{blog.author?.fullName}</span>
             </Link>
           </div>

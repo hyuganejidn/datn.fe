@@ -6,6 +6,7 @@ import { BlogAPI } from '@/services'
 import http from '@/helpers/axios'
 import { useDispatch } from 'react-redux'
 import { InputFile } from 'Templates/form'
+import { getAvatar } from '@/helpers/common'
 import { S_Close, S_InputField, S_InputFile, S_InputTextArea } from './Blog.style'
 import * as types from '../store/action_types'
 import { makeGetErrorWithType } from '../store/selector'
@@ -21,8 +22,7 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
       ? JSON.parse(dataBlog.info)
       : {
           email: '',
-          fallback: '',
-          twitter: '',
+          facebook: '',
         },
   })
   const dispatch = useDispatch()
@@ -45,7 +45,8 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
     slug: Yup.string()
       .required('Vui lòng nhập định danh')
       .min(3, 'Tên blog có ít nhất 6 ký tự')
-      .max(50, 'Tên blog không vượt quá 60 ký tự'),
+      .max(50, 'Tên blog không vượt quá 60 ký tự')
+      .matches(/^[a-z-]+$/, 'Không đúng định dạng'),
 
     avatar: Yup.mixed().required('Vui lòng chọn ảnh đại diện'),
   })
@@ -161,7 +162,11 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
                   {values.avatar && (
                     <img
                       className="img-full rounded-md"
-                      src={typeof values.avatar === 'string' ? values.avatar : URL.createObjectURL(values.avatar)}
+                      src={
+                        typeof values.avatar === 'string'
+                          ? getAvatar(values.avatar)
+                          : URL.createObjectURL(values.avatar)
+                      }
                       alt="blogs"
                     />
                   )}
@@ -184,7 +189,9 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
                     <div style={{ paddingTop: values.cover && '56.25%' }}>
                       <img
                         className="img-full rounded-md"
-                        src={typeof values.cover === 'string' ? values.cover : URL.createObjectURL(values.cover)}
+                        src={
+                          typeof values.cover === 'string' ? getAvatar(values.cover) : URL.createObjectURL(values.cover)
+                        }
                         alt="blogs"
                       />
                     </div>
@@ -223,15 +230,6 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
                   name="info.facebook"
                   component={S_InputField}
                   placeholder="Facebook"
-                  classes="py-1 outline-none w-full"
-                  maxLength={300}
-                />
-              </div>
-              <div className="flex mt-6 items-center border-b border-gray-200">
-                <FastField
-                  name="info.twitter"
-                  component={S_InputField}
-                  placeholder="Twitter"
                   classes="py-1 outline-none w-full"
                   maxLength={300}
                 />

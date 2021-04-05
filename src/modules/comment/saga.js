@@ -1,6 +1,7 @@
 import { all, call, put, takeEvery, takeLatest } from 'redux-saga/effects'
 
 import { CommentAPI, PostAPI } from '@/services'
+import { toast } from 'react-toastify'
 import * as types from './store/action_types'
 import * as typesHome from '../home/store/action_types'
 
@@ -43,6 +44,7 @@ function* deleteComment({ payload: { comment, socket } }) {
     socket.emit('DeleteComment', comment)
     yield put({ type: types.DELETE_COMMENT, payload: comment })
     console.log(comment)
+    toast.success('Xóa bình luận thành công')
     yield put({
       type: typesHome.UPDATE_POST_COMMENT_NUM,
       payload: -(1 + (comment.commentsChild ? comment.commentsChild.length : 0)),
@@ -56,6 +58,7 @@ function* updateComment({ payload: { comment, content, socket } }) {
   try {
     yield call(() => CommentAPI.update(comment.id, content))
     socket.emit('UpdateComment', { comment, content })
+    toast.success('Chỉnh sửa bình luận thành công')
     yield put({ type: types.UPDATE_COMMENT, payload: { comment, content } })
   } catch (error) {
     throw new Error(error)

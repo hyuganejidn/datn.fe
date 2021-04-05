@@ -4,7 +4,7 @@ import { useDispatch } from 'react-redux'
 import { Avatar } from '@material-ui/core'
 
 import { PostAPI } from '@/services'
-import { replaceImg, timeSince } from '@/helpers/common'
+import { getAvatar, replaceImg, timeSince } from '@/helpers/common'
 import { LayoutContainer } from '@/_layouts'
 import { Visibility } from 'Templates/icon/IconsSvg'
 
@@ -86,7 +86,7 @@ function PostViewBlog() {
             <S_PostMainView>
               <div className="flex items-center">
                 <Link to={`/blogs/${post.blog?.slug}`} className="text-sm font-medium break-words block no-underline">
-                  Blog / <span> {post.blog?.title} </span>
+                  Blog / <span style={{ marginRight: 8 }}> {post.blog?.title} </span>
                 </Link>
 
                 <StatusBlogView blogId={post.blog?.id} authorId={post.blog?.author?.id} />
@@ -96,7 +96,7 @@ function PostViewBlog() {
               <S_InfoUser>
                 <div>
                   {post.author?.avatarUrl ? (
-                    <Avatar alt={post.author?.fullName} src={post.author?.avatarUrl} />
+                    <Avatar alt={post.author?.fullName} src={getAvatar(post.author?.avatarUrl)} />
                   ) : (
                     <Avatar>{post.author?.fullName[0].toUpperCase()}</Avatar>
                   )}

@@ -7,6 +7,7 @@ import { CommentLine } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
+import { getAvatar } from '@/helpers/common'
 import {
   S_Footer,
   S_FooterLink,
@@ -59,7 +60,6 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
   }
 
   const cancelReply = e => {
-    console.log(e.key)
     if (e.key === 'Escape') {
       setIsReply(false)
       document.body.removeEventListener('keydown', cancelReply)
@@ -95,14 +95,14 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
   const handleReport = () => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
-    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'comment', id: comment.id } })
   }
 
   return (
     <S_Comment>
       <S_Avatar style={{ position: 'relative' }}>
         {comment.author?.avatarUrl ? (
-          <Avatar alt={comment.author?.fullName} src={comment.author?.avatarUrl} />
+          <Avatar alt={comment.author?.fullName} src={getAvatar(comment.author?.avatarUrl)} />
         ) : (
           <Avatar>{comment.author?.fullName[0].toUpperCase()}</Avatar>
         )}
@@ -139,6 +139,7 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
               <CommentVote
                 type={type}
                 isAuth={isAuth}
+                userId={userId}
                 commentId={comment.id}
                 commentVoteTotal={comment.voteNum}
                 isVote={commentsUserVote[comment.id]}

@@ -15,6 +15,7 @@ import { DownVote, UpVote, CommentSquare, Share } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
 import { useDispatch } from 'react-redux'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
+import { toast } from 'react-toastify'
 import PostUpdate from './PostUpdate'
 
 function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
@@ -28,8 +29,15 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
   })
 
   useEffect(() => {
-    const handleVote = ({ _vote }) => {
-      setVote(prev => ({ ...prev, voteTotal: _vote.voteTotal }))
+    const handleVote = ({ vote: _vote, userId: _userId }) => {
+      setVote(prev =>
+        userId === _userId
+          ? _vote
+          : {
+              voteTotal: _vote.voteTotal,
+              vote: prev.vote,
+            }
+      )
     }
 
     socket.on('VotePost', handleVote)
@@ -39,19 +47,21 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
   const handleVotePost = async (_postId, voteNum) => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
-    socket.emit('VotePost', { voteNum, vote })
-
     const voteData = await PostAPI.votePost(_postId, voteNum)
-    setVote({
+    const voteNew = {
       voteTotal: voteData.vote,
       vote: vote.vote === voteNum ? 0 : voteNum,
-    })
+    }
+    socket.emit('VotePost', { vote: voteNew, userId })
+
+    setVote(voteNew)
   }
 
   const handleDelete = async id => {
     try {
       await PostAPI.destroy(id)
       socket.emit('DeletePost', id)
+      toast.success('Xóa bài viết thành công')
       history.push('/')
     } catch (error) {
       throw new Error(error)
@@ -65,7 +75,7 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
 
   const handleReport = () => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
-    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
   return (
     <>
@@ -75,7 +85,7 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
             <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1}>
               <UpVote width={18} />
             </S_UpVote>
-            <span style={{ margin: '0 4px' }}>{vote ? vote?.voteTotal : post.voteNum}</span>
+            <span style={{ margin: '0 4px' }}>{vote.voteTotal}</span>
             <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1}>
               <DownVote width={18} />
             </S_DownVote>

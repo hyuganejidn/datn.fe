@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { toast } from 'react-toastify'
 
 import { CommentLine, HeartLine } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
 import Modal3 from 'Templates/commons/Modal3'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
-import { timeSince, capitalizeFirstLetter, getInnerText } from '@/helpers/common'
+import { timeSince, capitalizeFirstLetter, getInnerText, getAvatar } from '@/helpers/common'
+import { PostAPI } from '@/services'
+import * as types from './store/action_types'
 
 import { S_Footer, S_ThreeDotMenu } from '../comment/Comment.style'
 import { S_ImageAvatar, S_PostContent, S_FooterLink, S_PostMain, S_PostTop, S_TopLink } from '../home/Post.style'
@@ -16,8 +19,27 @@ function PostBlog({ isAuth, post, userId, type }) {
   const dispatch = useDispatch()
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
 
-  const handleDelete = () => {
-    // dispatch({ type: types.S_DELETE_COMMENT, payload: comment })
+  const handleDelete = async () => {
+    try {
+      await PostAPI.destroy(post.id)
+      toast.success('Xóa bài viết thành công')
+      switch (type) {
+        case 'postsNew':
+          return dispatch({ type: types.DELETE_POST_NEW, payload: post.id })
+        case 'postsBlog':
+          return dispatch({ type: types.DELETE_POST_BLOG, payload: post.id })
+        case 'postsUserFollowed':
+          return dispatch({ type: types.DELETE_POST_USER_FOLLOW, payload: post.id })
+        case 'postSearch':
+          return dispatch({ type: typesHome.DELETE_POST, payload: post.id })
+        default:
+          return null
+      }
+      // socket.emit('DeletePost', id)
+      // history.push('/')
+    } catch (error) {
+      throw new Error(error)
+    }
   }
 
   const handleUpdate = () => {
@@ -27,8 +49,9 @@ function PostBlog({ isAuth, post, userId, type }) {
   const handleReport = () => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
-    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
+
   return (
     <div className="py-6 flex justify-between">
       <div>
@@ -37,7 +60,7 @@ function PostBlog({ isAuth, post, userId, type }) {
             <div className="w-5 h-5 rounded-full mr-2 flex-shrink-0 no-underline">
               {post.blog?.avatar !== 'avatar' ? (
                 <img
-                  src={post.blog?.avatar}
+                  src={getAvatar(post.blog?.avatar)}
                   alt={post.title}
                   style={{ objectFit: 'cover', height: '100%', borderRadius: 3 }}
                   // className="w-5 h-5 rounded-full mr-2 flex-shrink-0 no-underline"
@@ -102,16 +125,16 @@ function PostBlog({ isAuth, post, userId, type }) {
       </div>
       {post.avatar && (
         <div className="w-1/4 flex-shrink-0 ml-2 no-underline">
-          <Link to={`/topics/posts/${post.id}`}>
+          <Link to={`/blogs/posts/${post.id}`}>
             <div className="w-full relative" style={{ paddingTop: '65%' }}>
               <div className="absolute top-0 w-full h-full rounded-t">
-                <S_ImageAvatar src={post.avatar} alt={post.topic?.slug} />
+                <S_ImageAvatar src={getAvatar(post.avatar)} alt={post.topic?.slug} />
               </div>
             </div>
           </Link>
         </div>
       )}
-      {isShowUpdatePost && (
+      {isShowUpdatePost && type && (
         <Modal3
           title="Chỉnh sửa bài viết"
           setIsShowModal={setIsShowUpdatePost}

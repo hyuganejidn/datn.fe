@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 import { useDispatch } from 'react-redux'
 import * as types from '@/modules/auth/store/action_types'
@@ -12,6 +13,8 @@ function UpdateInfo({ data, setIsShowModal }) {
   const handleUpdateInfo = async () => {
     try {
       const user = await UserAPI.updateInfo(info)
+      toast.success('Cập nhật thông tin thành công')
+
       dispatch({
         type: types.UPDATE_USER_INFO,
         payload: {
@@ -46,7 +49,7 @@ function UpdateInfo({ data, setIsShowModal }) {
       <div className="flex items-center mt-1 ">
         <textarea
           placeholder="Nhập giới thiệu bản thân"
-          rows={1}
+          rows={3}
           name="introduction"
           value={info.introduction}
           id="inputEditProfileBio"

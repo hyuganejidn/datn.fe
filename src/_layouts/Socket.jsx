@@ -54,11 +54,10 @@ export const SocketWrapper = ({ children }) => {
     dispatch({ type: types.SET_SOCKET_POST, payload: socketPosts })
 
     socketPosts.on('JoiningRoom', msg => {
-      console.log(msg, 123)
+      console.log(msg)
     })
 
     socketPosts.on('UpdatePost', post => {
-      console.log(post)
       dispatch({ type: typesHome.SET_POST, payload: post })
     })
 

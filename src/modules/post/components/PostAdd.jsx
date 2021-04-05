@@ -50,12 +50,19 @@ function PostAdd() {
   const [content, setContent] = useState('')
   const [topicSelected, setTopicSelected] = useState({})
   const [blog, setBlog] = useState({})
+  const [errors, setErrors] = useState({})
 
   const handleChange = value => {
+    if (errors.content) {
+      setErrors({ ...errors, content: '' })
+    }
     setContent(value)
   }
 
   const handleChangeSelect = value => {
+    if (classify === 'forum' && errors.select) {
+      setErrors({ ...errors, select: '' })
+    }
     setTopicSelected(value)
   }
 
@@ -80,7 +87,24 @@ function PostAdd() {
     return _content
   }
 
+  const verifyPost = title => {
+    const errorsRes = {}
+    if (title === '') {
+      errorsRes.title = 'Vui lòng nhập tiêu đề'
+    }
+    if (content === '') {
+      errorsRes.content = 'Vui lòng nhập nội dung'
+    }
+    if (classify === 'forum' && !Object.keys(topicSelected).length) {
+      errorsRes.select = 'Vui lòng chọn chủ đề'
+    }
+    return errorsRes
+  }
+
   const onSubmitPost = async values => {
+    const errorsRes = verifyPost(values.title)
+    if (Object.keys(errorsRes).length) return setErrors(errorsRes)
+
     const imgs = await saveImages(content)
     const contentNew = replaceImgSrc(imgs, content)
     const elImgFirst = getFirstTagImg(contentNew)
@@ -96,6 +120,7 @@ function PostAdd() {
       const post = await PostAPI.create(data)
       history.push(classify === 'forum' ? '/' : `/blogs/${blog.slug}`)
       console.log(post)
+      return null
     } catch (error) {
       throw new Error(error)
     }
@@ -120,7 +145,14 @@ function PostAdd() {
     <LayoutBg>
       <div className="m-auto md:max-w-3xl" style={{ paddingTop: 16 }}>
         {classify === 'forum' ? (
-          <SelectTopic topics={topicsSelect} topicSelected={topicSelected} onChange={handleChangeSelect} />
+          <>
+            <SelectTopic topics={topicsSelect} topicSelected={topicSelected} onChange={handleChangeSelect} />
+            {errors.select && (
+              <div className="MuiFormHelperText-root" style={{ color: 'red', fontSize: '0.75rem' }}>
+                {errors.select}
+              </div>
+            )}
+          </>
         ) : (
           <Link
             to={`/blogs/${blogSlug}`}
@@ -136,10 +168,20 @@ function PostAdd() {
             <Form>
               <div className="rounded-lg px-2 md:px-4 mt-2 p-2 border border-gray-200 bg-white rounded-lg border">
                 <S_InputTitle name="title" component={InputEmoji} placeholder="Tiêu đề" />
+                {errors.title && (
+                  <div className="MuiFormHelperText-root" style={{ color: 'red', fontSize: '0.75rem' }}>
+                    {errors.title}
+                  </div>
+                )}
 
                 <S_Editor value={content} modules={modules} formats={formats} onChange={handleChange}>
                   {/* <S_EditingArea /> */}
                 </S_Editor>
+                {errors.content && (
+                  <div className="MuiFormHelperText-root" style={{ color: 'red', fontSize: '0.75rem' }}>
+                    {errors.content}
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <div className="flex mt-2">
                     <button

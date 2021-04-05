@@ -9,19 +9,29 @@ import { useDispatch } from 'react-redux'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { useHistory } from 'react-router-dom'
 import Modal3 from 'Templates/commons/Modal3'
+import { toast } from 'react-toastify'
 import PostUpdate from './PostUpdate'
 
 function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
   const dispatch = useDispatch()
   const history = useHistory()
 
-  const [voteTotal, setVoteTotal] = useState(undefined)
-  const [isVoted, setIsVoted] = useState(isVote)
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
+  const [vote, setVote] = useState({
+    voteTotal: post.voteNum,
+    vote: isVote,
+  })
 
   useEffect(() => {
-    const handleLike = _vote => {
-      setVoteTotal(_vote)
+    const handleLike = ({ _vote, _userId }) => {
+      setVote(prev =>
+        userId === _userId
+          ? _vote
+          : {
+              voteTotal: _vote.voteTotal,
+              vote: prev.vote,
+            }
+      )
     }
 
     socket.on('LikePost', handleLike)
@@ -32,15 +42,19 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const likeData = await PostAPI.likePost(_postId)
-    socket.emit('LikePost', likeData.vote)
-    setVoteTotal(likeData.vote)
-    setIsVoted(prev => !prev)
+    const likeNew = {
+      voteTotal: likeData.vote,
+      vote: !vote.vote,
+    }
+    socket.emit('LikePost', { vote: likeNew, userId })
+    setVote(likeNew)
   }
 
   const handleDelete = async id => {
     try {
       await PostAPI.destroy(id)
       socket.emit('DeletePost', id)
+      toast.success('Xóa bài viết thành công')
       history.push('/')
     } catch (error) {
       throw new Error(error)
@@ -53,7 +67,7 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
 
   const handleReport = () => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
-    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT })
+    dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
 
   return (
@@ -62,14 +76,14 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
         <S_PostViewFooter>
           <S_Like style={{ marginRight: 18 }}>
             <S_HeartLike onClick={() => handleLikePost(post.id)}>
-              {isVoted ? (
+              {vote.vote ? (
                 <Heart width={16} style={{ color: '#f56565' }} />
               ) : (
                 <HeartLine width={16} style={{ color: '#f56565' }} />
               )}
             </S_HeartLike>
 
-            <S_FooterText>{voteTotal || post.voteNum} lượt thích</S_FooterText>
+            <S_FooterText>{vote.voteTotal} lượt thích</S_FooterText>
           </S_Like>
 
           <S_FooterMainLink>
@@ -101,7 +115,7 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
           component={PostUpdate}
           dataPost={post}
           classify="blog"
-          type="blog"
+          type="post"
         />
       )}
     </>

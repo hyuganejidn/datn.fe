@@ -112,14 +112,20 @@ export const replaceSrcImg = (xmlString, srcImgs) => {
   for (let i = 0; i < elImages.length; i += 1) {
     elImages[i].setAttribute('src', srcImgs[i].path)
   }
+
+  const elImagesHttp = doc.body.querySelectorAll('img[src^="http"]')
+  for (let i = 0; i < elImagesHttp.length; i += 1) {
+    const src = elImagesHttp[i].getAttribute('src').replace(ENV.API_SERVER, '')
+    elImagesHttp[i].setAttribute('src', src)
+  }
   return doc
 }
 
 export const replaceImg = xmlString => {
   const doc = new DOMParser().parseFromString(xmlString, 'text/html')
-  const elImages = doc.body.querySelectorAll('img[src^="/public/images/"]')
+  const elImages = doc.body.querySelectorAll('img[src*="/public/images/"]')
   for (let i = 0; i < elImages.length; i += 1) {
-    const src = elImages[i].getAttribute('src')
+    const src = elImages[i].getAttribute('src').replace(ENV.API_SERVER, '')
     elImages[i].setAttribute('src', `${ENV.API_SERVER}${src}`)
   }
   return doc.firstChild.outerHTML
@@ -135,4 +141,9 @@ export const getInnerText = xmlString => {
   const dom = new DOMParser().parseFromString(xmlString, 'text/html')
   const elContent = dom.body.firstChild
   return elContent.innerText
+}
+
+export const getAvatar = url => {
+  if (/^(http)/.test(url)) return url
+  return `${ENV.API_SERVER}${url}`
 }

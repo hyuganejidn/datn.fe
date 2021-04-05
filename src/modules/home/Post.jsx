@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react'
 
 import { votePost } from '@/services/post'
-import { capitalizeFirstLetter, getInnerText, timeSince } from '@/helpers/common'
+import { capitalizeFirstLetter, getAvatar, getInnerText, timeSince } from '@/helpers/common'
 import { Icons } from 'Templates/icon/Icon'
 import { DownVote, UpVote } from 'Templates/icon/IconsSvg'
 import { useDispatch } from 'react-redux'
 import { PostAPI } from '@/services'
 import Modal3 from 'Templates/commons/Modal3'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
-import { ENV } from '@/_constants/common'
+import { makeGetSocketWithType } from '@/_layouts/Socket'
+import { toast } from 'react-toastify'
 import {
   S_Avatar,
   S_AvatarDefault,
@@ -34,30 +35,49 @@ import { S_ThreeDotMenu } from '../comment/Comment.style'
 import * as types from './store/action_types'
 import PostUpdate from '../post/components/PostUpdate'
 
-function Post({ isAuth, post, isVote, userId }) {
-  const [vote, setVote] = useState(undefined)
+function Post({ isAuth, post, isVote, userId, voteSocket }) {
   const dispatch = useDispatch()
-  const [isVoted, setIsVoted] = useState(isVote)
+  const socket = makeGetSocketWithType()
+
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
+  const [vote, setVote] = useState({
+    voteTotal: post.voteNum,
+    vote: isVote,
+  })
 
   useEffect(() => {
-    setIsVoted(() => isVote)
+    setVote(prev => ({ ...prev, vote: isVote }))
   }, [isVote])
+
+  useEffect(() => {
+    if (voteSocket !== undefined) {
+      setVote(prev =>
+        userId === voteSocket.userId
+          ? voteSocket.vote
+          : {
+              voteTotal: voteSocket.vote.voteTotal,
+              vote: prev.vote,
+            }
+      )
+    }
+  }, [voteSocket])
 
   const handleVotePost = async (postId, voteNum) => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const voteData = await votePost(postId, voteNum)
-    setVote({
+    const voteNew = {
       voteTotal: voteData.vote,
-      vote: isVoted === voteNum ? 0 : voteNum,
-    })
-    setIsVoted(isVoted === voteNum ? 1 : voteNum)
+      vote: vote.vote === voteNum ? 0 : voteNum,
+    }
+    socket.emit('VotePost', { vote: voteNew, postId, userId })
+    setVote(voteNew)
   }
 
   const handleDelete = async id => {
     try {
       await PostAPI.destroy(id)
+      toast.success('Xóa bài viết thành công')
       dispatch({ type: types.REMOVE_POST, payload: id })
     } catch (error) {
       throw new Error(error)
@@ -71,28 +91,24 @@ function Post({ isAuth, post, isVote, userId }) {
 
   const handleReport = () => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
-    dispatch({ type: types.APP_UPDATE_IS_REPORT })
+    dispatch({ type: types.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
 
   return (
     <S_Post className="shadow-box-2 rounded-lg" style={{ margin: '8px 0' }}>
       <S_Vote>
-        <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1 || isVoted === 1}>
+        <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1}>
           <UpVote />
         </S_UpVote>
-        <span className="p-2">{vote ? vote?.voteTotal : post.voteNum}</span>
-        <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1 || isVoted === -1}>
+        <span className="p-2">{vote.voteTotal}</span>
+        <S_DownVote onClick={() => handleVotePost(post.id, -1)} isVoted={vote?.vote === -1}>
           <DownVote />
         </S_DownVote>
       </S_Vote>
 
       <S_Avatar to={`/topics/posts/${post.id}`}>
         <S_AvatarDefault>
-          {post.avatar ? (
-            <S_ImageAvatar src={`${ENV.API_SERVER}${post.avatar}`} alt={post.topic?.slug} />
-          ) : (
-            <S_ImageDefault />
-          )}
+          {post.avatar ? <S_ImageAvatar src={getAvatar(post.avatar)} alt={post.topic?.slug} /> : <S_ImageDefault />}
         </S_AvatarDefault>
       </S_Avatar>
 

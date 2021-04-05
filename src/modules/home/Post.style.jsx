@@ -289,3 +289,10 @@ export const S_FooterMainLink = styled.button`
     background-color: rgba(237, 242, 247, var(--bg-opacity));
   }
 `
+
+export const SearchWrapper = styled.div`
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+`

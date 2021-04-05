@@ -6,17 +6,29 @@ const initialState = {
     isShowReport: false,
     isLogin: false,
   },
+  dataReport: {
+    type: '',
+    id: '',
+  },
   posts: [],
   post: null,
   postsVoted: {},
   processing: {
     postsVoted: false,
   },
+  search: {
+    posts: [],
+    blogs: [],
+    users: [],
+  },
 }
 
 const reducer = (state = initialState, { type, payload }) =>
   produce(state, draft => {
     switch (type) {
+      case types.SET_SEARCH:
+        draft.search = payload
+        break
       case types.SET_POST:
         draft.post = payload
         break
@@ -39,15 +51,21 @@ const reducer = (state = initialState, { type, payload }) =>
       case types.SET_PROCESSING:
         draft.processing.postsVoted = !state.processing.postsVoted
         break
-      case types.APP_UPDATE_IS_REPORT:
+      case types.APP_UPDATE_IS_REPORT: {
         draft.app.isShowReport = !state.app.isShowReport
+        draft.dataReport = payload
         break
+      }
       case types.APP_UPDATE_IS_LOGIN:
         draft.app.isLogin = !state.app.isLogin
         break
       case types.UPDATE_TOPICS: {
         const indexPost = state.posts.findIndex(post => post.id === payload.id)
         if (indexPost !== -1) draft.posts[indexPost] = payload
+        break
+      }
+      case types.DELETE_POST: {
+        draft.search.posts = state.search.posts.filter(post => post.id !== payload)
         break
       }
       default:

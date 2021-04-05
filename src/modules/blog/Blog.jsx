@@ -1,6 +1,8 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import StatusBlog from '@/modules/blog/containers/StatusBlog'
+import { getAvatar } from '@/helpers/common'
+import { S_Description } from './components/Blog.style'
 
 function Blog({ blog }) {
   return (
@@ -9,10 +11,12 @@ function Blog({ blog }) {
         <Link className="min-w-0 flex items-center cursor-pointer no-underline" to={`/blogs/${blog.slug}`}>
           <div className="flex-shrink-0">
             <img
-              src={blog.avatar}
-              className="h-12 w-12 rounded-sm"
+              src={getAvatar(blog.avatar)}
+              className="rounded-sm"
               alt={blog.slug}
               style={{
+                width: '5rem',
+                height: '5rem',
                 objectFit: 'cover',
                 borderRadius: '5px',
               }}
@@ -21,12 +25,10 @@ function Blog({ blog }) {
 
           <div className="min-w-0 ml-5">
             <div className="w-full font-medium text-xl text-black truncate">{blog.title}</div>
-            <div className="text-sm font-light text-black overflow-hidden" style={{ maxHeight: '3em' }}>
-              {blog.description}
-            </div>
+            <S_Description className="text-sm font-light text-black overflow-hidden">{blog.description}</S_Description>
           </div>
         </Link>
-        <div>
+        <div style={{ minWidth: 100, marginLeft: 15 }}>
           <StatusBlog blogId={blog.id} blogAuthorId={blog.author?.id} blogSlug={blog.slug} />
         </div>
       </div>

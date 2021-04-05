@@ -8,7 +8,7 @@ import { useDispatch } from 'react-redux'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
 import { S_DownVote, S_Like, S_UpVote, S_Vote, S_HeartLike } from '../Comment.style'
 
-function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal }) {
+function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal, userId }) {
   const dispatch = useDispatch()
   const socket = makeGetSocketWithType()
 
@@ -18,47 +18,52 @@ function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal }) {
   })
 
   useEffect(() => {
-    const handleVote = ({ _vote, _commentId }) => {
+    const handleVote = ({ _vote, _commentId, _userId }) => {
       if (_commentId === commentId) {
-        setVote(prev => ({ ...prev, voteTotal: _vote.voteTotal }))
+        setVote(prev =>
+          userId === _userId
+            ? _vote
+            : {
+                voteTotal: _vote.voteTotal,
+                vote: prev.vote,
+              }
+        )
       }
     }
 
-    socket.on('VoteComment', handleVote)
-    socket.on('LikeComment', handleVote)
+    type === 'forum' ? socket.on('VoteComment', handleVote) : socket.on('LikeComment', handleVote)
     return () => {
-      socket.off('VoteComment', handleVote)
-      socket.off('LikeComment', handleVote)
+      type === 'forum' ? socket.off('VoteComment', handleVote) : socket.off('LikeComment', handleVote)
     }
   }, [])
 
-  const handleVoteComment = async (postId, voteNum) => {
+  const handleVoteComment = async (_commentId, voteNum) => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     try {
-      const voteData = await CommentAPI.voteComment(postId, voteNum)
+      const voteData = await CommentAPI.voteComment(_commentId, voteNum)
       const voteNew = {
         voteTotal: voteData.vote,
         vote: vote.vote === voteNum ? 0 : voteNum,
       }
       setVote(voteNew)
 
-      socket.emit('VoteComment', { vote, voteNum, commentId })
+      socket.emit('VoteComment', { vote: voteNew, commentId, userId })
     } catch (error) {
       throw new Error(error)
     }
   }
 
-  const handleLikeComment = async postId => {
+  const handleLikeComment = async _commentId => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
-    const voteData = await CommentAPI.likeComment(postId)
-    const voteNew = {
+    const voteData = await CommentAPI.likeComment(_commentId)
+    const likeNew = {
       voteTotal: voteData.vote,
       vote: !vote.vote,
     }
-    socket.emit('LikeComment', { vote: voteNew, commentId })
-    setVote(voteNew)
+    socket.emit('LikeComment', { vote: likeNew, commentId, userId })
+    setVote(likeNew)
   }
 
   return (
@@ -68,7 +73,7 @@ function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal }) {
           <S_UpVote onClick={() => handleVoteComment(commentId, 1)} isVoted={vote?.vote === 1}>
             <UpVote width={14} />
           </S_UpVote>
-          <span style={{ fontSize: 16, margin: '0 3px', color: '#718096' }}>{vote?.voteTotal}</span>
+          <span style={{ fontSize: 16, margin: '0 3px', color: '#718096' }}>{vote.voteTotal}</span>
           <S_DownVote onClick={() => handleVoteComment(commentId, -1)} isVoted={vote?.vote === -1}>
             <DownVote width={14} />
           </S_DownVote>
@@ -83,9 +88,7 @@ function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal }) {
             )}
           </S_HeartLike>
 
-          <span style={{ fontSize: 14, margin: '0 3px', color: '#718096' }}>
-            {vote ? vote?.voteTotal : commentVoteTotal} lượt thích
-          </span>
+          <span style={{ fontSize: 14, margin: '0 3px', color: '#718096' }}>{vote.voteTotal} lượt thích</span>
         </S_Like>
       )}
     </>

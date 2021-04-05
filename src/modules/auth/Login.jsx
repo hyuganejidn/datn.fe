@@ -79,12 +79,12 @@ export default function Login() {
                       <i className="fas fa-eye-slash " />
                     </span>
                   </div>
-                  <Link
+                  {/* <Link
                     to="/forgotPassword"
                     className="mt-3 block self-end text-sm text-gray-900 hover:text-black hover:underline"
                   >
                     Bạn quên mật khẩu?
-                  </Link>
+                  </Link> */}
                 </div>
                 <div className="flex items-center justify-between mt-10">
                   <Link

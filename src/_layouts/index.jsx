@@ -73,4 +73,8 @@ export const LayoutUser = ({ children }) => (
   </div>
 )
 
+export const LayoutContainerCenter = ({ children }) => (
+  <div className="md:w-7/12 mx-auto rounded-b border border-t-0 pt-5 pb-12 h-full">{children}</div>
+)
+
 export const LayoutBg = ({ children }) => <div className="theme-bg h-full">{children}</div>

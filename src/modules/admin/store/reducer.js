@@ -3,6 +3,7 @@ import * as types from './action_types'
 
 const initialState = {
   reports: [],
+  users: [],
   loading: false,
   total: 0,
 }
@@ -12,6 +13,10 @@ const reducer = (state = initialState, { type, payload }) =>
     switch (type) {
       case types.SET_REPORTS:
         draft.reports = payload.data
+        draft.total = payload.total
+        break
+      case types.SET_USERS:
+        draft.users = payload.data
         draft.total = payload.total
         break
       case types.SET_LOADING:

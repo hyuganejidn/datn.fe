@@ -59,10 +59,17 @@ function* getBlog({ payload: slug }) {
 }
 
 export default function* blogsSaga() {
-  yield all([takeLatest(types.S_FETCH_POSTS_NEW, fetchPostsNew)])
-  yield all([takeLatest(types.S_FETCH_POSTS_USER_FOLLOWED, fetchPostsUserFollowed)])
-  yield all([takeLatest(types.S_FETCH_BLOGS_ME, fetchBlogsMe)])
-  yield all([takeLatest(types.S_FETCH_BLOGS_TOP, fetchBlogsTop)])
-  yield all([takeLatest(types.S_FETCH_POSTS_BLOG, fetchPostsBlog)])
-  yield all([takeLatest(types.S_GET_BLOG, getBlog)])
+  yield all([
+    takeLatest(types.S_FETCH_POSTS_NEW, fetchPostsNew),
+    takeLatest(types.S_FETCH_POSTS_USER_FOLLOWED, fetchPostsUserFollowed),
+    takeLatest(types.S_FETCH_BLOGS_ME, fetchBlogsMe),
+    takeLatest(types.S_FETCH_BLOGS_TOP, fetchBlogsTop),
+    takeLatest(types.S_FETCH_POSTS_BLOG, fetchPostsBlog),
+    takeLatest(types.S_GET_BLOG, getBlog),
+  ])
+  // yield all([])
+  // yield all([])
+  // yield all([])
+  // yield all([])
+  // yield all([])
 }

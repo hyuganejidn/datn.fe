@@ -4,29 +4,30 @@ import { useDispatch } from 'react-redux'
 import DataTable from 'Templates/table'
 
 import * as types from '../store/action_types'
-import { makeGetLoading, makeGetReports, makeGetTotal } from '../store/selector'
+import { makeGetLoading, makeGetTotal, makeGetUsers } from '../store/selector'
 
 const columns = [
-  { name: 'reason', title: 'Lý do' },
-  { name: '_type', title: 'Loại' },
-  { name: 'createdAt', title: 'Ngày report' },
-  { name: 'author', title: 'Người report' },
+  { name: 'fullName', title: 'Họ tên' },
+  { name: 'status', title: 'Loại' },
+  { name: 'createdAt', title: 'Ngày tạo' },
 ]
 
-function Reports() {
+function Users() {
   const dispatch = useDispatch()
 
-  const reports = makeGetReports()
+  const users = makeGetUsers()
   const loading = makeGetLoading()
   const total = makeGetTotal()
   const [selection, setSelection] = useState([])
 
-  const fetchData = params => dispatch({ type: types.S_FETCH_REPORTS, payload: params })
+  const fetchData = params => dispatch({ type: types.S_FETCH_USERS, payload: params })
+
+  // console.log(selection)
 
   return (
     <div>
       <DataTable
-        rows={reports}
+        rows={users}
         columns={columns}
         loading={loading}
         totalCount={total}
@@ -38,4 +39,4 @@ function Reports() {
   )
 }
 
-export default Reports
+export default Users

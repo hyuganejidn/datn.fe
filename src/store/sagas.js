@@ -7,5 +7,5 @@ import blog from '@/modules/blog/saga'
 import admin from '@/modules/admin/saga'
 
 export default function* rootSaga() {
-  yield all([auth(), comment(), forum(), blog(), admin()])
+  yield all([auth(), admin(), comment(), forum(), blog()])
 }

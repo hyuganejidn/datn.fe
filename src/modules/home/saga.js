@@ -44,9 +44,11 @@ function* getPostsVoted() {
   }
 }
 
-export default function* commentSaga() {
-  yield all([takeLatest(types.S_FETCH_POSTS, fetchPosts)])
-  yield all([takeLatest(types.S_GET_POST, getPost)])
-  yield all([takeLatest(types.S_FETCH_POSTS_USER, getPostsUser)])
-  yield all([takeLatest(types.S_FETCH_POSTS_VOTED, getPostsVoted)])
+export default function* homeSaga() {
+  yield all([
+    takeLatest(types.S_FETCH_POSTS, fetchPosts),
+    takeLatest(types.S_GET_POST, getPost),
+    takeLatest(types.S_FETCH_POSTS_USER, getPostsUser),
+    takeLatest(types.S_FETCH_POSTS_VOTED, getPostsVoted),
+  ])
 }

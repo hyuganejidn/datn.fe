@@ -1,8 +1,9 @@
+import { queryUrl } from '@/helpers/api'
 import http from '../helpers/axios'
 
 const path = '/users'
 
-export const listUser = () => http.get(`${path}`).then(res => res.data)
+export const list = params => http.get(queryUrl(path, params))
 
 export const me = () => http.get(`${path}/me`)
 

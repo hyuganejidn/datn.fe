@@ -17,6 +17,21 @@ export const makeGetReports = () => {
   return useSelector(stateSelect)
 }
 
+export const makeGetUsers = () => {
+  const stateSelect = createSelector(
+    state => state.admin.users,
+    users =>
+      users.map(user => ({
+        ...user,
+        status: user.isBlock ? 'Block' : 'Active',
+        // author: report.userReport.fullName,
+        // _type: type[report.type],
+      }))
+  )
+
+  return useSelector(stateSelect)
+}
+
 export const makeGetLoading = () => {
   const stateSelect = createSelector(
     state => state.admin,

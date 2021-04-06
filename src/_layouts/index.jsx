@@ -13,9 +13,12 @@ import HeaderNav from '@/_components/header/'
 import Report from 'Templates/features/Report'
 import Modal from 'Templates/commons/Modal2'
 import ShouldLogin from 'Templates/commons/ModalShouldLogin'
+import { useLocation } from 'react-router-dom'
 
 const Layout = ({ children, ...props }) => {
   const dispatch = useDispatch()
+  const location = useLocation()
+
   const loadingLogin = makeGetProcessing('login')
   const isShowReport = makeGetIsShowReport()
   const isShowLogin = makeGetIsLogin()
@@ -26,18 +29,18 @@ const Layout = ({ children, ...props }) => {
     else dispatch({ type: types.AUTH_SET_PROCESSING, payload: { key: 'login' } })
   }, [])
 
+  if (loadingLogin) return null
+
+  if (/admin/.test(location.pathname)) return <div className="theme-admin">{children}</div>
+
   return (
     <div className="theme">
-      {!loadingLogin && (
-        <>
-          <HeaderNav />
-          <div className="pt-12">
-            <div className="layout" {...props}>
-              {children}
-            </div>
-          </div>
-        </>
-      )}
+      <HeaderNav />
+      <div className="pt-12">
+        <div className="layout" {...props}>
+          {children}
+        </div>
+      </div>
       {isShowReport && (
         <Modal
           title="Chọn lý do báo xấu"

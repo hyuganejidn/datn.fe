@@ -19,13 +19,13 @@ const App = () => (
   <Provider store={store}>
     <SocketWrapper>
       <Router>
-        <Layout>
-          <Switch>
+        <Switch>
+          <Layout>
             {routes.map((route, i) =>
               route.auth ? <PrivateRoute key={i} {...route} /> : <PublicRoute key={i} {...route} />
             )}
-          </Switch>
-        </Layout>
+          </Layout>
+        </Switch>
       </Router>
     </SocketWrapper>
     <ToastContainer

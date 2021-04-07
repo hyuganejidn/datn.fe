@@ -14,8 +14,10 @@ const initialState = {
   post: null,
   postsVoted: {},
   processing: {
+    posts: false,
     postsVoted: false,
   },
+  hasMore: false,
   search: {
     posts: [],
     blogs: [],
@@ -36,11 +38,18 @@ const reducer = (state = initialState, { type, payload }) =>
         draft.post.commentNum += payload || 1
         break
       }
+      case types.SET_HAS_MORE: {
+        draft.hasMore = payload
+        break
+      }
       case types.RESET_POST:
         draft.post = null
         break
       case types.SET_POSTS:
         draft.posts = payload
+        break
+      case types.ADD_POST:
+        draft.posts.push(...payload)
         break
       case types.REMOVE_POST:
         draft.posts = draft.posts.filter(post => post.id !== payload)
@@ -50,6 +59,9 @@ const reducer = (state = initialState, { type, payload }) =>
         break
       case types.SET_PROCESSING:
         draft.processing.postsVoted = !state.processing.postsVoted
+        break
+      case types.SET_PROCESSING_POSTS:
+        draft.processing.posts = !state.processing.posts
         break
       case types.APP_UPDATE_IS_REPORT: {
         draft.app.isShowReport = !state.app.isShowReport

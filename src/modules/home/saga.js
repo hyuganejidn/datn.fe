@@ -4,12 +4,17 @@ import { PostAPI, TopicAPI, UserAPI } from '@/services'
 
 import * as types from './store/action_types'
 
-function* fetchPosts({ payload }) {
+function* fetchPosts({ payload: { slug, params, isUpdate } }) {
   try {
-    const posts = yield call(() => TopicAPI.getPostsOfTopic(payload))
-    yield put({ type: types.SET_POSTS, payload: posts })
+    yield put({ type: types.SET_PROCESSING_POSTS })
+    const posts = yield call(() => TopicAPI.getPostsOfTopic(slug, params))
+    yield put({ type: types.SET_HAS_MORE, payload: posts.length > 0 })
+    if (isUpdate) yield put({ type: types.ADD_POST, payload: posts })
+    else yield put({ type: types.SET_POSTS, payload: posts })
   } catch (error) {
     throw new Error(error)
+  } finally {
+    yield put({ type: types.SET_PROCESSING_POSTS })
   }
 }
 

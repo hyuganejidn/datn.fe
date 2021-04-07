@@ -52,6 +52,7 @@ export default props => {
 
   useEffect(() => {
     params.q = debouncedValue
+    params.page = 1
     const queryStr = queryWith(params)
     history.push(`?${queryStr}`)
   }, [debouncedValue])

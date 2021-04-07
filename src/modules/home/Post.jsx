@@ -39,7 +39,7 @@ import { S_ThreeDotMenu } from '../comment/Comment.style'
 import * as types from './store/action_types'
 import PostUpdate from '../post/components/PostUpdate'
 
-function Post({ isAuth, post, isVote, userId, voteSocket }) {
+function Post({ refProp, isAuth, post, isVote, userId, voteSocket }) {
   const dispatch = useDispatch()
   const socket = makeGetSocketWithType()
   const handleCopy = useCopyToClipboard()[1]
@@ -100,7 +100,7 @@ function Post({ isAuth, post, isVote, userId, voteSocket }) {
   }
 
   return (
-    <S_Post className="shadow-box-2 rounded-lg" style={{ margin: '8px 0' }}>
+    <S_Post className="shadow-box-2 rounded-lg" style={{ margin: '8px 0' }} ref={refProp}>
       <S_Vote>
         <S_UpVote onClick={() => handleVotePost(post.id, 1)} isVoted={vote?.vote === 1}>
           <UpVote />

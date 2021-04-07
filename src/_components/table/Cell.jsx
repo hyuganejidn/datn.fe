@@ -8,6 +8,7 @@ import { useDispatch } from 'react-redux'
 
 import * as types from '@/modules/admin/store/action_types'
 import { formatDate } from '@/helpers/common'
+import { makeGetMe } from '@/modules/auth/store/selector'
 
 const classify = {
   forum: 'topics',
@@ -17,6 +18,7 @@ const classify = {
 function Cell(props) {
   const { column, row } = props
   const dispatch = useDispatch()
+  const user = makeGetMe()
   if (column.name === 'createdAt') {
     return (
       <Table.Cell {...props}>
@@ -59,6 +61,7 @@ function Cell(props) {
   }
 
   if (column.name === 'blockUser') {
+    if (user.id === row.id) return <Table.Cell {...props} />
     return (
       <Table.Cell {...props}>
         <Button

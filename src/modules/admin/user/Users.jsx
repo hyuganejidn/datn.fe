@@ -8,6 +8,7 @@ import { makeGetLoading, makeGetTotal, makeGetUsers } from '../store/selector'
 
 const columns = [
   { name: 'fullName', title: 'Họ tên' },
+  { name: 'username', title: 'Tên đăng nhập' },
   { name: '_status', title: 'Loại' },
   { name: '_role', title: 'Quyền' },
   { name: 'statusUser', title: 'Trạng thái' },

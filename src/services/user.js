@@ -23,8 +23,8 @@ export const search = q => http.get(`/search?q=${q}`).then(res => res.data)
 export const reportPost = ({ reason, postId, commentId, type, status, value }) =>
   http.post(`${path}/report_post`, { value, reason, postId, commentId, type, status })
 
-export const blockPost = ({ postId, isBlock }) => http.post(`${path}/block_post`, { postId, isBlock })
+export const blockPost = (postId, isBlock) => http.post(`${path}/block_post`, { postId, isBlock })
 
-export const blockUser = ({ userId, isBlock }) => http.post(`${path}/block_user`, { userId, isBlock })
+export const blockUser = (userId, isBlock) => http.post(`${path}/block_user`, { userId, isBlock })
 
-export const blockComment = ({ commentId, isBlock }) => http.post(`${path}/block_comment`, { commentId, isBlock })
+export const blockComment = (commentId, isBlock) => http.post(`${path}/block_comment`, { commentId, isBlock })

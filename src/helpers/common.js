@@ -139,7 +139,7 @@ export const getFirstTagImg = xmlString => {
 
 export const getInnerText = xmlString => {
   const dom = new DOMParser().parseFromString(xmlString, 'text/html')
-  const elContent = dom.body.firstChild
+  const elContent = dom.body
   return elContent.innerText
 }
 

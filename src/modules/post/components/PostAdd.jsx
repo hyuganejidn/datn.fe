@@ -117,9 +117,8 @@ function PostAdd() {
     }
     classify === 'forum' ? (data.topic = topicSelected.slug) : (data.blog = blog.id)
     try {
-      const post = await PostAPI.create(data)
+      await PostAPI.create(data)
       history.push(classify === 'forum' ? '/' : `/blogs/${blog.slug}`)
-      console.log(post)
       return null
     } catch (error) {
       throw new Error(error)

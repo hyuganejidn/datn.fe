@@ -36,7 +36,6 @@ function Report({ setIsShowModal }) {
         commentId: dataReport.type === 'comment' ? dataReport.id : null,
         type: dataReport.type,
         value: +value,
-        status: 'processing',
       }
       await UserAPI.reportPost(data)
       toast.success('Báo cáo thành công')

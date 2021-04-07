@@ -122,7 +122,7 @@ function PostViewBlog() {
                 </div>
               </S_InfoUser>
 
-              <S_PostMainContent dangerouslySetInnerHTML={{ __html: replaceImg(post.content) }} />
+              <S_PostMainContent dangerouslySetInnerHTML={{ __html: replaceImg(post.content) }} className="post-view" />
             </S_PostMainView>
 
             <PostViewFooterBlog

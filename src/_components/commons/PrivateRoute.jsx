@@ -12,6 +12,14 @@ const PrivateRoute = ({ component: Component, role, ...rest }) => {
       render={props => {
         if (isAuth) {
           if (!role || role === user.role) return <Component {...props} />
+          return (
+            <Redirect
+              to={{
+                pathname: '/',
+                state: { from: props.location },
+              }}
+            />
+          )
         }
 
         return (

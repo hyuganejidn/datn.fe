@@ -2,16 +2,22 @@ import { createSelector } from 'reselect'
 import { useSelector } from 'react-redux'
 
 const type = { post: 'Bài viết', comment: 'Bình luận' }
+const role = { admin: 'Admin', user: 'Viewer' }
 
 export const makeGetReports = () => {
   const stateSelect = createSelector(
     state => state.admin.reports,
     reports =>
-      reports.map(report => ({
-        ...report,
-        author: report.userReport.fullName,
-        _type: type[report.type],
-      }))
+      reports.map(report => {
+        const data = report.post || report.comment
+        return {
+          ...report,
+          author: data.author.fullName,
+          numberReports: report.reports.length,
+          _type: type[report.type],
+          status: data.isBlock ? 'Đã khóa' : 'Đang hoạt động',
+        }
+      })
   )
 
   return useSelector(stateSelect)
@@ -23,7 +29,8 @@ export const makeGetUsers = () => {
     users =>
       users.map(user => ({
         ...user,
-        status: user.isBlock ? 'Block' : 'Active',
+        _status: user.isBlock ? 'Block' : 'Active',
+        _role: role[user.role],
         // author: report.userReport.fullName,
         // _type: type[report.type],
       }))

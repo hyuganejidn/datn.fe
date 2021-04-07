@@ -10,6 +10,9 @@ import Modal3 from 'Templates/commons/Modal3'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
 import { toast } from 'react-toastify'
+import DropdownComponent from 'Templates/dropDown/DropdownComponent'
+import { ENV } from '@/_constants/common'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
 import {
   S_Avatar,
   S_AvatarDefault,
@@ -17,7 +20,7 @@ import {
   S_DownVote,
   S_FooterLink,
   S_Icon,
-  S_ImageAvatar,
+  S_ImageAvatar_2,
   S_ImageDefault,
   S_Post,
   S_PostContent,
@@ -31,6 +34,7 @@ import {
   S_UpVote,
   S_Vote,
 } from './Post.style'
+
 import { S_ThreeDotMenu } from '../comment/Comment.style'
 import * as types from './store/action_types'
 import PostUpdate from '../post/components/PostUpdate'
@@ -38,6 +42,7 @@ import PostUpdate from '../post/components/PostUpdate'
 function Post({ isAuth, post, isVote, userId, voteSocket }) {
   const dispatch = useDispatch()
   const socket = makeGetSocketWithType()
+  const handleCopy = useCopyToClipboard()[1]
 
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
   const [vote, setVote] = useState({
@@ -108,7 +113,7 @@ function Post({ isAuth, post, isVote, userId, voteSocket }) {
 
       <S_Avatar to={`/topics/posts/${post.id}`}>
         <S_AvatarDefault>
-          {post.avatar ? <S_ImageAvatar src={getAvatar(post.avatar)} alt={post.topic?.slug} /> : <S_ImageDefault />}
+          {post.avatar ? <S_ImageAvatar_2 src={getAvatar(post.avatar)} alt={post.topic?.slug} /> : <S_ImageDefault />}
         </S_AvatarDefault>
       </S_Avatar>
 
@@ -133,10 +138,24 @@ function Post({ isAuth, post, isVote, userId, voteSocket }) {
             <S_Comment />
             <span style={{ marginLeft: 4, marginRight: 19 }}>{post.commentNum} Bình luận</span>
           </S_FooterLink>
-          <S_FooterLink to={`/topics/posts/${post.id}`}>
-            <S_Share />
-            <span style={{ marginLeft: 4, marginRight: 19 }}>Chia sẽ</span>
-          </S_FooterLink>
+
+          <DropdownComponent
+            component={() => (
+              <>
+                <S_Share />
+                <span style={{ marginLeft: 4, marginRight: 19 }}>Chia sẽ</span>
+              </>
+            )}
+            options={[
+              {
+                title: 'Copy Link',
+                onClick: () => {
+                  handleCopy(`${ENV.HOST}blogs/posts/${post.id}`)
+                  toast.success('Copied thành công')
+                },
+              },
+            ]}
+          />
           <S_ThreeDotMenu
             options={
               userId === post.author?.id

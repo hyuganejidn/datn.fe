@@ -107,7 +107,6 @@ function PostUpdate({ classify, type, setIsShowModal, dataPost = {} }) {
       avatar: elImgFirst ? elImgFirst.getAttribute('src') : '',
     }
     classify === 'forum' && (data.topic = topicSelected.slug)
-    console.log(data)
     try {
       const post = await PostAPI.update(dataPost.id, data)
       handleUpdatePost(type, post)

@@ -23,7 +23,6 @@ function Search() {
   const users = makeGetSearchUsers()
   const postsTopic = makeGetSearchPostsWithType('forum')
   const postsBlogs = makeGetSearchPostsWithType('blog')
-  // console.log(postsTopic, postsBlogs, blogs, users)
 
   useEffect(() => {
     const fetchDataSearch = async () => {

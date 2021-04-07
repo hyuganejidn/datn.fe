@@ -2,7 +2,6 @@ import { formatDate } from '@/helpers/common'
 import React from 'react'
 
 function InfoBlog({ blog }) {
-  console.log()
   const info = JSON.parse(blog.info)
   return (
     <div className="py-3 px-5 font-light">

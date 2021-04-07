@@ -6,6 +6,7 @@ import {
   S_PostViewFooter,
   S_FooterMainLink,
   S_FooterText,
+  S_SHARE,
 } from '@/modules/home/Post.style'
 import { PostAPI } from '@/services'
 import Modal3 from 'Templates/commons/Modal3'
@@ -16,12 +17,16 @@ import * as typesHome from '@/modules/home/store/action_types'
 import { useDispatch } from 'react-redux'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { toast } from 'react-toastify'
+import DropdownComponent from 'Templates/dropDown/DropdownComponent'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { ENV } from '@/_constants/common'
 import PostUpdate from './PostUpdate'
 
 function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
   const history = useHistory()
   const dispatch = useDispatch()
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
+  const handleCopy = useCopyToClipboard()[1]
 
   const [vote, setVote] = useState({
     voteTotal: post.voteNum,
@@ -96,10 +101,23 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
             <S_FooterText>{post.commentNum} Bình luận</S_FooterText>
           </S_FooterMainLink>
 
-          <S_FooterMainLink>
-            <Share width={16} />
-            <S_FooterText>Chia sẽ</S_FooterText>
-          </S_FooterMainLink>
+          <DropdownComponent
+            component={() => (
+              <S_SHARE>
+                <Share width={16} />
+                <S_FooterText>Chia sẽ</S_FooterText>
+              </S_SHARE>
+            )}
+            options={[
+              {
+                title: 'Copy Link',
+                onClick: () => {
+                  handleCopy(`${ENV.HOST}topics/posts/${post.id}`)
+                  toast.success('Copied thành công')
+                },
+              },
+            ]}
+          />
 
           <S_ThreeDotMenu
             options={

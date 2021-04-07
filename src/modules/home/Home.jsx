@@ -5,17 +5,17 @@ import { LayoutBg } from '@/_layouts'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
 import Forum from './Forum'
 import Topics from './Topics'
-import { makeGetIsAuthenticated } from '../auth/store/selector'
+// import { makeGetIsAuthenticated } from '../auth/store/selector'
 
 function Home() {
-  const isAuth = makeGetIsAuthenticated()
+  // const isAuth = makeGetIsAuthenticated()
   const socket = makeGetSocketWithType()
 
   useEffect(() => {
     socket.emit('JoiningRoom', 'home')
     return () => socket.emit('LeavingRoom')
   }, [])
-  console.log(isAuth)
+  // console.log(isAuth)
   return (
     <LayoutBg>
       <S_Layout>
@@ -37,7 +37,7 @@ const S_Layout = styled.div`
 
 const S_Topics = styled(Topics)`
   position: sticky;
-  top: 0;
+  top: 65px;
   padding-right: 4px;
   width: 300px;
   max-height: calc(100vh - 50px);

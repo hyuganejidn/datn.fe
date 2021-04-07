@@ -104,7 +104,10 @@ function PostViewForum() {
               </S_PostMainTop>
               <S_PostMainView>
                 <S_PostMainTitle>{post.title}</S_PostMainTitle>
-                <S_PostMainContent dangerouslySetInnerHTML={{ __html: replaceImg(post.content) }} />
+                <S_PostMainContent
+                  className="post-view"
+                  dangerouslySetInnerHTML={{ __html: replaceImg(post.content) }}
+                />
               </S_PostMainView>
               <PostViewFooterForum
                 post={post}

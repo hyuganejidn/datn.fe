@@ -24,3 +24,28 @@
     background-color: #48bb78 !important;
   }
 }
+
+.theme-admin {
+  display: flex;
+  .MuiButtonBase-root.MuiButton-root.MuiButton-text {
+    &[class*='Pagination-button'] {
+      color: rgba(0, 0, 0, 0.6);
+      font-weight: 400;
+    }
+    &[class*='Pagination-activeButton'] {
+      color: rgb(0, 0, 0);
+      font-weight: 500;
+    }
+  }
+}
+
+.post-view {
+  a {
+    text-decoration: underline;
+    color: #06c !important;
+  }
+  p {
+    line-height: 1.5rem;
+    margin-bottom: 14px;
+  }
+}

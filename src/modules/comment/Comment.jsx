@@ -1,5 +1,5 @@
 import { Avatar } from '@material-ui/core'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 
@@ -8,6 +8,7 @@ import * as typesHome from '@/modules/home/store/action_types'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { makeGetSocketWithType } from '@/_layouts/Socket'
 import { getAvatar } from '@/helpers/common'
+import { getStorage, removeStorage } from '@/helpers/storage'
 import {
   S_Footer,
   S_FooterLink,
@@ -34,6 +35,8 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
   const [isEdit, setIsEdit] = useState(false)
 
   const [commentReply, setCommentReply] = useState(comment)
+
+  useEffect(() => () => removeStorage(comment.id), [])
 
   const handleSubmitComment = async ({ content }) => {
     if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
@@ -123,7 +126,7 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
           </S_EditComment>
         ) : (
           <>
-            <S_CommentContent>
+            <S_CommentContent style={{ border: comment.id === getStorage(comment.id) && '1px solid red' }}>
               <div>
                 <S_NameAuthorLink to={`/users/${comment.author.id}`}>{comment.author.fullName}</S_NameAuthorLink>
                 {comment.userBeingReply && comment.userBeingReply.id !== comment.author.id && (

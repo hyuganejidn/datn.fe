@@ -17,7 +17,7 @@ export default [
     ),
   },
   {
-    path: '/admin',
+    path: '/admin/users',
     auth: true,
     role: 'admin',
     exact: true,

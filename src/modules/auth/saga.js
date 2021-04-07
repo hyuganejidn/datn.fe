@@ -13,8 +13,8 @@ function* login({ payload }) {
     yield put({ type: types.AUTH_SET_USER, payload: user })
     yield put({ type: types.AUTH_LOGIN_SUCCESSFUL })
   } catch (error) {
-    console.log(error)
     yield put({ type: types.AUTH_LOGIN_ERRORS, payload: error })
+    throw new Error(error)
   }
 }
 

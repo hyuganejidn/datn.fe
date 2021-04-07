@@ -1,7 +1,8 @@
 import { makeGetIsAuthenticated, makeGetMe } from '@/modules/auth/store/selector'
 import { Avatar } from '@material-ui/core'
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
+import queryString from 'query-string'
 import { Link, useHistory, useLocation } from 'react-router-dom'
 import {
   Menu,
@@ -26,12 +27,16 @@ function HeaderNav() {
     forum: /topics/.test(location.pathname) || location.pathname === '/',
     blog: /blogs/.test(location.pathname),
   }
-
+  const { q } = queryString.parse(location.search)
   const dispatch = useDispatch()
   const history = useHistory()
 
   const [isShowPopupUser, setIsShowPopupUser] = useState(false)
-  const [textSearch, setTextSearch] = useState('')
+  const [textSearch, setTextSearch] = useState(q || '')
+
+  useEffect(() => {
+    if (!q) setTextSearch(() => '')
+  }, [location.search])
 
   const dismissDropdown = useCallback(() => {
     setIsShowPopupUser(false)
@@ -40,13 +45,12 @@ function HeaderNav() {
   const handleSearch = async () => {
     if (textSearch.length > 0) {
       history.push(`/search?q=${textSearch}`)
+    } else {
+      history.push(`/`)
     }
   }
 
-  const handleChangeSearch = event => {
-    console.log(event.target.value)
-    setTextSearch(event.target.value)
-  }
+  const handleChangeSearch = event => setTextSearch(event.target.value)
 
   useClickOutside(dropdown, dismissDropdown)
 
@@ -89,6 +93,7 @@ function HeaderNav() {
               type="text"
               value={textSearch}
               onChange={event => handleChangeSearch(event)}
+              onKeyDown={event => event.key === 'Enter' && handleSearch()}
               className="text-sm w-full my-1 outline-none bg-gray-100"
               name="search"
               placeholder="Tìm kiếm"
@@ -108,7 +113,8 @@ function HeaderNav() {
               if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
               history.push('/posts/add?classify=forum')
             }}
-            className=" md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full px-2 bg-green-500 py-px text-white no-underline"
+            className=" md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full bg-green-500 text-white no-underline"
+            style={{ padding: '4px 8px' }}
           >
             <span className="text-sm">&nbsp;Đăng bài</span>
           </button>
@@ -145,6 +151,16 @@ function HeaderNav() {
                 {isShowPopupUser && (
                   <div className="mt-1 absolute rounded border border-gray-400 shadow-lg right-0">
                     <div className="bg-white rounded whitespace-no-wrap z-50 shadow-sm">
+                      {user.role === 'admin' && (
+                        <Link
+                          to="/admin/users"
+                          target="_blank"
+                          className="flex items-center rounded-t px-6 py-2 text-black hover:bg-green-200 cursor-pointer no-underline"
+                          onClick={() => setIsShowPopupUser(!isShowPopupUser)}
+                        >
+                          <div>Admin</div>
+                        </Link>
+                      )}
                       <Link
                         to={`/users/${user.id}`}
                         className="flex items-center rounded-t px-6 py-2 text-black hover:bg-green-200 cursor-pointer no-underline"

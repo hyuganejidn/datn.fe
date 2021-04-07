@@ -2,10 +2,105 @@ import React from 'react'
 import { Table } from '@devexpress/dx-react-grid-material-ui'
 import { DataTypeProvider } from '@devexpress/dx-react-grid'
 import Tooltip from '@material-ui/core/Tooltip'
+import { Button } from '@material-ui/core'
+import { setStorage } from '@/helpers/storage'
+import { useDispatch } from 'react-redux'
+
+import * as types from '@/modules/admin/store/action_types'
+import { formatDate } from '@/helpers/common'
+
+const classify = {
+  forum: 'topics',
+  blogs: 'blogs',
+}
 
 function Cell(props) {
-  // const { column } = props
-  // console.log(column)
+  const { column, row } = props
+  const dispatch = useDispatch()
+  if (column.name === 'createdAt') {
+    return (
+      <Table.Cell {...props}>
+        <span>{formatDate(row.createdAt)}</span>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'statusReport') {
+    const data = row.post || row.comment
+    return (
+      <Table.Cell {...props}>
+        <span style={{ color: data.isBlock ? 'red' : '#48bb78' }}>{row.status}</span>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'statusUser') {
+    return (
+      <Table.Cell {...props}>
+        <span style={{ color: row?.isBlock ? 'red' : '#48bb78' }}>{row?.isBlock ? 'Khóa' : 'Đang hoạt động'}</span>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'blockReport') {
+    const data = row.post || row.comment
+    return (
+      <Table.Cell {...props}>
+        <Button
+          variant="outlined"
+          size="small"
+          color={data.isBlock ? 'primary' : 'secondary'}
+          onClick={() => dispatch({ type: types.S_BLOCK, payload: row })}
+        >
+          {data.isBlock ? 'Active' : 'Block'}
+        </Button>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'blockUser') {
+    return (
+      <Table.Cell {...props}>
+        <Button
+          variant="outlined"
+          size="small"
+          color={row.isBlock ? 'primary' : 'secondary'}
+          onClick={() => dispatch({ type: types.S_BLOCK_USER, payload: row })}
+        >
+          {row.isBlock ? 'Active' : 'Block'}
+        </Button>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'detailUser') {
+    return (
+      <Table.Cell {...props}>
+        <Button variant="outlined" size="small" color="primary" href={`/users/${row.id}`} target="_blank">
+          View
+        </Button>
+      </Table.Cell>
+    )
+  }
+
+  if (column.name === 'detailReport') {
+    const post = row.post || row.comment.post
+
+    return (
+      <Table.Cell {...props}>
+        <Button
+          variant="outlined"
+          size="small"
+          color="primary"
+          href={`/${classify[post.classify]}/posts/${post.id}`}
+          target="_blank"
+          onClick={() => row.comment && setStorage(row.comment.id, row.comment.id)}
+        >
+          View
+        </Button>
+      </Table.Cell>
+    )
+  }
 
   return <Table.Cell {...props} />
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
 import { CommentSquareLine, Heart, HeartLine, ShareLine } from 'Templates/icon/IconsSvg'
-import { S_FooterMainLink, S_PostViewFooter, S_FooterText } from '@/modules/home/Post.style'
+import { S_FooterMainLink, S_SHARE, S_PostViewFooter, S_FooterText } from '@/modules/home/Post.style'
 import { S_HeartLike, S_Like, S_ThreeDotMenu } from '@/modules/comment/Comment.style'
 import { PostAPI } from '@/services'
 import * as typesHome from '@/modules/home/store/action_types'
@@ -10,11 +10,15 @@ import { useShouldShowModal } from '@/hooks/useShowModalLogin'
 import { useHistory } from 'react-router-dom'
 import Modal3 from 'Templates/commons/Modal3'
 import { toast } from 'react-toastify'
+import DropdownComponent from 'Templates/dropDown/DropdownComponent'
+import { useCopyToClipboard } from '@/hooks/useCopyToClipboard'
+import { ENV } from '@/_constants/common'
 import PostUpdate from './PostUpdate'
 
 function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
   const dispatch = useDispatch()
   const history = useHistory()
+  const handleCopy = useCopyToClipboard()[1]
 
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
   const [vote, setVote] = useState({
@@ -91,10 +95,23 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
             <S_FooterText>{post.commentNum} Bình luận</S_FooterText>
           </S_FooterMainLink>
 
-          <S_FooterMainLink>
-            <ShareLine width={16} />
-            <S_FooterText>Chia sẽ</S_FooterText>
-          </S_FooterMainLink>
+          <DropdownComponent
+            component={() => (
+              <S_SHARE>
+                <ShareLine width={16} />
+                <S_FooterText>Chia sẽ</S_FooterText>
+              </S_SHARE>
+            )}
+            options={[
+              {
+                title: 'Copy Link',
+                onClick: () => {
+                  handleCopy(`${ENV.HOST}blogs/posts/${post.id}`)
+                  toast.success('Copied thành công')
+                },
+              },
+            ]}
+          />
 
           <S_ThreeDotMenu
             options={

@@ -62,6 +62,16 @@ export const S_AvatarDefault = styled.div`
 `
 export const S_ImageAvatar = styled.img`
   position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 90%;
+  object-fit: cover;
+  border-radius: 8px;
+`
+
+export const S_ImageAvatar_2 = styled.img`
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -278,6 +288,19 @@ export const S_PostMainForum = styled.div`
 `
 
 export const S_FooterMainLink = styled.button`
+  display: flex;
+  align-items: center;
+  /* color: inherit !important; */
+  padding: 4px 4px;
+  border-radius: 4px;
+  margin-right: 18px;
+  cursor: pointer;
+  :hover {
+    background-color: rgba(237, 242, 247, var(--bg-opacity));
+  }
+`
+
+export const S_SHARE = styled.div`
   display: flex;
   align-items: center;
   /* color: inherit !important; */

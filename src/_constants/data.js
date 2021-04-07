@@ -9,12 +9,12 @@ const forum = {
 export const topicsSelect = [
   {
     slug: 'food',
-    name: 'Ăn uống- Nấu nướng',
+    name: 'Ăn uống - Nấu nướng',
     icon: Icons.Food,
   },
   {
     slug: 'travel',
-    name: 'Du lịch- phượt',
+    name: 'Du lịch - Phượt',
     icon: Icons.Travel,
   },
   {
@@ -49,7 +49,7 @@ export const topicsSelect = [
   },
   {
     slug: 'relationship',
-    name: 'Tình yêu - tình bạn',
+    name: 'Tình yêu - Tình bạn',
     icon: Icons.Relationship,
   },
   {
@@ -59,7 +59,7 @@ export const topicsSelect = [
   },
   {
     slug: 'confidence',
-    name: 'Tâm sự - chuyên đời',
+    name: 'Tâm sự - Chuyện đời',
     icon: Icons.Confidence,
   },
   {
@@ -149,7 +149,7 @@ export const topicsSelect = [
   },
   {
     slug: 'housing',
-    name: 'Nhà cửa - nội thất',
+    name: 'Nhà cửa - Nội thất',
     icon: Icons.Housing,
   },
   {
@@ -209,12 +209,12 @@ export const topicsSelect = [
   },
   {
     slug: 'horoscope',
-    name: 'Tử vi - số mệnh',
+    name: 'Tử vi - Số mệnh',
     icon: Icons.Horoscope,
   },
   {
     slug: 'scienceAndTechnology',
-    name: 'Khoa học - Công nghê',
+    name: 'Khoa học - Công nghệ',
     icon: Icons.ScienceAndTechnology,
   },
   {

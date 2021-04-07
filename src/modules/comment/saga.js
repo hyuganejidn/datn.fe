@@ -43,7 +43,6 @@ function* deleteComment({ payload: { comment, socket } }) {
     yield call(() => CommentAPI.destroy(comment.id))
     socket.emit('DeleteComment', comment)
     yield put({ type: types.DELETE_COMMENT, payload: comment })
-    console.log(comment)
     toast.success('Xóa bình luận thành công')
     yield put({
       type: typesHome.UPDATE_POST_COMMENT_NUM,

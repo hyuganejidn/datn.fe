@@ -14,6 +14,7 @@ import Report from 'Templates/features/Report'
 import Modal from 'Templates/commons/Modal2'
 import ShouldLogin from 'Templates/commons/ModalShouldLogin'
 import { useLocation } from 'react-router-dom'
+import NavAdmin from '@/modules/admin/nav/NavAdmin'
 
 const Layout = ({ children, ...props }) => {
   const dispatch = useDispatch()
@@ -31,16 +32,18 @@ const Layout = ({ children, ...props }) => {
 
   if (loadingLogin) return null
 
-  if (/admin/.test(location.pathname)) return <div className="theme-admin">{children}</div>
+  if (/admin/.test(location.pathname)) return <NavAdmin>{children}</NavAdmin>
 
   return (
     <div className="theme">
-      <HeaderNav />
-      <div className="pt-12">
-        <div className="layout" {...props}>
-          {children}
+      <>
+        <HeaderNav />
+        <div className="pt-12">
+          <div className="layout" {...props}>
+            {children}
+          </div>
         </div>
-      </div>
+      </>
       {isShowReport && (
         <Modal
           title="Chọn lý do báo xấu"

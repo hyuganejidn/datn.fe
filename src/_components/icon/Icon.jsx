@@ -73,7 +73,7 @@ export const Icons = {
   Literature: 'Literature',
   School: 'School',
   Housing: 'Housing',
-  MysticalSpirituality: 'Mystical-spirituality',
+  MysticalSpirituality: 'MysticalSpirituality',
   Cars: 'Cars',
   Stock: 'Stock',
   Business: 'Business',

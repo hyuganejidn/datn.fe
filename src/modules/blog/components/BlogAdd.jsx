@@ -51,7 +51,7 @@ function BlogAdd() {
       // .trim()
       .min(3, 'Tên blog có ít nhất 6 ký tự')
       .max(50, 'Tên blog không vượt quá 60 ký tự')
-      .matches(/^[a-z-]+$/, 'Không đúng định dạng'),
+      .matches(/^([a-z\d]|-)+$/, 'Không đúng định dạng'),
 
     avatar: Yup.mixed().required('Vui lòng chọn ảnh đại diện'),
   })

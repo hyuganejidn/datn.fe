@@ -49,3 +49,9 @@
     margin-bottom: 14px;
   }
 }
+
+.skeleton {
+  .MuiSkeleton-text {
+    transform: none;
+  }
+}

@@ -4,6 +4,7 @@ import { makeGetSocketWithType } from '@/_layouts/Socket'
 import { parseQuery } from '@/helpers/api'
 import { useHistory, useLocation } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import SkeletonPost from 'Templates/skeleton/Post'
 import Post from './Post'
 import { makeGetIsAuthenticated, makeGetMe } from '../auth/store/selector'
 import { makeGetPostsVoted, makeGetProcessing } from './store/selector'
@@ -28,7 +29,7 @@ function Posts({ posts }) {
       if (loading) return null
       if (observer.current) observer.current.disconnect()
       observer.current = new IntersectionObserver(entries => {
-        if (entries[0].isIntersecting && hasMore) {
+        if (entries[0].isIntersecting && hasMore && posts.length >= 10) {
           history.push(`?page=${(+params.page || 1) + 1}&limit=10`)
         }
       })
@@ -76,7 +77,13 @@ function Posts({ posts }) {
           />
         )
       )}
-      {loading && <div>loading</div>}
+      {loading && (
+        <>
+          <SkeletonPost />
+          <SkeletonPost />
+          <SkeletonPost />
+        </>
+      )}
     </>
   )
 }

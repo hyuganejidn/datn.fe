@@ -8,11 +8,11 @@ import { makeGetBlogsMe, makeGetBlogsTop, makeGetPostsNew, makeGetPostsUserFollo
 import * as types from './store/action_types'
 import { makeGetIsAuthenticated } from '../auth/store/selector'
 
-function LinkTab(props) {
+export function LinkTab(props) {
   return <Tab component={Link} {...props} />
 }
 
-function TabPanel(props) {
+export function TabPanel(props) {
   const { children, value, index, ...other } = props
 
   return (
@@ -28,7 +28,7 @@ function TabPanel(props) {
   )
 }
 
-function a11yProps(index) {
+export function a11yProps(index) {
   return {
     id: `nav-tab-${index}`,
     'aria-controls': `nav-tabpanel-${index}`,

@@ -45,6 +45,7 @@ export function timeSince(_date) {
 }
 
 export function capitalizeFirstLetter(str) {
+  if (typeof str !== 'string') return ''
   const capitalized = str.replace(/^./, str[0].toUpperCase())
   return capitalized
 }

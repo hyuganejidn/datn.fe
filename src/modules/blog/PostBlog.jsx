@@ -7,12 +7,12 @@ import { CommentLine, HeartLine } from 'Templates/icon/IconsSvg'
 import * as typesHome from '@/modules/home/store/action_types'
 import Modal3 from 'Templates/commons/Modal3'
 import { useShouldShowModal } from '@/hooks/useShowModalLogin'
-import { timeSince, capitalizeFirstLetter, getInnerText, getAvatar } from '@/helpers/common'
+import { capitalizeFirstLetter, getAvatar, getInnerText, timeSince } from '@/helpers/common'
 import { PostAPI } from '@/services'
 import * as types from './store/action_types'
 
 import { S_Footer, S_ThreeDotMenu } from '../comment/Comment.style'
-import { S_ImageAvatar, S_PostContent, S_FooterLink, S_PostMain, S_PostTop, S_TopLink } from '../home/Post.style'
+import { S_FooterLink, S_ImageAvatar, S_PostContent, S_PostMain, S_PostTop, S_TopLink } from '../home/Post.style'
 import PostUpdate from '../post/components/PostUpdate'
 
 function PostBlog({ isAuth, post, userId, type }) {

@@ -46,7 +46,7 @@ function Post({ refProp, isAuth, post, isVote, userId, voteSocket }) {
 
   const [isShowUpdatePost, setIsShowUpdatePost] = useState(false)
   const [vote, setVote] = useState({
-    voteTotal: post.voteNum,
+    voteTotal: post?.voteNum,
     vote: isVote,
   })
 

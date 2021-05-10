@@ -47,9 +47,9 @@ function Posts({ posts }) {
     socket.on('VotePost', handleVote)
     return () => {
       socket.off('VotePost', handleVote)
-      history.replace({
-        search: '',
-      })
+      // history.replace({
+      //   search: '',
+      // })
     }
   }, [])
 
@@ -77,6 +77,7 @@ function Posts({ posts }) {
           />
         )
       )}
+
       {loading && (
         <>
           <SkeletonPost />

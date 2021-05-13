@@ -5,6 +5,7 @@ const initialState = {
   app: {
     isShowReport: false,
     isLogin: false,
+    isBlock: false,
   },
   dataReport: {
     type: '',
@@ -70,6 +71,9 @@ const reducer = (state = initialState, { type, payload }) =>
       }
       case types.APP_UPDATE_IS_LOGIN:
         draft.app.isLogin = !state.app.isLogin
+        break
+      case 'APP_UPDATE_IS_BLOCK':
+        draft.app.isBlock = !state.app.isBlock
         break
       case types.UPDATE_TOPICS: {
         const indexPost = state.posts.findIndex(post => post.id === payload.id)

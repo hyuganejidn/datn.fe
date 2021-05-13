@@ -8,7 +8,7 @@ function* fetchPostsNew() {
     const posts = yield call(() => BlogAPI.getPostsOfBLogs())
     yield put({ type: types.SET_POSTS_NEW, payload: posts })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -17,7 +17,7 @@ function* fetchPostsUserFollowed() {
     const posts = yield call(() => BlogAPI.getPostsUserFollowed())
     yield put({ type: types.SET_POSTS_USER_FOLLOWED, payload: posts })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -26,7 +26,7 @@ function* fetchBlogsMe() {
     const blogs = yield call(() => BlogAPI.getBlogsMe())
     yield put({ type: types.SET_BLOGS_ME, payload: blogs })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -35,7 +35,7 @@ function* fetchBlogsTop() {
     const blogs = yield call(() => BlogAPI.getBlogs())
     yield put({ type: types.SET_BLOGS_TOP, payload: blogs })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -44,7 +44,7 @@ function* fetchPostsBlog({ payload: blogId }) {
     const blogs = yield call(() => BlogAPI.getPostsOfBlogId(blogId))
     yield put({ type: types.SET_POSTS_BLOG, payload: blogs })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -54,7 +54,7 @@ function* getBlog({ payload: slug }) {
     yield put({ type: types.SET_BLOG, payload: blog })
     yield call(() => fetchPostsBlog({ payload: blog.id }))
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -67,9 +67,4 @@ export default function* blogsSaga() {
     takeLatest(types.S_FETCH_POSTS_BLOG, fetchPostsBlog),
     takeLatest(types.S_GET_BLOG, getBlog),
   ])
-  // yield all([])
-  // yield all([])
-  // yield all([])
-  // yield all([])
-  // yield all([])
 }

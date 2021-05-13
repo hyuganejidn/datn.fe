@@ -50,7 +50,7 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
   }, [])
 
   const handleVotePost = async (_postId, voteNum) => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const voteData = await PostAPI.votePost(_postId, voteNum)
     const voteNew = {
@@ -78,8 +78,8 @@ function PostViewFooterForum({ isAuth, isVote, userId, post, socket }) {
     setIsShowUpdatePost(prev => !prev)
   }
 
-  const handleReport = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReport = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
     dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
   return (

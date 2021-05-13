@@ -64,7 +64,7 @@ export default function NavAdmin({ children }) {
             </IconButton>
             <Typography variant="h6" noWrap>
               <Link to="/" className="hover:underline">
-                Trang chủ
+                Diễn đàn
               </Link>
             </Typography>
           </Toolbar>

@@ -8,7 +8,7 @@ export const getBlogById = slug => http.get(`${path}/${slug}`)
 
 export const getPostsOfBLogs = () => http.get('/posts?classify=blog').then(res => res.data)
 
-export const getBlogs = () => http.get(`${path}`).then(res => res.data)
+export const getBlogs = () => http.get(`${path}?sort=-followNum`).then(res => res.data)
 
 export const getBlogsUserFollowed = () => http.get(`${path}/blogs_followed`).then(res => res.data)
 

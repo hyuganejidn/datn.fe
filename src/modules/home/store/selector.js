@@ -109,3 +109,12 @@ export const makeGetIsLogin = () => {
 
   return useSelector(stateSelect)
 }
+
+export const makeGetIsBlock = () => {
+  const stateSelect = createSelector(
+    state => state.forum,
+    forum => forum.app.isBlock
+  )
+
+  return useSelector(stateSelect)
+}

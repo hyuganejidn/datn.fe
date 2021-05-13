@@ -7,7 +7,7 @@ import { getAuthToken } from '@/helpers/storage'
 import * as types from '@/modules/auth/store/action_types'
 import * as typesHome from '@/modules/home/store/action_types'
 import { makeGetProcessing } from '@/modules/auth/store/selector'
-import { makeGetIsShowReport, makeGetIsLogin } from '@/modules/home/store/selector'
+import { makeGetIsShowReport, makeGetIsLogin, makeGetIsBlock } from '@/modules/home/store/selector'
 
 import HeaderNav from '@/_components/header/'
 import Report from 'Templates/features/Report'
@@ -15,6 +15,7 @@ import Modal from 'Templates/commons/Modal2'
 import ShouldLogin from 'Templates/commons/ModalShouldLogin'
 import { useLocation } from 'react-router-dom'
 import NavAdmin from '@/modules/admin/nav/NavAdmin'
+import ShouldBlock from 'Templates/commons/ModalShouldBlock'
 
 const Layout = ({ children, ...props }) => {
   const dispatch = useDispatch()
@@ -23,6 +24,7 @@ const Layout = ({ children, ...props }) => {
   const loadingLogin = makeGetProcessing('login')
   const isShowReport = makeGetIsShowReport()
   const isShowLogin = makeGetIsLogin()
+  const isShowBlock = makeGetIsBlock()
 
   useEffect(() => {
     const token = getAuthToken()
@@ -60,6 +62,15 @@ const Layout = ({ children, ...props }) => {
             dispatch({ type: typesHome.APP_UPDATE_IS_LOGIN })
           }}
           component={ShouldLogin}
+        />
+      )}
+      {isShowBlock && (
+        <Modal
+          title="Tài khoản bị khóa"
+          setIsShowModal={() => {
+            dispatch({ type: 'APP_UPDATE_IS_BLOCK' })
+          }}
+          component={ShouldBlock}
         />
       )}
     </div>

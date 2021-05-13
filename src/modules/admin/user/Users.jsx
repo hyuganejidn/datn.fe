@@ -13,7 +13,7 @@ const columns = [
   { name: '_role', title: 'Quyền' },
   { name: 'statusUser', title: 'Trạng thái' },
   { name: 'createdAt', title: 'Ngày tạo' },
-  { name: 'blockUser', title: 'Action block' },
+  { name: 'blockUser', title: 'Action' },
   { name: 'detailUser', title: 'Chi tiết' },
 ]
 
@@ -27,15 +27,18 @@ function Users() {
   const fetchData = params => dispatch({ type: types.S_FETCH_USERS, payload: params })
 
   return (
-    <DataTable
-      rows={users}
-      columns={columns}
-      loading={loading}
-      totalCount={total}
-      // selection={selection}
-      loadData={fetchData}
-      // setSelection={setSelection}
-    />
+    <>
+      <h1 style={{ opacity: 0.8 }}>Quản lý Users</h1>
+      <DataTable
+        rows={users}
+        columns={columns}
+        loading={loading}
+        totalCount={total}
+        // selection={selection}
+        loadData={fetchData}
+        // setSelection={setSelection}
+      />
+    </>
   )
 }
 

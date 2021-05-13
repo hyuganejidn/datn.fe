@@ -36,7 +36,7 @@ import DetailRow from './DetailRow'
 const getRowId = row => row.id
 
 export default props => {
-  const { rows, columns, totalCount, styleColumn, onDelete, sorting, loading, loadData, isDetailRow } = props
+  const { rows, columns, totalCount, styleColumn, onDelete, sorting, loading, loadData, isDetailRow, isSelect } = props
   const location = useLocation()
   const history = useHistory()
   const params = parseQuery(location.search)
@@ -87,16 +87,18 @@ export default props => {
 
   return (
     <Paper style={{ position: 'relative' }}>
-      <S_Selection isVisible={onDelete && selection.length > 0}>
-        <span>{selection.length} lựa chọn</span>
-        <IconButton aria-label="delete" onClick={handleDelete}>
-          <DeleteIcon color="secondary" />
-        </IconButton>
-      </S_Selection>
+      {isSelect && (
+        <S_Selection isVisible={onDelete && selection.length > 0}>
+          <span>{selection.length} lựa chọn</span>
+          <IconButton aria-label="delete" onClick={handleDelete}>
+            <DeleteIcon color="secondary" />
+          </IconButton>
+        </S_Selection>
+      )}
       <Grid rows={rows} columns={columns} getRowId={getRowId}>
         <SearchState value={searchValue} onValueChange={setSearchState} />
         <SortingState sorting={sorting || []} defaultSorting={[{ columnName: 'updatedAt', direction: 'desc' }]} />
-        <SelectionState selection={selection} onSelectionChange={setSelection} />
+        {isSelect && <SelectionState selection={selection} onSelectionChange={setSelection} />}
         <PagingState
           defaultCurrentPage={0}
           pageSize={+params.limit}
@@ -107,7 +109,7 @@ export default props => {
 
         <CustomPaging totalCount={totalCount} />
         <IntegratedSorting />
-        <IntegratedSelection />
+        {isSelect && <IntegratedSelection />}
         {/* <IntegratedFiltering /> */}
         {/* <DateTypeProvider for={['createdAt', 'updatedAt']} /> */}
         <CellTooltip columns={columns} />
@@ -119,7 +121,7 @@ export default props => {
         {isDetailRow && <TableRowDetail contentComponent={DetailRow} />}
         <Toolbar />
         <SearchPanel />
-        <TableSelection showSelectAll />
+        {isSelect && <TableSelection showSelectAll />}
         <PagingPanel pageSizes={pageSizes} />
       </Grid>
       {loading && (

@@ -12,7 +12,7 @@ const columns = [
   { name: 'author', title: 'Tác giả' },
   { name: 'numberReports', title: 'Số report' },
   { name: 'statusReport', title: 'Trạng thái' },
-  { name: 'blockReport', title: 'Action block' },
+  { name: 'blockReport', title: 'Action' },
   { name: 'detailReport', title: 'Chi tiết' },
   // { name: 'reason', title: 'Lý do' },
 ]
@@ -36,17 +36,21 @@ function Reports() {
   }
 
   return (
-    <DataTable
-      isDetailRow
-      rows={reports}
-      columns={columns}
-      loading={loading}
-      totalCount={total}
-      // selection={selection}
-      loadData={fetchData}
-      onDelete={handleDelete}
-      // setSelection={setSelection}
-    />
+    <>
+      <h1 style={{ opacity: 0.8 }}>Quản lý Reports</h1>
+      <DataTable
+        isSelect
+        isDetailRow
+        rows={reports}
+        columns={columns}
+        loading={loading}
+        totalCount={total}
+        // selection={selection}
+        loadData={fetchData}
+        onDelete={handleDelete}
+        // setSelection={setSelection}
+      />
+    </>
   )
 }
 

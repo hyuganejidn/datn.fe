@@ -156,7 +156,7 @@ function PostAdd() {
           <Link
             to={`/blogs/${blogSlug}`}
             className="rounded-sm font-light py-2 text-lg px-3 hover:underline hover:text-blue-600 text-green-500 bg-white no-underline"
-            style={{ marginBottom: 16, display: 'inline-block' }}
+            style={{ display: 'inline-block', width: '100%' }}
           >
             Blog/{blog.title}
           </Link>

@@ -114,8 +114,8 @@ function UserView() {
         )}
         <div className="flex mt-2 items-center">
           <div
-            className={`ml-8 cursor-pointer py-2 px-1 hover:text-black border-b-2 text-black ${
-              tabs.blogs && 'border-green-700'
+            className={`ml-8 cursor-pointer py-2 px-1 hover:text-black border-b-2 ${
+              tabs.blogs && 'border-green-700 text-black'
             }`}
             onClick={() => moveTab('blogs')}
             aria-hidden="true"
@@ -124,7 +124,7 @@ function UserView() {
           </div>
           <div
             className={`ml-5 cursor-pointer py-2 px-1 hover:text-black border-b-2 text-gray-700 ${
-              tabs.forum && 'border-green-700'
+              tabs.forum && 'border-green-700 text-black'
             }`}
             onClick={() => moveTab('forum')}
             aria-hidden="true"

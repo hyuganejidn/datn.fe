@@ -4,16 +4,7 @@ import { EmojiInput } from 'Templates/emoji/Emoji'
 import { EmojiSuggestion } from 'Templates/emoji/EmojiSuggestion'
 
 function InputEmoji(props) {
-  const {
-    field,
-    form,
-    label,
-    disabled,
-    placeholder,
-    autoComplete,
-    row,
-    className,
-  } = props
+  const { field, form, label, disabled, placeholder, autoComplete, row, className } = props
   const { name, value } = field
   const { errors, touched } = form
   const showError = errors[name] && touched[name]

@@ -1093,3 +1093,11 @@ img {
     width: 60%;
   }
 }
+@media (min-width: 1200px) {
+  .lg\:w-7\/10 {
+    width: 65%;
+  }
+}
+.bb {
+  border-bottom: 0.5px solid #ccc;
+}

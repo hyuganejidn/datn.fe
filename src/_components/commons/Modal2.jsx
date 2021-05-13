@@ -2,7 +2,6 @@ import React from 'react'
 
 function Modal(props) {
   const { title, setIsShowModal, component: Component, ...rest } = props
-
   return (
     <div className="z-40 fixed w-full h-full top-0 left-0 pb-64 overflow-scroll">
       <div

@@ -46,7 +46,7 @@ function StatusBlogView({ blogId, authorId }) {
       className="hover:bg-gray-200 border border-green-500 text-green-700 rounded p-1"
       style={{ lineHeight: '1.4rem' }}
       onClick={async () => {
-        if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+        if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
         await UserAPI.followBlog(blogId)
         dispatch({ type: types.S_AUTH_UPDATE_ME })

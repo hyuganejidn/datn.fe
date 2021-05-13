@@ -65,7 +65,7 @@ function Search() {
           variant="fullWidth"
           value={tabValue}
           onChange={handleChange}
-          className="md:w-3xl m-auto"
+          className="md:w-3xl m-auto bb"
           aria-label="nav tabs example"
         >
           <LinkTab label="Tất cả" to={`?q=${params.q}&tab=all`} {...a11yProps(0)} />

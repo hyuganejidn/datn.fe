@@ -16,12 +16,19 @@ function InputField(props) {
     helperText,
     placeholder,
     autoComplete,
+    resetErrorsServer,
   } = props
 
   const { name } = field
   const { errors, touched } = form
 
   const showError = (errors[name] && touched[name]) || !!errorText
+  const handleChange = eventChange => {
+    if (resetErrorsServer && eventChange.target.value && errorText) {
+      resetErrorsServer()
+    }
+    field.onChange(eventChange)
+  }
 
   return (
     <div className={className}>
@@ -33,6 +40,7 @@ function InputField(props) {
           maxLength,
         }}
         error={showError}
+        onChange={handleChange}
         className={classes}
         type={type || 'text'}
         helperText={helperText}

@@ -103,7 +103,7 @@ function BlogHome() {
           variant="fullWidth"
           value={tabValue}
           onChange={handleChange}
-          className="md:w-3xl m-auto"
+          className="md:w-3xl m-auto bb"
           aria-label="nav tabs example"
         >
           <LinkTab label="Bài mới" to="?tab=news" {...a11yProps(0)} />

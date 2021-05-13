@@ -37,7 +37,12 @@ export default function Login() {
       .max(30, 'Mật khẩu không vượt quá 30 ký tự'),
   })
 
-  const login = values => dispatch({ type: types.S_AUTH_LOGIN_REQUEST, payload: values })
+  const login = values => {
+    console.log(values)
+    dispatch({ type: types.S_AUTH_LOGIN_REQUEST, payload: values })
+  }
+
+  const resetErrorsServer = () => dispatch({ type: types.AUTH_RESET_ERRORS })
 
   return (
     <div>
@@ -61,6 +66,7 @@ export default function Login() {
                       label="Họ tên"
                       placeholder="Họ tên"
                       errorText={errors.username}
+                      resetErrorsServer={resetErrorsServer}
                       className="flex-grow font-roboto py-1 pr-1 rounded-r outline-none"
                     />
                   </div>
@@ -73,6 +79,7 @@ export default function Login() {
                       component={InputPassword}
                       label="Mật khẩu"
                       errorText={errors.password}
+                      resetErrorsServer={resetErrorsServer}
                       className="flex-grow font-roboto outline-none py-1 pr-1"
                     />
                     <span className="rounded mr-2 border-0 text-gray-600 hover:text-black cursor-pointer">

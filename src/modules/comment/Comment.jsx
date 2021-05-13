@@ -39,7 +39,7 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
   useEffect(() => () => removeStorage(comment.id), [])
 
   const handleSubmitComment = async ({ content }) => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const data = {
       content: content.slice(0, -1),
@@ -55,8 +55,8 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
     setIsEdit(prev => !prev)
   }
 
-  const onReplyCommentChild = _comment => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const onReplyCommentChild = async _comment => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     setIsReply(true)
     setCommentReply(_comment)
@@ -69,8 +69,8 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
     }
   }
 
-  const handleReplyComment = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReplyComment = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     if (handleReplyCommentChild) {
       handleReplyCommentChild()
@@ -95,8 +95,8 @@ function Comment({ i, type, comment, userId, handleReplyCommentChild, commentsUs
     document.body.addEventListener('keydown', cancelEdit)
   }
 
-  const handleReport = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReport = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'comment', id: comment.id } })
   }

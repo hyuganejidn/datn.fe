@@ -43,7 +43,7 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
   }, [])
 
   const handleLikePost = async _postId => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const likeData = await PostAPI.likePost(_postId)
     const likeNew = {
@@ -69,8 +69,8 @@ function PostViewFooterBlog({ isAuth, isVote, userId, post, socket }) {
     setIsShowUpdatePost(prev => !prev)
   }
 
-  const handleReport = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReport = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
     dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
 

@@ -10,7 +10,7 @@ function* getCommentsPost({ payload }) {
     const comments = yield call(() => PostAPI.listComment(payload))
     yield put({ type: types.SET_COMMENTS_POST, payload: comments })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -22,7 +22,7 @@ function* createComment({ payload: { data, socket } }) {
     yield put({ type: types.ADD_COMMENT, payload: comment })
     yield put({ type: typesHome.UPDATE_POST_COMMENT_NUM })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -34,7 +34,7 @@ function* createChildComment({ payload: { data, socket } }) {
     yield put({ type: types.ADD_COMMENT, payload: comment })
     yield put({ type: typesHome.UPDATE_POST_COMMENT_NUM })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -49,7 +49,7 @@ function* deleteComment({ payload: { comment, socket } }) {
       payload: -(1 + (comment.commentsChild ? comment.commentsChild.length : 0)),
     })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -60,7 +60,7 @@ function* updateComment({ payload: { comment, content, socket } }) {
     toast.success('Chỉnh sửa bình luận thành công')
     yield put({ type: types.UPDATE_COMMENT, payload: { comment, content } })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 

@@ -49,7 +49,7 @@ function UpdateInfo({ data, setIsShowModal }) {
       <div className="flex items-center mt-1 ">
         <textarea
           placeholder="Nhập giới thiệu bản thân"
-          rows={3}
+          rows={5}
           name="introduction"
           value={info.introduction}
           id="inputEditProfileBio"

@@ -68,7 +68,7 @@ function Post({ refProp, isAuth, post, isVote, userId, voteSocket }) {
   }, [voteSocket])
 
   const handleVotePost = async (postId, voteNum) => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const voteData = await votePost(postId, voteNum)
     const voteNew = {
@@ -94,8 +94,8 @@ function Post({ refProp, isAuth, post, isVote, userId, voteSocket }) {
     setIsShowUpdatePost(prev => !prev)
   }
 
-  const handleReport = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReport = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
     dispatch({ type: types.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }
 

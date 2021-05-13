@@ -68,7 +68,7 @@ function PostViewBlog() {
   }, [])
 
   const handleSubmitComment = async ({ content }, { resetForm }) => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) {
       resetForm()
       return
     }

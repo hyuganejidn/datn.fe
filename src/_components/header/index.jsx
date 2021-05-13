@@ -12,6 +12,8 @@ import {
   ForumNavColor,
   BlogsNav,
   ForumNav,
+  ShowMore,
+  Logout,
 } from 'Templates/icon/IconsSvg'
 import * as types from '@/modules/auth/store/action_types'
 import useClickOutside from '@/hooks/useClickOutside'
@@ -57,7 +59,7 @@ function HeaderNav() {
   return (
     <div>
       <nav className="flex items-center w-full fixed h-12 bg-white border-gray-100 border-b z-30 shadow-sm">
-        <div className="w-full md:w-11/12 mx-auto flex items-center justify-between md:px-1">
+        <div className="w-full md:w-11/12 lg:w-7/10 mx-auto flex items-center justify-between md:px-1">
           <div className="flex items-center flex-shrink-0">
             <div className="md:hidden text-lg text-gray-700 ml-1">
               <Menu />
@@ -109,8 +111,8 @@ function HeaderNav() {
           </div>
           <button
             type="button"
-            onClick={() => {
-              if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+            onClick={async () => {
+              if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
               history.push('/posts/add?classify=forum')
             }}
             className=" md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full bg-green-500 text-white no-underline"
@@ -145,7 +147,7 @@ function HeaderNav() {
                       <Avatar style={{ width: 28, height: 28 }}>{user.fullName[0].toUpperCase()}</Avatar>
                     )}
                     <span className="hidden md:block text-sm mx-1 font-medium">{user.fullName}</span>
-                    <i className="fas fa-caret-down ml-1 md:ml-0" />
+                    <ShowMore />
                   </div>
                 </div>
                 {isShowPopupUser && (
@@ -208,7 +210,7 @@ function HeaderNav() {
                         aria-hidden="true"
                       >
                         <div className="text-gray-600 mr-3">
-                          <i className="fas fa-sign-out-alt fa-sm" />
+                          <Logout />
                         </div>
                         <div>Đăng xuất</div>
                       </div>

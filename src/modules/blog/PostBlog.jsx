@@ -46,8 +46,8 @@ function PostBlog({ isAuth, post, userId, type }) {
     setIsShowUpdatePost(prev => !prev)
   }
 
-  const handleReport = () => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+  const handleReport = async () => {
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     dispatch({ type: typesHome.APP_UPDATE_IS_REPORT, payload: { type: 'post', id: post.id } })
   }

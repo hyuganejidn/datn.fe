@@ -17,7 +17,7 @@ function InputEmoji(props) {
         maxLength={maxLength}
         rowsMin={row || 3}
         className={classes}
-        rowsMax={rowsMax || 4}
+        rowsMax={rowsMax || 6}
         placeholder={placeholder}
         disabled={disabled || false}
         autoComplete={autoComplete || 'off'}

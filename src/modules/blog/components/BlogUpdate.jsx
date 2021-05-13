@@ -94,11 +94,7 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
     <div>
       <Formik initialValues={initialForm} onSubmit={handleUpdateBlog} validationSchema={validationSchema}>
         {({ values, setFieldValue }) => (
-          <div className="relative bg-white w-11/12 md:max-w-xl mx-auto my-3 p-2  rounded-md">
-            <div className="flex items-center">
-              <div className="font-medium text-3xl justify-center">Tạo blog</div>
-            </div>
-
+          <div className="relative bg-white w-11/12 mx-auto my-3 p-2  rounded-md">
             <Form>
               <div className="flex items-center mt-5">
                 <FastField
@@ -246,7 +242,7 @@ function BlogUpdate({ dataBlog, setIsShowModal }) {
                   type="submit"
                   className="px-5 py-1 rounded text-white font-medium bg-green-500 hover:bg-green-700 focus:outline-none"
                 >
-                  Tạo blog
+                  Sửa blog
                 </button>
               </div>
             </Form>

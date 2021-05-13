@@ -8,7 +8,11 @@ function Blog({ blog }) {
   return (
     <li>
       <div className="flex items-center justify-between mt-8 ">
-        <Link className="min-w-0 flex items-center cursor-pointer no-underline" to={`/blogs/${blog.slug}`}>
+        <Link
+          className="flex items-center cursor-pointer no-underline"
+          style={{ maxWidth: '80%' }}
+          to={`/blogs/${blog.slug}`}
+        >
           <div className="flex-shrink-0">
             <img
               src={getAvatar(blog.avatar)}
@@ -23,7 +27,7 @@ function Blog({ blog }) {
             />
           </div>
 
-          <div className="min-w-0 ml-5">
+          <div className="ml-5">
             <div className="w-full font-medium text-xl text-black truncate">{blog.title}</div>
             <S_Description className="text-sm font-light text-black overflow-hidden">{blog.description}</S_Description>
           </div>

@@ -9,7 +9,7 @@ function* fetchReports({ payload }) {
     const data = yield call(() => ReportAPI.list(payload))
     yield put({ type: types.SET_REPORTS, payload: data })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   } finally {
     yield put({ type: types.SET_LOADING })
   }
@@ -21,7 +21,7 @@ function* fetchUsers({ payload }) {
     const data = yield call(() => UserAPI.list(payload))
     yield put({ type: types.SET_USERS, payload: data })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   } finally {
     yield put({ type: types.SET_LOADING })
   }
@@ -39,7 +39,7 @@ function* handleBlock({ payload }) {
 
     yield put({ type: types.BLOCK, payload: payload.id })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 
@@ -49,7 +49,7 @@ function* handleBlockUser({ payload }) {
 
     yield put({ type: types.BLOCK_USER, payload: payload.id })
   } catch (error) {
-    throw new Error(error)
+    // throw new Error(error)
   }
 }
 

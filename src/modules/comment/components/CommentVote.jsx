@@ -38,7 +38,7 @@ function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal, userId
   }, [])
 
   const handleVoteComment = async (_commentId, voteNum) => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     try {
       const voteData = await CommentAPI.voteComment(_commentId, voteNum)
@@ -55,7 +55,7 @@ function CommentVote({ isAuth, type, isVote, commentId, commentVoteTotal, userId
   }
 
   const handleLikeComment = async _commentId => {
-    if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+    if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
     const voteData = await CommentAPI.likeComment(_commentId)
     const likeNew = {

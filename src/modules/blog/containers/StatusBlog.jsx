@@ -18,9 +18,9 @@ function StatusBlog({ blogId, blogAuthorId, blogSlug }) {
     return (
       <button
         type="button"
-        className="flex-shrink-0 font-light cursor-pointer hover:bg-gray-300 rounded px-2 border border-gray-500 text-black no-underline"
+        className="flex-shrink-0 font-light cursor-pointer hover:bg-gray-300 rounded border border-gray-500 text-black no-underline"
         onClick={() => history.push(`/posts/add?classify=blog&blogSlug=${blogSlug}`)}
-        style={{ fontSize: 16 }}
+        style={{ fontSize: 16, padding: '4px 12px' }}
       >
         Viết bài
       </button>
@@ -56,7 +56,7 @@ function StatusBlog({ blogId, blogAuthorId, blogSlug }) {
       className="flex-shrink-0 font-light cursor-pointer hover:bg-gray-200 rounded-full px-2 py-1"
       style={{ fontSize: 16 }}
       onClick={async () => {
-        if (useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
+        if (await useShouldShowModal({ dispatch, isAuth, type: 'login' })) return
 
         await UserAPI.followBlog(blogId)
         dispatch({ type: types.S_AUTH_UPDATE_ME })

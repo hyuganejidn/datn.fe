@@ -118,17 +118,22 @@ function HeaderNav() {
             className=" md:block ml-5 mr-10 flex-shrink-0 hover:bg-green-600 rounded-full bg-green-500 text-white no-underline"
             style={{ padding: '4px 8px' }}
           >
-            <span className="text-sm">&nbsp;Đăng bài</span>
+            <span className="font-medium text-sm">&nbsp;Đăng bài</span>
           </button>
           <div className="flex items-center flex-shrink-0">
             {!isAuth ? (
               <div className=" md:flex items-center flex-shrink-0">
-                <Link to="/login" className="ml-5 flex-shrink-0 hover:text-black no-underline text-gray-600">
+                <Link
+                  to="/login"
+                  className="ml-5 flex-shrink-0 hover:text-black no-underline text-gray-600"
+                  style={{ padding: '4px 8px' }}
+                >
                   <span className="font-medium text-sm">Đăng nhập</span>
                 </Link>
                 <Link
                   to="/register"
                   className="px-3 flex-shrink-0 rounded-full ml-2 bg-green-500 hover:bg-green-700  no-underline text-gray-600"
+                  style={{ padding: '4px 8px' }}
                 >
                   <span className="font-medium text-sm text-white">Đăng ký</span>
                 </Link>

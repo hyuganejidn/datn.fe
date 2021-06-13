@@ -80,7 +80,7 @@ function UserView() {
   return (
     <LayoutBg>
       <LayoutUser>
-        {user && (
+        {user && Object.keys(user).length > 0 && (
           <div className="flex items-center mx-8">
             <div className="rounded-full bg-white" style={{ padding: 2 }}>
               <AvatarWrapper className="w-16 h-16 rounded-full relative ">
